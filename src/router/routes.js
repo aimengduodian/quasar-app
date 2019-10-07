@@ -1,6 +1,7 @@
-import categories from 'assets/categories'
-import LayoutShowcase from 'layouts/showcase'
+import categories from 'assets/categories' // 类别
+import LayoutShowcase from 'layouts/showcase' // 布局展示
 
+// 定义路由
 const routes = [
   {
     path: '/',
@@ -64,6 +65,8 @@ categories.forEach(category => {
 })
 
 routes.push(showcase)
+
+// 添加布局模板路由
 routes.push({
   path: '/showcase/layout-demo',
   component: () => import('layouts/layout-demo'),
@@ -74,6 +77,8 @@ routes.push({
     {path: 'floating-action-button', component: () => import('pages/layout-demo/floating-action-button')}
   ]
 })
-routes.push({ path: '*', component: () => import('pages/error404.vue') })
+
+// 没有找到路由返回404
+routes.push({path: '*', component: () => import('pages/error404.vue')})
 
 export default routes

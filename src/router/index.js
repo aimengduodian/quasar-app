@@ -15,6 +15,7 @@ export default function ({ store }) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  // 前置路由守卫
   Router.beforeEach((to, from, next) => {
     if (to.meta) {
       store.commit('showcase/updatePageMeta', to.meta)

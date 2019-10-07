@@ -1,7 +1,7 @@
 <template>
   <div class="index-page bg-grey-2 window-height window-width column items-center no-wrap">
     <div class="banner bg-primary flex flex-center">
-      Play
+      app
     </div>
     <div class="text-center">
       <div class="card bg-white shadow-4 column no-wrap flex-center group">
@@ -40,7 +40,7 @@
         <privacy-policy ref="privacy" />
       </div>
     </div>
-    <a class="ribbon" :title="`Built with Quasar v${$q.version}`">&nbsp;</a>
+    <a class="ribbon" :title="`learning v${version}`">&nbsp;</a>
   </div>
 </template>
 
@@ -51,6 +51,11 @@ import PrivacyPolicy from 'components/privacy-policy'
 export default {
   components: {
     PrivacyPolicy
+  },
+  data () {
+    return {
+      version: '0.0.1'
+    }
   },
   methods: {
     launch () {

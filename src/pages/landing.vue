@@ -13,23 +13,21 @@
           class="full-width"
           icon="layers"
           no-ripple
-          label="Quasar Showcase"
+          label="跳转1"
         />
 
         <q-btn
           color="secondary"
           class="full-width"
-          type="a"
-          href="https://quasar-framework.org"
           target="_blank"
           icon="launch"
           no-ripple
-          label="Quasar Docs"
+          label="跳转2"
         />
 
         <q-btn
           color="grey-7"
-          label="Read Privacy Policy"
+          label="免责条约"
           @click="viewPrivacyPolicy"
           flat
           rounded
@@ -45,8 +43,7 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
-import PrivacyPolicy from 'components/privacy-policy'
+import PrivacyPolicy from '../components/privacy-policy'
 
 export default {
   components: {
@@ -54,13 +51,10 @@ export default {
   },
   data () {
     return {
-      version: '0.0.1'
+      version: '0.0.1' // 软件版本
     }
   },
   methods: {
-    launch () {
-      openURL('http://quasar-framework.org')
-    },
     viewPrivacyPolicy () {
       this.$refs.privacy.show()
     }

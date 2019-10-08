@@ -44,7 +44,7 @@
         :class="$q.theme === 'mat' ? 'bg-grey-3' : null"
       >
         <div class="row flex-center bg-white" style="height: 115px">
-          <img alt="Quasar logo" src="~assets/quasar-logo.svg" style="height: 75px; width 75px;">
+          <img alt="Quasar logo" src="~assets/quasar-logo.svg" style="height: 75px; width: 75px;">
           <div class="caption q-ml-md">
             Quasar v{{ $q.version }}
           </div>

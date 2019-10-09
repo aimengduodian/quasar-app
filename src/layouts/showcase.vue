@@ -30,35 +30,31 @@
           aria-label="Menu"
         />
       </q-toolbar>
-
-      <showcase-tabs v-if="$q.theme === 'mat'" />
+      <showcase-tabs v-if="$q.theme === 'mat'"/>
     </q-layout-header>
-
+    <!--页脚-->
     <q-layout-footer reveal v-if="$q.theme === 'ios'">
-      <showcase-tabs />
+      <showcase-tabs/>
     </q-layout-footer>
-
+    <!--侧边栏-->
     <q-layout-drawer v-model="drawerState" show-if-above>
       <q-scroll-area
         style="width: 100%; height: 100%;"
         :class="$q.theme === 'mat' ? 'bg-grey-3' : null"
       >
+        <!--侧边栏头-->
         <div class="row flex-center bg-white" style="height: 115px">
           <img alt="Quasar logo" src="~assets/quasar-logo.svg" style="height: 75px; width: 75px;">
           <div class="caption q-ml-md">
-            Quasar v{{ $q.version }}
+            Test v{{ $q.version }}
           </div>
         </div>
         <q-list no-border>
-          <q-item
-            to="/showcase"
-            exact
-            replace
-          >
-            <q-item-side icon="home" />
-            <q-item-main label="Showcase home" />
+          <q-item to="/showcase" exact replace>
+            <q-item-side icon="home"/>
+            <q-item-main label="Showcase home"/>
           </q-item>
-          <q-item-separator />
+          <q-item-separator/>
           <template v-for="category in categories">
             <q-list-header :key="`header-${category.title}`">
               {{ category.title }}
@@ -69,15 +65,15 @@
               :to="`/showcase/${category.hash}/${feature.hash}`"
               :replace="!category.extract"
             >
-              <q-item-side :icon="feature.icon" />
-              <q-item-main :label="feature.title" />
+              <q-item-side :icon="feature.icon"/>
+              <q-item-main :label="feature.title"/>
               <!--
               <q-item-side right v-if="feature.status">
                 <q-chip dense color="faded">{{ feature.status }}</q-chip>
               </q-item-side>
               -->
             </q-item>
-            <q-item-separator :key="`separator-${category.title}`" />
+            <q-item-separator :key="`separator-${category.title}`"/>
           </template>
         </q-list>
       </q-scroll-area>
@@ -91,7 +87,7 @@
         :duration="300"
         @leave="resetScroll"
       >
-        <router-view />
+        <router-view/>
       </transition>
     </q-page-container>
   </q-layout>

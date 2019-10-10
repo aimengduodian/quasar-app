@@ -2,8 +2,12 @@
 
 module.exports = function (ctx) {
   return {
+    plugins: [
+      'boot'
+    ],
     css: [
-      'app.styl'
+      ctx.mode.spa ? 'app.styl' : null, // 指向/src/css/app.styl
+      ctx.mode.cordova ? 'app-cordova.styl' : null // 指向/src/css/app-cordova.styl
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
@@ -25,9 +29,9 @@ module.exports = function (ctx) {
       }
     },
     devServer: {
-      // open: true,
+      open: true,
       host: '192.168.1.254',
-      port: 9000,
+      port: ctx.mode.spa ? 9000 : (ctx.mode.pwa ? 9010 : 9020),
       proxy: {
         // 将所有以/api开头的请求代理到jsonplaceholder
         '/api': {

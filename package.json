@@ -1,6 +1,6 @@
 {
-  "name": "quasar-play",
-  "version": "0.17.19",
+  "name": "quasar",
+  "version": "0.0.1",
   "description": "Quasar Play for Quasar Framework",
   "productName": "Quasar Play",
   "cordovaId": "com.quasarframework.quasarplay",

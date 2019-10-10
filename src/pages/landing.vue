@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import PrivacyPolicy from '../components/privacy-policy'
+import PrivacyPolicy from 'components/privacy-policy'
 
 export default {
   components: {

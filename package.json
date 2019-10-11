@@ -14,6 +14,11 @@
     "build": "quasar build",
     "clean": "quasar clean"
   },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "js-md5": "^0.7.3",
+    "vuelidate": "^0.7.4"
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
     "babel-plugin-transform-imports": "^1.5.0",

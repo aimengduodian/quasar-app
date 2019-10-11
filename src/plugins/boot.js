@@ -8,7 +8,7 @@ export default ({ app, router, Vue }) => {
 
   /* eslint-disable-next-line no-new */
   new Vue(app)
-  console.log('sssss')
+  console.log('start')
   // “应用程序”具有Quasar CLI熟悉的所有功能，
   // 在这一点上你不需要注入任何东西
 }

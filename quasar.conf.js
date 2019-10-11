@@ -3,7 +3,9 @@
 module.exports = function (ctx) {
   return {
     plugins: [
-      'boot'
+      'axios',
+      'boot',
+      'vuelidate'
     ],
     css: [
       ctx.mode.spa ? 'app.styl' : null, // 指向/src/css/app.styl

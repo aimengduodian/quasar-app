@@ -94,38 +94,38 @@
 </template>
 
 <script>
-  import EbookTabs from 'components/ebook-tabs'
-  import { mapState } from 'vuex'
-  import categories from 'assets/ebook'
+import EbookTabs from 'components/ebook-tabs'
+import { mapState } from 'vuex'
+import categories from 'assets/ebook'
 
-  export default {
-    components: {
-      EbookTabs
-    },
-    data () {
-      return {
-        categories
-      }
-    },
-    computed: {
-      drawerState: {
-        get () {
-          return this.$store.state.ebook.drawerState
-        },
-        set (val) {
-          this.$store.commit('ebook/updateDrawerState', val)
-        }
+export default {
+  components: {
+    EbookTabs
+  },
+  data () {
+    return {
+      categories
+    }
+  },
+  computed: {
+    drawerState: {
+      get () {
+        return this.$store.state.ebook.drawerState
       },
-      ...mapState('ebook', [
-        'pageMeta'
-      ])
-    },
-    methods: {
-      resetScroll (el, done) {
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        done()
+      set (val) {
+        this.$store.commit('ebook/updateDrawerState', val)
       }
+    },
+    ...mapState('ebook', [
+      'pageMeta'
+    ])
+  },
+  methods: {
+    resetScroll (el, done) {
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      done()
     }
   }
+}
 </script>

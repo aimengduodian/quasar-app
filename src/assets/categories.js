@@ -60,34 +60,6 @@ export default [
     ]
   },
   {
-    title: 'Layout',
-    icon: 'dashboard',
-    hash: 'layout-demo',
-    extract: true,
-    features: [
-      {
-        title: 'Play with Layout',
-        icon: 'play_circle_outline',
-        hash: 'play-with-layout'
-      },
-      {
-        title: 'Drawer Panels',
-        icon: 'view_array',
-        hash: 'drawer-panels'
-      },
-      {
-        title: 'Page Sticky',
-        icon: 'pin_drop',
-        hash: 'page-sticky'
-      },
-      {
-        title: 'Floating Action Button',
-        icon: 'play_for_work',
-        hash: 'floating-action-button'
-      }
-    ]
-  },
-  {
     title: 'Buttons',
     icon: 'panorama_wide_angle',
     hash: 'buttons',

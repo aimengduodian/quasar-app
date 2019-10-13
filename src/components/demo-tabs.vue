@@ -6,26 +6,26 @@
   >
     <q-route-tab slot="title"
                  icon="play_circle_outline"
-                 to="/showcase/layout-demo/play-with-layout" r
+                 to="/ebook/layout-demo/play-with-layout"
                  eplace
-                 label="Play with Layout"
+                 label="图书"
     />
     <q-route-tab slot="title"
                  icon="view_array"
-                 to="/showcase/layout-demo/drawer-panels"
-                 replace label="Drawer Panels"
+                 to="/ebook/layout-demo/drawer-panels"
+                 replace label="电子"
     />
     <q-route-tab slot="title"
                  icon="pin_drop"
-                 to="/showcase/layout-demo/page-sticky"
+                 to="/ebook/layout-demo/page-sticky"
                  replace
-                 label="Page Sticky"
+                 label="辅导"
     />
     <q-route-tab slot="title"
                  icon="play_for_work"
-                 to="/showcase/layout-demo/floating-action-button"
+                 to="/ebook/layout-demo/floating-action-button"
                  replace
-                 label="Floating Action Button"
+                 label="其他"
     />
   </q-tabs>
 </template>

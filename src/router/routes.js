@@ -130,7 +130,7 @@ routes.push(ebook)
 
 // 添加布局模板路由
 routes.push({
-  path: '/showcase/layout-demo',
+  path: '/ebook/layout-demo',
   component: () => import('layouts/layout-demo'),
   children: [
     {path: 'play-with-layout', component: () => import('pages/layout-demo/play-with-layout')},

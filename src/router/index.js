@@ -19,14 +19,12 @@ export default function ({ store }) {
   Router.beforeEach((to, from, next) => {
     if (to.meta) {
       switch (to.meta.hash) {
-        case '/ebook': {
+        case '/ebook':
           store.commit('ebook/updatePageMeta', to.meta)
           break
-        }
-        case '/showcas': {
+        case '/showcase':
           store.commit('showcase/updatePageMeta', to.meta)
           break
-        }
       }
     }
 

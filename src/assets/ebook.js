@@ -11,18 +11,13 @@ export default [
       },
       {
         title: '提供建议',
-        icon: 'format_bold',
+        icon: 'view_compact',
         hash: 'advice'
       },
       {
-        title: '我要购买',
-        icon: 'format_bold',
-        hash: 'books?flag=1'
-      },
-      {
         title: '我要发布',
-        icon: 'format_bold',
-        hash: 'book?flag=0'
+        icon: 'linear_scale',
+        hash: 'sellgoods'
       }
     ]
   },
@@ -31,5 +26,33 @@ export default [
     icon: 'blur_on',
     hash: 'buy',
     features: []
+  },
+  {
+    title: '我要购买',
+    icon: 'mode_edit',
+    hash: 'layout-demo',
+    extract: true,
+    features: [
+      {
+        title: 'Play with Layout',
+        icon: 'play_circle_outline',
+        hash: 'play-with-layout'
+      },
+      {
+        title: 'Drawer Panels',
+        icon: 'view_array',
+        hash: 'drawer-panels'
+      },
+      {
+        title: 'Page Sticky',
+        icon: 'pin_drop',
+        hash: 'page-sticky'
+      },
+      {
+        title: 'Floating Action Button',
+        icon: 'play_for_work',
+        hash: 'floating-action-button'
+      }
+    ]
   }
 ]

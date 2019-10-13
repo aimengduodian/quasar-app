@@ -18,6 +18,7 @@
 
         <q-btn
           color="secondary"
+          to="/ebook"
           class="full-width"
           target="_blank"
           icon="launch"

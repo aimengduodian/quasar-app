@@ -10,7 +10,7 @@
       :key="tab.hash"
       slot="title"
       :icon="tab.icon"
-      :to="`/showcase${pageMeta.hash}/${tab.hash}`"
+      :to="`/ebook${pageMeta.hash}/${tab.hash}`"
       :label="tab.label"
       exact
       replace
@@ -22,13 +22,10 @@
 <script>
 import { mapState } from 'vuex'
 
-export default {
-  name: 'ShowcaseTabs',
-  computed: mapState('showcase', [
+export default  {
+  name: 'EbookTabs',
+  computed: mapState('ebook', [
     'pageMeta'
-  ]),
-  created () {
-    console.log(this.PageMeta)
-  }
+  ])
 }
 </script>

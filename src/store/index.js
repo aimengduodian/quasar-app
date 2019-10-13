@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import showcase from './showcase'
 import layoutDemo from './layoutDemo'
+import ebook from './ebook'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,8 @@ export default function () {
   const Store = new Vuex.Store({
     modules: {
       showcase,
-      layoutDemo
+      layoutDemo,
+      ebook
     }
   })
 
@@ -22,6 +24,10 @@ export default function () {
     module.hot.accept(['./layoutDemo'], () => {
       const newLayoutDemo = require('./layoutDemo').default
       Store.hotUpdate({ modules: { layoutDemo: newLayoutDemo } })
+    })
+    module.hot.accept(['./ebook'], () => {
+      const newEbook = require('./ebook').default
+      Store.hotUpdate({ modules: { ebook: newEbook } })
     })
   }
 

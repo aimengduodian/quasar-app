@@ -1,5 +1,8 @@
 import categories from 'assets/categories' // 类别
 import LayoutShowcase from 'layouts/showcase' // 布局展示
+// ebook页面
+import ebookCategories from 'assets/ebook'
+import LayoutEbookWeb from 'layouts/ebookweb'
 
 // 定义路由
 const routes = [
@@ -8,7 +11,7 @@ const routes = [
     component: () => import('pages/landing')
   }
 ]
-
+// 懒加载函数
 function lazyLoad (path, meta) {
   return {
     path,
@@ -24,7 +27,7 @@ const showcase = {
     {
       path: '',
       meta: {
-        title: 'Ebook Web',
+        title: 'showcase',
         hash: '/showcase',
         icon: 'layers',
         backRoute: '/'
@@ -65,6 +68,65 @@ categories.forEach(category => {
 })
 
 routes.push(showcase)
+
+// ebook路由
+// 懒加载函数
+function lazyLoadEbook (path, meta) {
+  return {
+    path,
+    meta,
+    component: () => import('pages/ebook/' + path)
+  }
+}
+
+const ebook = {
+  path: '/ebook',
+  component: LayoutEbookWeb,
+  children: [
+    {
+      path: '',
+      meta: {
+        title: '校园易市',
+        hash: '/ebook',
+        icon: 'layers',
+        backRoute: '/'
+      },
+      component: () => import('pages/ebook/index')
+    }
+  ]
+}
+
+ebookCategories.forEach(category => {
+  if (category.extract) {
+    return
+  }
+  category.features.forEach(feature => {
+    let path = category.hash + '/' + feature.hash
+
+    if (!feature.tabs) {
+      ebook.children.push(lazyLoadEbook(path, feature))
+      return
+    }
+
+    feature.tabs.forEach(tab => {
+      let subpath = path + '/' + tab.hash
+      ebook.children.push(lazyLoadEbook(subpath, {
+        title: tab.title,
+        hash: '/' + path,
+        iframeTabs: feature.iframeTabs,
+        icon: feature.icon,
+        tabs: feature.tabs
+      }))
+    })
+
+    routes.push({
+      path: '/ebook/' + path,
+      redirect: '/ebook/' + path + '/' + feature.tabs[0].hash
+    })
+  })
+})
+
+routes.push(ebook)
 
 // 添加布局模板路由
 routes.push({

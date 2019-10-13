@@ -48,33 +48,16 @@ export default {
       this.disabled = !(this.userAdvice.des.trim() && this.userAdvice.des)
     },
     subAdvice () {
-      this.$axios('api/useradvice/save', this.userAdvice, (req) => {
-        if (req.status === 200) {
-          this.$createDialog({
-            type: 'confirm',
-            title: '已经提交成功了！',
-            content: '是否继续输入建议？',
-            confirmBtn: {
-              text: '是',
-              active: true,
-              disabled: false,
-              href: 'javascript:;'
-            },
-            cancelBtn: {
-              text: '否',
-              active: false,
-              disabled: false,
-              href: 'javascript:;'
-            },
-            onConfirm: () => {
-              this.userAdvice.des = ''
-            },
-            onCancel: () => {
-              history.back()
-            }
-          }).show()
+      this.$axios({
+        method: 'POST',
+        url: '/api/useradvice/save',
+        headers: { 'content-type': 'multipart/form-data'},
+        data: JSON.stringify(this.userAdvice)
+      }).then(
+        (req) => {
+          history.back()
         }
-      })
+      )
     }
   }
 }

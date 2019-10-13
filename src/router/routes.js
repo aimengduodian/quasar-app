@@ -24,7 +24,7 @@ const showcase = {
     {
       path: '',
       meta: {
-        title: 'Quasar Showcase',
+        title: 'Ebook Web',
         hash: '/showcase',
         icon: 'layers',
         backRoute: '/'

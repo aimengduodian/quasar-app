@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpr lFf">
+  <q-layout view="lHh LpR lFf">
     <!--reveal滚动隐藏页眉页脚-->
     <q-layout-header reveal>
       <q-toolbar :inverted="$q.theme === 'ios'">

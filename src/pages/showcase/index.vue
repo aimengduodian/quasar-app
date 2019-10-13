@@ -1,15 +1,5 @@
 <template>
   <q-page padding class="page-showcase">
-    <div class="showcase-top text-center">
-      <img src="~assets/quasar-logo.svg">
-
-      <p class="caption">
-        Use sidebar to browse through demos, which showcase only a few of the Quasar components and features.
-        <br>
-        For a full list, visit the documentation website.
-      </p>
-    </div>
-
     <div class="row justify-center">
       <div style="width: 850px; max-width: 90vw;" class="row">
         <div
@@ -24,7 +14,7 @@
         </div>
       </div>
     </div>
-
+    <!--back button-->
     <q-page-sticky v-show="category" position="bottom-right" :offset="[18, 18]">
       <q-btn round color="secondary" @click="category = false" class="animate-pop">
         <q-icon name="keyboard_backspace" />

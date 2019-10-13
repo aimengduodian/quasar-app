@@ -1,4 +1,23 @@
 export default [
+  // self
+  {
+    title: 'ReadMe',
+    icon: 'blur_on',
+    hash: 'about',
+    features: [
+      {
+        title: '关于我们',
+        icon: 'style',
+        hash: 'version'
+      },
+      {
+        title: '提供建议',
+        icon: 'format_bold',
+        hash: 'advice'
+      }
+    ]
+  },
+  // system
   {
     title: 'Style & Identity',
     icon: 'style',

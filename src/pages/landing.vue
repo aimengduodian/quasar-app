@@ -5,7 +5,7 @@
     </div>
     <div class="text-center">
       <div class="card bg-white shadow-4 column no-wrap flex-center group">
-        <img src="~assets/quasar-play-logo-full.svg">
+        <img alt="pic" src="~assets/quasar-play-logo-full.svg">
         <br>
         <q-btn
           color="primary"

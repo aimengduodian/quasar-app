@@ -3,8 +3,9 @@
     <q-layout-header v-model="header" :reveal="headerReveal">
       <q-toolbar :inverted="$q.theme === 'ios'">
         <q-toolbar-title>
-          Header
-          <span slot="subtitle">Header Subtitle</span>
+          <q-search inverted v-model="terms" placeholder="点击搜索">
+            <q-autocomplete @search="search" @selected="selected" />
+          </q-search>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>

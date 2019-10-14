@@ -12,45 +12,44 @@
       <div class="areaWrap justify-center">
         <img src="~assets/map.png" alt="">
       </div>
-      </div>
     </div>
   </q-page>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        version: {
-          title: '',
-          des: ''
-        }
-      }
-    },
-    created () {
-      this.about()
-    },
-    methods: {
-      showNotify () {
-        this.$q.notify((this.$q.platform.is.desktop ? 'Clicked' : 'Tapped') + ' on a context menu item.')
-      },
-      about () {
-        this.$axios.get('/api/aboutus/us/').then(
-          (response) => {
-            this.version.des = response.data.page.pageinfo.des
-            this.version.title = response.data.page.pageinfo.title
-          }
-        ).catch(() => {
-          this.$q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-        })
+export default {
+  data () {
+    return {
+      version: {
+        title: '',
+        des: ''
       }
     }
+  },
+  created () {
+    this.about()
+  },
+  methods: {
+    showNotify () {
+      this.$q.notify((this.$q.platform.is.desktop ? 'Clicked' : 'Tapped') + ' on a context menu item.')
+    },
+    about () {
+      this.$axios.get('/api/aboutus/us/').then(
+        (response) => {
+          this.version.des = response.data.page.pageinfo.des
+          this.version.title = response.data.page.pageinfo.title
+        }
+      ).catch(() => {
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
+        })
+      })
+    }
   }
+}
 </script>
 
 <style lang="stylus">

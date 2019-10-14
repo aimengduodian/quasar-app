@@ -49,10 +49,11 @@ export default {
     },
     subAdvice () {
       this.$axios({
-        method: 'POST',
+        method: 'GET',
         url: '/api/useradvice/save',
-        headers: { 'content-type': 'multipart/form-data'},
-        data: JSON.stringify(this.userAdvice)
+        params: {
+          des: this.userAdvice.des
+        }
       }).then(
         (req) => {
           history.back()

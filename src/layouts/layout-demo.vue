@@ -1,10 +1,10 @@
 <template>
   <q-layout view="lHh LpR lFf">
-    <q-layout-header v-model="header" :reveal="headerReveal">
+    <q-layout-header>
       <q-toolbar :inverted="$q.theme === 'ios'">
         <q-toolbar-title>
           <q-search inverted v-model="terms" placeholder="点击搜索">
-            <q-autocomplete @search="search" @selected="selected" />
+            <q-autocomplete />
           </q-search>
         </q-toolbar-title>
       </q-toolbar>
@@ -33,22 +33,18 @@ export default {
   components: {
     DemoTabs
   },
+  data() {
+    return {
+      terms: '',
+      selected: '123',
+      footer: true,
+      footerReveal: true
+    }
+  },
   computed: {
-    header: {
-      get () { return this.$store.state.layoutDemo.header },
-      set (val) { this.$store.commit('layoutDemo/setHeader', val) }
-    },
-    footer: {
-      get () { return this.$store.state.layoutDemo.footer },
-      set (val) { this.$store.commit('layoutDemo/setFooter', val) }
-    },
-    ...mapGetters('layoutDemo', ['view']),
-    ...mapState('layoutDemo', [
-      'headerReveal', 'footerReveal',
-      'leftOverlay', 'leftBehavior', 'leftBreakpoint',
-      'rightOverlay', 'rightBehavior', 'rightBreakpoint',
-      'scrolling'
-    ])
+    search() {
+
+    }
   }
 }
 </script>

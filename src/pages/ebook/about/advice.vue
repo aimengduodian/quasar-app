@@ -49,9 +49,9 @@ export default {
     },
     subAdvice () {
       this.$axios({
-        method: 'GET',
+        method: 'POST',
         url: '/api/useradvice/save',
-        params: {
+        data: {
           des: this.userAdvice.des
         }
       }).then(

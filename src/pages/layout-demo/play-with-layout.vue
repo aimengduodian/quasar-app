@@ -1,6 +1,5 @@
 <template>
   <q-page padding class="row justify-center">
-
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items"
          :key="index">
@@ -25,7 +24,7 @@
       </div>
     </q-infinite-scroll>
     <!--返回到顶部-->
-    <q-page-sticky position="top-left" :offset="[0, 100]">
+    <q-page-sticky position="bottom-left" :offset="[0, 100]">
       <a
         v-back-to-top.animate="1000"
         class="animate-pop play-backtotop non-selectable shadow-2"
@@ -34,7 +33,6 @@
         Back to top
       </a>
     </q-page-sticky>
-
   </q-page>
 </template>
 
@@ -55,11 +53,10 @@ export default {
     },
     subAdvice () {
       const _that = this
-      this.$axios.get('/api/book/books', {
-        params: {
+
+      this.$axios.post('/api/book/books', {
           pageSize: _that.pageSize,
           pageNumber: _that.pageNumber
-        }
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {

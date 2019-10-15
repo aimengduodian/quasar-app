@@ -72,7 +72,7 @@ export default {
       setTimeout(() => {
         this.subAdvice()
         done()
-      }, 1000)
+      }, 100)
     }
   },
   created () {

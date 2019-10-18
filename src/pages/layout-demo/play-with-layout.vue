@@ -54,9 +54,9 @@ export default {
     subAdvice () {
       const _that = this
 
-      this.$axios.post('/api/book/books', {
-          pageSize: _that.pageSize,
-          pageNumber: _that.pageNumber
+      this.$axios.post('/book/books', {
+        pageSize: _that.pageSize,
+        pageNumber: _that.pageNumber
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {

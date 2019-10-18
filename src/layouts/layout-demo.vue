@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh LpR lFf">
-    <q-layout-header v-model="header" :reveal="headerReveal">
+    <q-layout-header :reveal="headerReveal">
       <q-toolbar :inverted="$q.theme === 'ios'">
         <q-toolbar-title>
           <q-search inverted color="light" v-model="terms" placeholder="点击搜索">
@@ -13,7 +13,7 @@
       </q-toolbar>
     </q-layout-header>
 
-    <q-layout-footer v-model="footer" :reveal="footerReveal">
+    <q-layout-footer :reveal="footerReveal">
       <demo-tabs/>
     </q-layout-footer>
 
@@ -32,7 +32,6 @@
 import DemoTabs from 'components/demo-tabs'
 import { uid, filter } from 'quasar'
 import countries from 'assets/autocomplete.json'
-import { mapState, mapGetters } from 'vuex'
 
 const icons = ['alarm', 'email', 'search', 'build', 'card_giftcard', 'perm_identity', 'receipt', 'schedule', 'speaker_phone', 'archive', 'weekend', 'battery_charging_full']
 
@@ -65,7 +64,7 @@ export default {
   components: {
     DemoTabs
   },
-  data() {
+  data () {
     return {
       terms: '',
       countries: parseCountries(),
@@ -74,23 +73,40 @@ export default {
     }
   },
   methods: {
-    search (terms, done) {
-      setTimeout(() => {
-        done(filter(terms, {field: 'value', list: parseCountries()}))
-      }, 1000)
+    async search (terms, done) {
+      const arr = []
+      const msg = {
+        bookName: terms,
+        pageNumber: 0,
+        pageSize: 10
+      }
+      // ajax
+      await this.$axios.post('/book/books', msg).then((res) => {
+        res.data.page.pageInfo.list.forEach(item => {
+          let aItem = {}
+          aItem.value = item.id
+          aItem.label = item.bookName
+          aItem.sublabel = item.bookPub
+          arr.push(aItem)
+        })
+      })
+      // done(filter(terms, {field: 'value', list: parseCountries()}))
+      console.log(arr)
+      done(arr)
     },
     selected (item) {
       this.$q.notify(`Selected suggestion "${item.label}"`)
-    }
-  },
-  computed: {
-    header: {
-      get () { return this.$store.state.layoutDemo.header },
-      set (val) { this.$store.commit('layoutDemo/setHeader', val) }
     },
-    footer: {
-      get () { return this.$store.state.layoutDemo.footer },
-      set (val) { this.$store.commit('layoutDemo/setFooter', val) }
+    funDame () {
+      let aArr = []
+      let item = {
+        label: '123',
+        sublabel: 'abc',
+        icon: 'search',
+        value: 'search'
+      }
+      aArr.push(item)
+      return aArr
     }
   }
 }

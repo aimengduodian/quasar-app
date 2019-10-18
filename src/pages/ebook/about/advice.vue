@@ -50,7 +50,7 @@ export default {
     subAdvice () {
       this.$axios({
         method: 'POST',
-        url: '/api/useradvice/save',
+        url: '/useradvice/save',
         data: {
           des: this.userAdvice.des
         }

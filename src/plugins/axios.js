@@ -4,7 +4,7 @@ import cookie from 'vue-cookie'
 import qs from 'qs'
 
 // axios默认配置
-// axios.defaults.baseURL = 'http://192.168.2.251'
+axios.defaults.baseURL = 'http://47.106.222.50:8080'
 axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 

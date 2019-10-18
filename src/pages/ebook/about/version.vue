@@ -34,7 +34,7 @@ export default {
       this.$q.notify((this.$q.platform.is.desktop ? 'Clicked' : 'Tapped') + ' on a context menu item.')
     },
     about () {
-      this.$axios.get('/api/aboutus/us/').then(
+      this.$axios.get('/aboutus/us/').then(
         (response) => {
           this.version.des = response.data.page.pageinfo.des
           this.version.title = response.data.page.pageinfo.title

@@ -11,7 +11,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if ( config.method === 'post' ){
+    if (config.method === 'post') {
       config.data = qs.stringify(config.data)
     }
     // 判断是否存在ticket，如果存在的话，则每个http header都加上ticket

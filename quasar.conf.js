@@ -32,7 +32,7 @@ module.exports = function(ctx) {
     },
     devServer: {
       open: true,
-      host: 'localhost',
+      host: '192.168.1.254',
       port: ctx.mode.spa ? 9000 : (ctx.mode.pwa ? 9010 : 9020),
       proxy: {
         // 将所有以/api开头的请求代理到jsonplaceholder

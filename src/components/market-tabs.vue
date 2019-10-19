@@ -6,24 +6,23 @@
   >
     <q-route-tab slot="title"
                  icon="play_circle_outline"
-                 to="/ebook/layout-demo/play-with-layout"
-                 eplace
-                 label="图书"
+                 to="/ebook/market/books"
+                 eplace label="图书"
     />
     <q-route-tab slot="title"
                  icon="view_array"
-                 to="/ebook/layout-demo/drawer-panels"
+                 to="/ebook/market/electronics"
                  replace label="电子"
     />
     <q-route-tab slot="title"
                  icon="pin_drop"
-                 to="/ebook/layout-demo/page-sticky"
+                 to="/ebook/market/coach"
                  replace
                  label="辅导"
     />
     <q-route-tab slot="title"
                  icon="play_for_work"
-                 to="/ebook/layout-demo/floating-action-button"
+                 to="/ebook/market/others"
                  replace
                  label="其他"
     />

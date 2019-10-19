@@ -1,21 +1,56 @@
 <template>
   <q-layout view="lHh LpR lFf">
+    <!--header-->
     <q-layout-header :reveal="headerReveal">
-      <q-toolbar :inverted="$q.theme === 'ios'">
-        <q-toolbar-title>
-          <q-search inverted color="light" v-model="terms" placeholder="点击搜索">
-            <q-autocomplete
-              @search="search"
-              @selected="selected"
-            />
-          </q-search>
-        </q-toolbar-title>
-      </q-toolbar>
+      <div>
+        <div class="row" style="background: bisqued">
+          <div class="col-10" />
+          <div class="col-2">
+            <q-btn flat icon="search" @click.native="show()"/>
+          </div>
+        </div>
+      </div>
     </q-layout-header>
-
+    <!--footer-->
     <q-layout-footer :reveal="footerReveal">
-      <demo-tabs/>
+      <footer-tabs/>
     </q-layout-footer>
+    <!--modal-->
+    <q-modal v-model="layoutModal"
+             :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+      <q-modal-layout>
+        <q-toolbar slot="header">
+          <q-btn
+            flat
+            round
+            dense
+            @click="layoutModal = false"
+            icon="reply"
+          />
+          <q-toolbar-title>
+            <q-search inverted color="light"
+                      @click.native="show()"
+                      v-model="terms"
+                      placeholder="点击搜索">
+              <q-autocomplete
+                @search="search"
+                @selected="selected"
+              />
+            </q-search>
+          </q-toolbar-title>
+        </q-toolbar>
+
+        <q-toolbar slot="footer">
+          <q-toolbar-title>
+            Footer
+          </q-toolbar-title>
+        </q-toolbar>
+
+        <div class="layout-padding">
+          <!--content-->
+        </div>
+      </q-modal-layout>
+    </q-modal>
 
     <q-page-container>
       <transition
@@ -29,11 +64,15 @@
 </template>
 
 <script>
-import DemoTabs from 'components/demo-tabs'
+import FooterTabs from 'components/market-tabs'
 import { uid, filter } from 'quasar'
 import countries from 'assets/autocomplete.json'
 
-const icons = ['alarm', 'email', 'search', 'build', 'card_giftcard', 'perm_identity', 'receipt', 'schedule', 'speaker_phone', 'archive', 'weekend', 'battery_charging_full']
+const icons = ['alarm', 'email', 'search',
+  'build', 'card_giftcard', 'perm_identity',
+  'receipt', 'schedule', 'speaker_phone',
+  'archive', 'weekend', 'battery_charging_full'
+]
 
 function getRandomIcon () {
   return icons[Math.floor(Math.random() * icons.length)]
@@ -62,17 +101,21 @@ function parseCountries () {
 
 export default {
   components: {
-    DemoTabs
+    FooterTabs
   },
   data () {
     return {
       terms: '',
+      layoutModal: false,
       countries: parseCountries(),
       headerReveal: false,
       footerReveal: false
     }
   },
   methods: {
+    show () {
+      this.layoutModal = true
+    },
     async search (terms, done) {
       const arr = []
       const msg = {

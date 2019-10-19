@@ -128,15 +128,15 @@ ebookCategories.forEach(category => {
 
 routes.push(ebook)
 
-// 添加布局模板路由
+// ebook路由
 routes.push({
-  path: '/ebook/layout-demo',
-  component: () => import('layouts/layout-demo'),
+  path: '/ebook/market',
+  component: () => import('layouts/marketLayout'),
   children: [
-    {path: 'play-with-layout', component: () => import('pages/layout-demo/play-with-layout')},
-    {path: 'drawer-panels', component: () => import('pages/layout-demo/drawer-panels')},
-    {path: 'page-sticky', component: () => import('pages/layout-demo/page-sticky')},
-    {path: 'floating-action-button', component: () => import('pages/layout-demo/floating-action-button')}
+    {path: 'books', component: () => import('pages/ebook/books/books')},
+    {path: 'electronics', component: () => import('pages/ebook/electronics/electronics')},
+    {path: 'others', component: () => import('pages/ebook/others/others')},
+    {path: 'coach', component: () => import('pages/ebook/coach/coach')}
   ]
 })
 

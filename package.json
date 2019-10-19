@@ -11,7 +11,7 @@
     "dev-mat": "quasar dev -t mat",
     "dev-pwa": "quasar dev -m pwa",
     "dev-server": "$ quasar serve",
-    "build": "quasar build",
+    "build": "quasar build -t ios",
     "clean": "quasar clean"
   },
   "dependencies": {

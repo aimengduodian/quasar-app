@@ -3,7 +3,7 @@
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items"
          :key="index">
-        <q-card style="margin: 0 20px">
+        <q-card style="margin: 0 10px">
           <q-card-media overlay-position="full">
             <img alt="" :src="item.bookPic">
             <q-card-title slot="overlay">
@@ -74,9 +74,6 @@ export default {
         done()
       }, 100)
     }
-  },
-  created () {
-    this.subAdvice()
   }
 }
 </script>

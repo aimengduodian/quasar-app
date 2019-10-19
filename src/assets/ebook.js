@@ -30,28 +30,13 @@ export default [
   {
     title: '我要购买',
     icon: 'mode_edit',
-    hash: 'layout-demo',
+    hash: 'market',
     extract: true,
     features: [
       {
-        title: 'Play with Layout',
+        title: 'books',
         icon: 'play_circle_outline',
-        hash: 'play-with-layout'
-      },
-      {
-        title: 'Drawer Panels',
-        icon: 'view_array',
-        hash: 'drawer-panels'
-      },
-      {
-        title: 'Page Sticky',
-        icon: 'pin_drop',
-        hash: 'page-sticky'
-      },
-      {
-        title: 'Floating Action Button',
-        icon: 'play_for_work',
-        hash: 'floating-action-button'
+        hash: 'books'
       }
     ]
   }

@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh LpR lFf">
     <!--header-->
-    <q-layout-header style="border: 0px" :reveal="headerReveal">
+    <q-layout-header :reveal="headerReveal">
       <div class="row header" >
         <div class="col-2">
           <q-btn flat icon="mail" @click.native="show()"/>
@@ -58,7 +58,8 @@
       <transition
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
-        mode="out-in">
+        mode="out-in"
+      >
         <router-view />
       </transition>
     </q-page-container>

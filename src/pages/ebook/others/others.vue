@@ -1,49 +1,103 @@
 <template>
-  <q-page padding class="text-center">
-    <p class="caption" style="margin-top: 72px">
-      Notice the eight buttons positioned along the border of the page.
-      <br>
-      If you will play with the Layout, you'll see that their position
-      changes to accomodate page resize, drawer panels appearing / dissapearing,
-      or header/footer going in & out of view or changing its size.
-    </p>
-
-    <q-page-sticky position="top-left" :offset="[18, 18]">
-      <q-btn fab-mini color="secondary" icon="location_on" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="top" :offset="[18, 18]">
-      <q-btn fab-mini color="purple" icon="camera_enhance" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="top-right" :offset="[18, 18]">
-      <q-btn fab-mini color="orange" icon="mail_outline" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="right" :offset="[18, 18]">
-      <q-btn fab-mini color="red" icon="feedback" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab-mini color="brown-5" icon="phone" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="bottom" :offset="[18, 18]">
-      <q-btn fab-mini color="primary" icon="g_translate" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="bottom-left" :offset="[18, 18]">
-      <q-btn fab-mini color="lime" text-color="black" icon="thumb_up" class="animate-pop" />
-    </q-page-sticky>
-
-    <q-page-sticky position="left" :offset="[18, 18]">
-      <q-btn fab-mini color="grey-3" text-color="dark" icon="loyalty" class="animate-pop" />
-    </q-page-sticky>
-
-    <div style="padding: 25px 16px 16px;">
-      <p class="caption" v-for="n in 50" :key="`sticky-${n}`">
-        <em>Page has intended scroll</em>
+  <q-page padding class="row justify-center">
+    <q-infinite-scroll :handler="refresher">
+      <p v-for="(item, index) in items"
+         :key="index">
+        <q-card style="margin: 0 10px">
+          <q-card-media>
+            <img alt="" :src="item.otherPic">
+            <q-card-title slot="overlay">
+              {{ item.otherName }}
+              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
+            </q-card-title>
+          </q-card-media>
+          <q-card-actions align="around">
+            <q-btn flat round color="red" icon="favorite" />
+            <q-btn flat round color="faded" icon="bookmark" />
+            <q-btn flat round color="primary" icon="share" @click="switch_go" />
+          </q-card-actions>
+        </q-card>
       </p>
-    </div>
+      <!--添加消息-->
+      <div class="row justify-center" style="margin-bottom: 50px;">
+        <q-spinner-dots slot="message" :size="40" />
+      </div>
+    </q-infinite-scroll>
+    <!--返回到顶部-->
+    <q-page-sticky position="bottom-left" :offset="[0, 100]">
+      <a
+        v-back-to-top.animate="1000"
+        class="animate-pop play-backtotop non-selectable shadow-2"
+        v-ripple.mat
+      >
+        Back to top
+      </a>
+    </q-page-sticky>
   </q-page>
 </template>
+
+<script>
+import view from './view'
+export default {
+  components: {
+    view
+  },
+  data () {
+    return {
+      pageSize: 5,
+      pageNumber: 1,
+      lastPage: 0,
+      items: []
+    }
+  },
+  methods: {
+    switch_go () {
+      this.$router.push('view')
+    },
+    splitMth (str) {
+      const strs = str.split(',')
+      return strs[0]
+    },
+    subAdvice () {
+      const _that = this
+
+      this.$axios.post('/other/others', {
+        pageSize: _that.pageSize,
+        pageNumber: _that.pageNumber
+      }).then((res) => {
+        this.lastPage = res.data.page.pageInfo.lastPage
+        res.data.page.pageInfo.list.forEach(item => {
+          item.otherPic = 'http://47.106.222.50:8083' + this.splitMth(item.otherPic)
+          this.items.push(item)
+        })
+        if (!res.data.page.pageInfo.isLastPage) {
+          _that.pageNumber++
+        }
+      })
+    },
+    refresher (index, done) {
+      setTimeout(() => {
+        this.subAdvice()
+        done()
+      }, 100)
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+  @import '~variables'
+
+  .play-backtotop
+    color white
+    top 30%
+    padding 15px
+    width 90px
+    background-color $cyan
+    border-radius 0 15px 15px 0
+    &:hover
+      color $grey-4
+
+    .q-card
+      width 80%
+</style>

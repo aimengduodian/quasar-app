@@ -1,31 +1,104 @@
 <template>
-  <q-page padding>
-    <blockquote>
-      <small>
-        This view contains two drawer panels. One on left and one on right.
-        <span class="desktop-only">Click</span>
-        <span class="mobile-only">Tap</span> on menu buttons from top-left
-        or top-right corners of the screen, or swipe the
-        Drawers into view from the left or right edge of screen.
-      </small>
-    </blockquote>
-    <p class="caption">
-      The Drawer Panel (also known as a Sidebar) is the element on the left
-      side (or right side) of your screen, usually used for Navigation, which gets
-      hidden on smaller screens and is shown alongside the Page content on wide
-      enough screens. Breakpoints are configurable in JS.
-    </p>
-    <p class="caption">
-      Drawer Panels can use a QScrollArea for enhancing design and behavior of
-      scrollbar. Furthermore, due to some Layout features, they can scroll along
-      the content should you wish to. Play with the Layout to see this in effect.
-    </p>
-    <p class="caption">
-      Drawers can be activated by swiping them into view from the edge of the screen
-      or by clicking/tapping on menu buttons. Their position is based on how you
-      structure the layout template. You can, for instance, display a Drawer on right
-      side of screen on big screens but swipe them from left on smaller screens.
-      It's up to you and where you place the Drawer HTML tag.
-    </p>
+  <q-page padding class="row justify-center">
+    <q-infinite-scroll :handler="refresher">
+      <p v-for="(item, index) in items"
+         :key="index">
+        <q-card style="margin: 0 10px">
+          <q-card-media>
+            <img alt="" :src="item.elecPic">
+            <q-card-title slot="overlay">
+              {{ item.electronicsName }}
+              <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
+              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
+            </q-card-title>
+          </q-card-media>
+          <q-card-actions align="around">
+            <q-btn flat round color="red" icon="favorite" />
+            <q-btn flat round color="faded" icon="bookmark" />
+            <q-btn flat round color="primary" icon="share" @click="switch_go" />
+          </q-card-actions>
+        </q-card>
+      </p>
+      <!--添加消息-->
+      <div class="row justify-center" style="margin-bottom: 50px;">
+        <q-spinner-dots slot="message" :size="40" />
+      </div>
+    </q-infinite-scroll>
+    <!--返回到顶部-->
+    <q-page-sticky position="bottom-left" :offset="[0, 100]">
+      <a
+        v-back-to-top.animate="1000"
+        class="animate-pop play-backtotop non-selectable shadow-2"
+        v-ripple.mat
+      >
+        Back to top
+      </a>
+    </q-page-sticky>
   </q-page>
 </template>
+
+<script>
+import view from './view'
+export default {
+  components: {
+    view
+  },
+  data () {
+    return {
+      pageSize: 5,
+      pageNumber: 1,
+      lastPage: 0,
+      items: []
+    }
+  },
+  methods: {
+    switch_go () {
+      this.$router.push('view')
+    },
+    splitMth (str) {
+      const strs = str.split(',')
+      return strs[0]
+    },
+    subAdvice () {
+      const _that = this
+
+      this.$axios.post('/electronics/electronics', {
+        pageSize: _that.pageSize,
+        pageNumber: _that.pageNumber
+      }).then((res) => {
+        this.lastPage = res.data.page.pageInfo.lastPage
+        res.data.page.pageInfo.list.forEach(item => {
+          item.elecPic = 'http://47.106.222.50:8083' + this.splitMth(item.electronicsPic)
+          this.items.push(item)
+        })
+        if (!res.data.page.pageInfo.isLastPage) {
+          _that.pageNumber++
+        }
+      })
+    },
+    refresher (index, done) {
+      setTimeout(() => {
+        this.subAdvice()
+        done()
+      }, 100)
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+  @import '~variables'
+
+  .play-backtotop
+    color white
+    top 30%
+    padding 15px
+    width 90px
+    background-color $cyan
+    border-radius 0 15px 15px 0
+    &:hover
+      color $grey-4
+
+    .q-card
+      width 80%
+</style>

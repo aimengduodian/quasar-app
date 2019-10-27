@@ -4,7 +4,7 @@
       <p v-for="(item, index) in items"
          :key="index">
         <q-card style="margin: 0 10px">
-          <q-card-media overlay-position="full">
+          <q-card-media>
             <img alt="" :src="item.bookPic">
             <q-card-title slot="overlay">
               {{ item.bookName }}
@@ -12,9 +12,10 @@
               <div slot="subtitle">价格：￥{{ item.bookPrice }}</div>
             </q-card-title>
           </q-card-media>
-          <q-card-actions>
-            <q-btn flat>Action 1</q-btn>
-            <q-btn flat>Action 2</q-btn>
+          <q-card-actions align="around">
+            <q-btn flat round color="red" icon="favorite" />
+            <q-btn flat round color="faded" icon="bookmark" />
+            <q-btn flat round color="primary" icon="share" @click="switch_go" />
           </q-card-actions>
         </q-card>
       </p>
@@ -37,7 +38,11 @@
 </template>
 
 <script>
+import view from './view'
 export default {
+  components: {
+    view
+  },
   data () {
     return {
       pageSize: 5,
@@ -47,6 +52,9 @@ export default {
     }
   },
   methods: {
+    switch_go () {
+      this.$router.push('view')
+    },
     splitMth (str) {
       const strs = str.split(',')
       return strs[0]
@@ -86,7 +94,7 @@ export default {
     top 30%
     padding 15px
     width 90px
-    background-color $secondary
+    background-color $cyan
     border-radius 0 15px 15px 0
     &:hover
       color $grey-4

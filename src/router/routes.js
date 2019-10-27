@@ -136,7 +136,8 @@ routes.push({
     {path: 'books', component: () => import('pages/ebook/books/books')},
     {path: 'electronics', component: () => import('pages/ebook/electronics/electronics')},
     {path: 'others', component: () => import('pages/ebook/others/others')},
-    {path: 'coach', component: () => import('pages/ebook/coach/coach')}
+    {path: 'coach', component: () => import('pages/ebook/coach/coach')},
+    {path: 'view', component: () => import('pages/ebook/books/view')}
   ]
 })
 

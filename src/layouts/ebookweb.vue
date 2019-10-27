@@ -126,6 +126,9 @@ export default {
       document.body.scrollTop = 0
       done()
     }
+  },
+  created() {
+    // this.$q.fullscreen.toggle()
   }
 }
 </script>

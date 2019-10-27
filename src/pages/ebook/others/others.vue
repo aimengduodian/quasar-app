@@ -1,23 +1,19 @@
 <template>
-  <q-page padding class="row justify-center">
-    <q-infinite-scroll :handler="refresher">
-      <p v-for="(item, index) in items"
-         :key="index">
-        <q-card style="margin: 0 10px">
-          <q-card-media>
-            <img alt="" :src="item.otherPic">
-            <q-card-title slot="overlay">
-              {{ item.otherName }}
-              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
-            </q-card-title>
-          </q-card-media>
-          <q-card-actions align="around">
-            <q-btn flat round color="red" icon="favorite" />
-            <q-btn flat round color="faded" icon="bookmark" />
-            <q-btn flat round color="primary" icon="share" @click="switch_go" />
-          </q-card-actions>
-        </q-card>
-      </p>
+  <q-page class="row justify-center">
+    <q-infinite-scroll class="item_style" :handler="refresher">
+      <q-item v-for="(item, index) in items"
+              :key="index">
+        <q-item-side :image="item.otherPic" />
+        <q-item-main>
+          <q-item-tile label> {{ item.otherName }}</q-item-tile>
+          <q-item-tile sublabel lines="3">
+            价格：￥{{ item.presentPrice }}
+          </q-item-tile>
+        </q-item-main>
+        <q-item-side>
+          <q-btn @click="switch_go" right icon="movie" />
+        </q-item-side>
+      </q-item>
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
         <q-spinner-dots slot="message" :size="40" />
@@ -87,6 +83,11 @@ export default {
 
 <style lang="stylus">
   @import '~variables'
+
+  .item_style
+    width 100%
+    margin 10px 0
+    border-radius 15px
 
   .play-backtotop
     color white

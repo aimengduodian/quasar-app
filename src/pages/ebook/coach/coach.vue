@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="row justify-center">
+  <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items"
          :key="index">

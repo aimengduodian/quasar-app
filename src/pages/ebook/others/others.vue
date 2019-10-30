@@ -1,18 +1,34 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll class="item_style" :handler="refresher">
-      <q-item v-for="(item, index) in items" :key="index">
-        <q-item-side :image="item.otherPic" />
-        <q-item-main>
-          <q-item-tile label> {{ item.otherName }}</q-item-tile>
-          <q-item-tile sublabel lines="3">
-            价格：￥{{ item.presentPrice }}
-          </q-item-tile>
-        </q-item-main>
-        <q-item-side>
-          <q-btn @click="switch_go" right icon="movie" />
-        </q-item-side>
-      </q-item>
+      <div v-for="(item, index) in items" :key="index">
+        <div class="row justify-around other-card">
+          <div class="col-3">
+            <img :src="item.otherPic" style="width: 80%" alt="">
+          </div>
+          <div class="col-5">
+            <div class="q-title">
+              {{ item.otherName }}
+            </div>
+            <div class="q-body-2">
+              价格：￥{{ item.presentPrice }}
+            </div>
+            <div class="q-caption">
+              描述
+            </div>
+          </div>
+          <div class="col-2">
+            <q-btn
+              round
+              size="15px"
+              color="primary"
+              label="Text height: 10px"
+              @click="switch_go"
+            />
+          </div>
+        </div>
+      </div>
+
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
         <q-spinner-dots slot="message" :size="40" />
@@ -100,4 +116,15 @@ export default {
 
     .q-card
       width 80%
+
+  .other-card
+    height 15vh
+    background-color #dedede
+    margin 10px 15px
+    border-radius 10px
+    >div
+      margin auto
+      >img
+        border-radius 5px
+        height 80%
 </style>

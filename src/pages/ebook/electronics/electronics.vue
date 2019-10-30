@@ -2,7 +2,7 @@
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items" :key="index">
-        <q-btn style="margin: 0; padding: 0" @click="switch_go">
+        <q-btn style="margin: 0; padding: 0" @click.stop="switch_go">
           <q-card style="margin: 5px 10px; border-radius: 20px;">
             <q-card-media>
               <img alt="" :src="item.elecPic">

@@ -3,7 +3,7 @@
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items"
          :key="index">
-        <q-card inline color="secondary" dark class="q-ma-sm">
+        <q-card inline style="border-radius: 20px" color="secondary" dark class="q-ma-sm">
           <q-card-title>
             {{ item.name }}
             <span slot="subtitle">薪酬：￥ {{ item.price }}</span>

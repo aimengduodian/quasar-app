@@ -1,8 +1,7 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll class="item_style" :handler="refresher">
-      <q-item v-for="(item, index) in items"
-              :key="index">
+      <q-item v-for="(item, index) in items" :key="index">
         <q-item-side :image="item.otherPic" />
         <q-item-main>
           <q-item-tile label> {{ item.otherName }}</q-item-tile>

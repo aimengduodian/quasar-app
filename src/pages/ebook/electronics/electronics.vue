@@ -1,23 +1,19 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
-      <p v-for="(item, index) in items"
-         :key="index">
-        <q-card style="margin: 0 10px">
-          <q-card-media>
-            <img alt="" :src="item.elecPic">
-            <q-card-title slot="overlay">
-              {{ item.electronicsName }}
-              <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
-              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
-            </q-card-title>
-          </q-card-media>
-          <q-card-actions align="around">
-            <q-btn flat round color="red" icon="favorite" />
-            <q-btn flat round color="faded" icon="bookmark" />
-            <q-btn flat round color="primary" icon="share" @click="switch_go" />
-          </q-card-actions>
-        </q-card>
+      <p v-for="(item, index) in items" :key="index">
+        <q-btn style="margin: 0; padding: 0" @click="switch_go">
+          <q-card style="margin: 5px 10px; border-radius: 20px;">
+            <q-card-media>
+              <img alt="" :src="item.elecPic">
+              <q-card-title>
+                {{ item.electronicsName }}
+                <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
+                <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
+              </q-card-title>
+            </q-card-media>
+          </q-card>
+        </q-btn>
       </p>
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
@@ -45,7 +41,7 @@ export default {
   },
   data () {
     return {
-      pageSize: 5,
+      pageSize: 15,
       pageNumber: 1,
       lastPage: 0,
       items: []

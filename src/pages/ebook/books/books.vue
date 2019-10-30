@@ -3,7 +3,7 @@
     <q-infinite-scroll :handler="refresher">
       <p v-for="(item, index) in items"
          :key="index">
-        <q-card style="margin: 0 10px">
+        <q-card style="margin: 5px 10px; border-radius: 20px">
           <q-card-media>
             <img alt="" :src="item.bookPic">
             <q-card-title slot="overlay">

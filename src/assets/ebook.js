@@ -15,9 +15,9 @@ export default [
         hash: 'advice'
       },
       {
-        title: '我要发布',
+        title: 'verify',
         icon: 'linear_scale',
-        hash: 'sellgoods'
+        hash: 'stu'
       }
     ]
   },

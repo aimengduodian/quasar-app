@@ -1,6 +1,7 @@
 export default [
   {
     title: 'books',
+    name: 'books',
     icon: 'mode_edit',
     hash: 'books',
     features: [
@@ -19,6 +20,7 @@ export default [
   {
     title: 'coach',
     icon: 'mode_edit',
+    name: 'coach',
     hash: 'coach',
     features: [
       {
@@ -36,6 +38,7 @@ export default [
   {
     title: 'electronics',
     icon: 'mode_edit',
+    name: 'electronics',
     hash: 'electronics',
     features: [
       {
@@ -53,6 +56,7 @@ export default [
   {
     title: 'others',
     icon: 'mode_edit',
+    name: 'others',
     hash: 'others',
     features: [
       {

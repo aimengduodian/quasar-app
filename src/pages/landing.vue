@@ -9,7 +9,7 @@
         <br>
         <q-btn
           color="secondary"
-          to="/ebook"
+          to="/ebook/market/books/books"
           class="full-width"
           target="_blank"
           icon="launch"

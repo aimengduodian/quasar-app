@@ -2,9 +2,10 @@ import categories from 'assets/market'
 import Layout from 'layouts/marketLayout'
 
 // 懒加载函数
-function lazyLoad (path, meta) {
+function lazyLoad (path, name, meta) {
   return {
     path,
+    name,
     meta,
     component: () => import('pages/ebook/' + path)
   }
@@ -19,7 +20,8 @@ const market = {
 categories.forEach(category => {
   category.features.forEach(feature => {
     let path = category.hash + '/' + feature.hash
-    market.children.push(lazyLoad(path, feature))
+    let name = category.name
+    market.children.push(lazyLoad(path, name, feature))
   })
 })
 

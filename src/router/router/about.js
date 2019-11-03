@@ -2,9 +2,10 @@ import categories from 'assets/ebook'
 import Layout from 'layouts/ebookweb'
 
 // 懒加载函数
-function lazyLoad (path, meta) {
+function lazyLoad (path, name, meta) {
   return {
     path,
+    name,
     meta,
     component: () => import('pages/ebook/' + path)
   }
@@ -19,7 +20,8 @@ const about = {
 categories.forEach(category => {
   category.features.forEach(feature => {
     let path = category.hash + '/' + feature.hash
-    about.children.push(lazyLoad(path, feature))
+    let name = category.name
+    about.children.push(lazyLoad(path, name, feature))
   })
 })
 

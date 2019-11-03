@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import FooterTabs from 'components/market-tabs'
 import { uid } from 'quasar'
+import FooterTabs from 'components/market-tabs'
 import countries from 'assets/autocomplete.json'
 
 const icons = ['alarm', 'email', 'search']

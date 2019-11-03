@@ -9,8 +9,8 @@ export default function ({ store }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ y: 0 }),
     routes,
-
-    // Leave these as is and change from quasar.conf.js instead!
+    // Leave these as is and change
+    // from quasar.conf.js instead!
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })

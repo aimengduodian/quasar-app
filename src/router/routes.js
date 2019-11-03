@@ -1,6 +1,5 @@
-// ebook页面
-import ebookCategories from 'assets/ebook'
-import LayoutEbookWeb from 'layouts/ebookweb'
+import home from './router/about'
+import market from './router/market'
 
 // 定义路由
 const routes = [
@@ -10,77 +9,20 @@ const routes = [
   }
 ]
 
-// ebook路由
-// 懒加载函数
-function lazyLoadEbook (path, meta) {
-  return {
-    path,
-    meta,
-    component: () => import('pages/ebook/' + path)
-  }
-}
-
-const ebook = {
+// home
+const homePage = {
   path: '/ebook',
-  component: LayoutEbookWeb,
-  children: [
-    {
-      path: '',
-      meta: {
-        title: '校园易市',
-        hash: '/ebook',
-        icon: 'layers',
-        backRoute: '/'
-      },
-      component: () => import('pages/ebook/index')
-    }
-  ]
+  meta: {
+    title: '校园易市',
+    icon: 'layers',
+    backRoute: '/'
+  },
+  component: () => import('pages/about/index')
 }
-
-ebookCategories.forEach(category => {
-  if (category.extract) {
-    return
-  }
-  category.features.forEach(feature => {
-    let path = category.hash + '/' + feature.hash
-
-    if (!feature.tabs) {
-      ebook.children.push(lazyLoadEbook(path, feature))
-      return
-    }
-
-    feature.tabs.forEach(tab => {
-      let subpath = path + '/' + tab.hash
-      ebook.children.push(lazyLoadEbook(subpath, {
-        title: tab.title,
-        hash: '/' + path,
-        iframeTabs: feature.iframeTabs,
-        icon: feature.icon,
-        tabs: feature.tabs
-      }))
-    })
-
-    routes.push({
-      path: '/ebook/' + path,
-      redirect: '/ebook/' + path + '/' + feature.tabs[0].hash
-    })
-  })
-})
-
-routes.push(ebook)
-
-// ebook路由
-routes.push({
-  path: '/ebook/market',
-  component: () => import('layouts/marketLayout'),
-  children: [
-    {path: 'books', component: () => import('pages/ebook/books/books')},
-    {path: 'electronics', component: () => import('pages/ebook/electronics/electronics')},
-    {path: 'others', component: () => import('pages/ebook/others/others')},
-    {path: 'coach', component: () => import('pages/ebook/coach/coach')},
-    {path: 'view', component: () => import('pages/ebook/books/view')}
-  ]
-})
+// add router
+routes.push(homePage)
+routes.push(home)
+routes.push(market)
 
 // 没有找到路由返回404
 routes.push({path: '*', component: () => import('pages/error404.vue')})

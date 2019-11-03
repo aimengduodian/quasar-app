@@ -9,7 +9,7 @@
         >
           <div class="card text-center category-link text-primary" @click="show(category)">
             <q-icon :name="category.icon" />
-            <p class="caption">{{ category.title }}</p>
+            <p class="caption">{{ category.title }}456</p>
           </div>
         </div>
       </div>

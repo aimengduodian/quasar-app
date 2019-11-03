@@ -1,6 +1,6 @@
 export default [
   {
-    title: '校园易市',
+    title: 'about',
     icon: 'blur_on',
     hash: 'about',
     features: [
@@ -13,30 +13,23 @@ export default [
         title: '提供建议',
         icon: 'view_compact',
         hash: 'advice'
-      },
-      {
-        title: 'verify',
-        icon: 'linear_scale',
-        hash: 'stu'
       }
     ]
   },
   {
-    title: '小卖部',
-    icon: 'blur_on',
-    hash: 'buy',
-    features: []
-  },
-  {
-    title: '我要购买',
+    title: 'market',
     icon: 'mode_edit',
     hash: 'market',
-    extract: true,
     features: [
       {
         title: 'books',
         icon: 'play_circle_outline',
         hash: 'books'
+      },
+      {
+        title: 'view',
+        icon: 'linear_scale',
+        hash: 'view'
       }
     ]
   }

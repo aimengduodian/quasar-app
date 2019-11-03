@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import EbookTabs from 'components/ebook-tabs'
 import { mapState } from 'vuex'
+import ebookTabs from 'components/ebook-tabs'
 import categories from 'assets/ebook'
 
 export default {
   components: {
-    EbookTabs
+    ebookTabs
   },
   data () {
     return {

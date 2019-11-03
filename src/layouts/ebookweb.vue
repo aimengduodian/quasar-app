@@ -4,10 +4,9 @@
     <q-layout-header reveal>
       <q-toolbar :inverted="$q.theme === 'ios'">
         <q-toolbar-title>
-          {{ pageMeta.title }}
+          {{ title }}
         </q-toolbar-title>
       </q-toolbar>
-      <ebook-tabs v-if="$q.theme === 'mat'"/>
     </q-layout-header>
     <q-page-container>
       <router-view/>
@@ -17,16 +16,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import ebookTabs from 'components/ebook-tabs'
-import categories from 'assets/ebook'
-
 export default {
-  components: {
-    ebookTabs
-  },
-  data () {
+  data() {
     return {
-      categories
+      title: '校园易市'
     }
   },
   computed: {

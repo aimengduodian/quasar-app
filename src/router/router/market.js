@@ -12,7 +12,7 @@ function lazyLoad (path, name, meta) {
 }
 
 const market = {
-  path: '/ebook/market',
+  path: '/market',
   component: Layout,
   children: []
 }
@@ -20,7 +20,7 @@ const market = {
 categories.forEach(category => {
   category.features.forEach(feature => {
     let path = category.hash + '/' + feature.hash
-    let name = category.name
+    let name = feature.name
     market.children.push(lazyLoad(path, name, feature))
   })
 })

@@ -1,28 +1,13 @@
-import categories from 'assets/ebook'
 import Layout from 'layouts/ebookweb'
-
-// 懒加载函数
-function lazyLoad (path, name, meta) {
-  return {
-    path,
-    name,
-    meta,
-    component: () => import('pages/ebook/' + path)
-  }
-}
 
 const about = {
   path: '/about',
   component: Layout,
-  children: []
+  children: [
+    {path: 'index', name: 'about', component: () => import('pages/about/index')},
+    {path: 'version', name: 'version', component: () => import('pages/about/version')},
+    {path: 'advice', name: 'advice', component: () => import('pages/about/advice')}
+  ]
 }
-
-categories.forEach(category => {
-  category.features.forEach(feature => {
-    let path = category.hash + '/' + feature.hash
-    let name = category.name
-    about.children.push(lazyLoad(path, name, feature))
-  })
-})
 
 export default about

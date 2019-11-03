@@ -1,17 +1,18 @@
 export default [
   {
     title: 'books',
-    name: 'books',
     icon: 'mode_edit',
     hash: 'books',
     features: [
       {
         title: 'books',
+        name: 'books',
         icon: 'play_circle_outline',
         hash: 'books'
       },
       {
         title: 'view',
+        name: 'view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -25,11 +26,13 @@ export default [
     features: [
       {
         title: 'coach',
+        name: 'coach',
         icon: 'play_circle_outline',
         hash: 'coach'
       },
       {
         title: 'view',
+        name: 'view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -43,11 +46,13 @@ export default [
     features: [
       {
         title: 'electronics',
+        name: 'electronics',
         icon: 'play_circle_outline',
         hash: 'electronics'
       },
       {
         title: 'view',
+        name: 'view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -61,11 +66,13 @@ export default [
     features: [
       {
         title: 'others',
+        name: 'others',
         icon: 'play_circle_outline',
         hash: 'others'
       },
       {
         title: 'view',
+        name: 'view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -78,6 +85,7 @@ export default [
     features: [
       {
         title: 'verify',
+        name: 'verify',
         icon: 'play_circle_outline',
         hash: 'stu'
       }

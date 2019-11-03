@@ -9,20 +9,11 @@ const routes = [
   }
 ]
 
-// home
-const homePage = {
-  path: '/ebook',
-  meta: {
-    title: '校园易市',
-    icon: 'layers',
-    backRoute: '/'
-  },
-  component: () => import('pages/about/index')
-}
 // add router
-routes.push(homePage)
 routes.push(home)
 routes.push(market)
+
+console.log(routes)
 
 // 没有找到路由返回404
 routes.push({path: '*', component: () => import('pages/error404.vue')})

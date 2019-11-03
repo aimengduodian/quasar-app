@@ -9,7 +9,16 @@
         <br>
         <q-btn
           color="secondary"
-          to="/ebook/market/books/books"
+          :to="{name: 'books'}"
+          class="full-width"
+          target="_blank"
+          icon="launch"
+          no-ripple
+          label="market"
+        />
+        <q-btn
+          color="secondary"
+          :to="{name: 'about'}"
           class="full-width"
           target="_blank"
           icon="launch"

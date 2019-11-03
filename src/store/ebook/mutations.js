@@ -8,7 +8,7 @@ export const updatePageMeta = (state, meta) => {
     hash: '',
     icon: '',
     iframeTabs: false,
-    backRoute: '/ebook',
+    backRoute: '/',
     tabs: [],
     ...meta
   }

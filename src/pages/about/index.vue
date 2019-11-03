@@ -18,6 +18,14 @@
           no-ripple
           label="advice"
         />
+        <q-btn
+          color="secondary"
+          :to="{name: 'verify'}"
+          class="full-width"
+          target="_blank"
+          no-ripple
+          label="verify"
+        />
       </div>
     </div>
   </q-page>
@@ -26,11 +34,7 @@
 <script>
 
 export default {
-  data () {
-    return {
-      categories: categories
-    }
-  }
+
 }
 </script>
 

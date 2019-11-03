@@ -6,7 +6,8 @@ const about = {
   children: [
     {path: 'index', name: 'about', component: () => import('pages/about/index')},
     {path: 'version', name: 'version', component: () => import('pages/about/version')},
-    {path: 'advice', name: 'advice', component: () => import('pages/about/advice')}
+    {path: 'advice', name: 'advice', component: () => import('pages/about/advice')},
+    {path: 'verify', name: 'verify', component: () => import('pages/verify/stu')}
   ]
 }
 

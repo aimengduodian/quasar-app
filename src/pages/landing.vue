@@ -8,22 +8,13 @@
         <img alt="pic" src="~assets/quasar-play-logo-full.svg">
         <br>
         <q-btn
-          color="primary"
-          to="/showcase"
-          class="full-width"
-          icon="layers"
-          no-ripple
-          label="跳转1"
-        />
-
-        <q-btn
           color="secondary"
           to="/ebook"
           class="full-width"
           target="_blank"
           icon="launch"
           no-ripple
-          label="跳转2"
+          label="跳转"
         />
 
         <q-btn

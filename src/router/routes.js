@@ -1,5 +1,3 @@
-import categories from 'assets/categories' // 类别
-import LayoutShowcase from 'layouts/showcase' // 布局展示
 // ebook页面
 import ebookCategories from 'assets/ebook'
 import LayoutEbookWeb from 'layouts/ebookweb'
@@ -11,63 +9,6 @@ const routes = [
     component: () => import('pages/landing')
   }
 ]
-// 懒加载函数
-function lazyLoad (path, meta) {
-  return {
-    path,
-    meta,
-    component: () => import('pages/showcase/' + path)
-  }
-}
-
-const showcase = {
-  path: '/showcase',
-  component: LayoutShowcase,
-  children: [
-    {
-      path: '',
-      meta: {
-        title: 'showcase',
-        hash: '/showcase',
-        icon: 'layers',
-        backRoute: '/'
-      },
-      component: () => import('pages/showcase/index')
-    }
-  ]
-}
-
-categories.forEach(category => {
-  if (category.extract) {
-    return
-  }
-  category.features.forEach(feature => {
-    let path = category.hash + '/' + feature.hash
-
-    if (!feature.tabs) {
-      showcase.children.push(lazyLoad(path, feature))
-      return
-    }
-
-    feature.tabs.forEach(tab => {
-      let subpath = path + '/' + tab.hash
-      showcase.children.push(lazyLoad(subpath, {
-        title: tab.title,
-        hash: '/' + path,
-        iframeTabs: feature.iframeTabs,
-        icon: feature.icon,
-        tabs: feature.tabs
-      }))
-    })
-
-    routes.push({
-      path: '/showcase/' + path,
-      redirect: '/showcase/' + path + '/' + feature.tabs[0].hash
-    })
-  })
-})
-
-routes.push(showcase)
 
 // ebook路由
 // 懒加载函数

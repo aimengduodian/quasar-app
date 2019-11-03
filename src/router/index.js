@@ -22,9 +22,6 @@ export default function ({ store }) {
         case '/ebook':
           store.commit('ebook/updatePageMeta', to.meta)
           break
-        case '/showcase':
-          store.commit('showcase/updatePageMeta', to.meta)
-          break
       }
     }
 

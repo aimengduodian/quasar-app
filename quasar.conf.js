@@ -65,7 +65,7 @@ module.exports = function(ctx) {
       manifest: {
         name: 'Quasar Play',
         short_name: 'Quasar-Play',
-        description: 'Quasar Framework Showcase',
+        description: 'Quasar Framework demo',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

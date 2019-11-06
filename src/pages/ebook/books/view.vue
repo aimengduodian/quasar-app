@@ -25,51 +25,20 @@
         />
       </q-carousel-control>
     </q-carousel>
-    <q-modal v-model="modal" maximized>
-      <q-carousel
-        color="white"
-        arrows
-        quick-nav
-        class="text-white full-height"
-      >
-        <q-carousel-slide
-          v-for="n in 7" :key="`full-${n}`"
-          class="flex flex-center"
-          :class="`bg-${colors[n % 5]}`"
-        >
-          <div class="q-display-3">Step {{ n }}</div>
-        </q-carousel-slide>
-
-        <q-carousel-control
-          slot="control-full"
-          slot-scope="carousel"
-          position="bottom-right"
-          :offset="[18, 22]"
-        >
-          <q-btn
-            rounded push
-            color="amber"
-            icon="close"
-            label="Close me"
-            @click="modal = false"
-          />
-        </q-carousel-control>
-      </q-carousel>
-    </q-modal>
     <br>
     <div class="row justify-around">
       <div class="col-3">
-        <img src="statics/boy-avatar.png" style="width: 80%" alt="">
+        <img src="statics/boy-avatar.png" style="border-radius: 10px; width: 80%" alt="">
       </div>
       <div class="col-5">
         <div class="q-title">
           <strong>图书名称</strong>
         </div>
         <div class="q-body-2">
-          出版社：xxxxxx
+          author:xxx
         </div>
         <div class="q-caption">
-          图书名称
+          出版社：xxxxxx
         </div>
       </div>
       <div class="col-2">
@@ -77,8 +46,9 @@
           round
           size="15px"
           color="primary"
-          label="Text height: 10px"
-        />
+        >
+          $10
+        </q-btn>
       </div>
     </div>
     <br>
@@ -94,7 +64,7 @@
 
       <q-tab-pane name="mails">
         <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
+          Carousel with a model
           and some custom controls: an autoplay button, a progressbar showing Carousel progress
           and a fullscreen toggle button.
           <br>
@@ -105,7 +75,7 @@
       </q-tab-pane>
       <q-tab-pane name="alarms">
         <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
+          Carousel with a model
           and some custom controls: an autoplay button, a progressbar showing Carousel progress
           and a fullscreen toggle button.
           <br>
@@ -113,7 +83,6 @@
           <q-btn
             rounded
             color="primary"
-            @click="slide = 1"
             icon="arrow_downward"
             label="Navigate to second slide"
             class="q-ml-sm"
@@ -122,7 +91,7 @@
       </q-tab-pane>
       <q-tab-pane name="movies">
         <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
+          Carousel with a model
           and some custom controls: an autoplay button, a progressbar showing Carousel progress
           and a fullscreen toggle button.
           <br>
@@ -138,20 +107,76 @@
 <script>
 
 export default {
-  data: () => ({
-    slide: 0,
-    autoplay: true,
-    colors: [
-      'primary',
-      'secondary',
-      'yellow',
-      'red',
-      'orange',
-      'grey-2'
-    ],
-    modal: false,
-    thumbnailsHorizontal: false
-  })
+  data() {
+    return {
+      // 获取详细信息
+      book: {
+        id: 0,
+        bookName: '',
+        bookType: '',
+        author: '',
+        bookPrice: '20',
+        pubDate: '2013-12-12',
+        bookPub: '',
+        bookPic: '',
+        weiXin: '',
+        phone: '',
+        des: ''
+      },
+      // 图片地址轮播
+      urls: []
+    }
+  },
+  methods: {
+    initData() {
+      const _that = this;
+      const toast = this.$createToast({
+        time: 0,
+        txt: '加载中...'
+      });
+      toast.show();
+      this.$http.post('/book/getById/' + this.book.id).then((res) => {
+        toast.hide();
+        _that.book = res.data.page.info;
+        _that.book.bookType = _that.getBookTypeName(_that.book.bookType);
+        const arr = _that.book.bookPic.split(',');
+        $.each(arr, (index, item) => {
+          _that.urls.push({ image: _that.$file(item) });
+        })
+      });
+    },
+    /*
+     * 将类型由数字改为字符串
+     * @param typeNum
+     * @returns {*}
+     */
+    getBookTypeName(typeNum) {
+      const key = 'bookType';
+      const aValue = storage.getSession(key);
+      let value = aValue[typeNum - 1].text;
+      if (typeof value === undefined) {
+        value = '未知';
+        console.error('BookView getBookTypeName: value error')
+      }
+      return value;
+    }
+  },
+  computed: {
+    power() {
+      return this.$store.getters.power;
+    },
+    powerFlag() {
+      return this.$store.getters.powerFlag;
+    }
+  },
+  created() {
+    this.book.id = this.$route.query.id;
+    if ((this.book.id).length > 1) {
+      this.initData()
+    } else {
+      this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
+    }
+  }
 }
 </script>
 

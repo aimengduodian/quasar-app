@@ -1,21 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import ebook from './ebook'
+import auth from './auth'
 
 Vue.use(Vuex)
 
 export default function () {
   const Store = new Vuex.Store({
     modules: {
-      ebook
+      auth
     }
   })
 
   if (process.env.DEV && module.hot) {
-    module.hot.accept(['./ebook'], () => {
-      const newEbook = require('./ebook').default
-      Store.hotUpdate({ modules: { ebook: newEbook } })
+    module.hot.accept(['./auth'], () => {
+      const auth = required('./auth').default
+      Store.hotUpdate({ modules: {auth: auth} })
     })
   }
 

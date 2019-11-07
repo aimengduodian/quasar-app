@@ -32,7 +32,6 @@
         v-ripple.mat
       >
         Back to top
-        {{ demo }}
       </a>
     </q-page-sticky>
   </q-page>

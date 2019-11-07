@@ -15,7 +15,7 @@
           <q-card-actions align="around">
             <q-btn flat round color="red" icon="favorite" />
             <q-btn flat round color="faded" icon="bookmark" />
-            <q-btn flat round color="primary" icon="share" @click="switch_go" />
+            <q-btn flat round color="primary" icon="share" @click="switch_go(item.id)" />
           </q-card-actions>
         </q-card>
       </p>
@@ -32,13 +32,17 @@
         v-ripple.mat
       >
         Back to top
+        {{ demo }}
       </a>
     </q-page-sticky>
   </q-page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import view from './view'
+import { power, powerFlag } from 'src/store/auth/getters'
+
 export default {
   components: {
     view
@@ -52,8 +56,12 @@ export default {
     }
   },
   methods: {
-    switch_go () {
-      this.$router.push('view')
+    switch_go (id) {
+      const itemId = 0
+      // if (!this.powerFlag) {
+      //   itemId = id
+      // }
+      this.$router.push({ name: 'view', query: { id: itemId } })
     },
     splitMth (str) {
       const strs = str.split(',')
@@ -82,6 +90,11 @@ export default {
         done()
       }, 100)
     }
+  },
+  computed: {
+    ...mapGetters('auth', [
+      power, powerFlag
+    ])
   }
 }
 </script>

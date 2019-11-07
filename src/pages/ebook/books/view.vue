@@ -47,7 +47,7 @@
           size="15px"
           color="primary"
         >
-          $10
+          ￥10
         </q-btn>
       </div>
     </div>
@@ -105,8 +105,8 @@
 </template>
 
 <script>
-
 export default {
+
   data() {
     return {
       // 获取详细信息
@@ -130,20 +130,16 @@ export default {
   methods: {
     initData() {
       const _that = this;
-      const toast = this.$createToast({
-        time: 0,
-        txt: '加载中...'
-      });
-      toast.show();
-      this.$http.post('/book/getById/' + this.book.id).then((res) => {
-        toast.hide();
-        _that.book = res.data.page.info;
-        _that.book.bookType = _that.getBookTypeName(_that.book.bookType);
-        const arr = _that.book.bookPic.split(',');
-        $.each(arr, (index, item) => {
-          _that.urls.push({ image: _that.$file(item) });
+
+      this.$axios.get('/book/getById' + this.book.id).then(res => {
+        _that.book = res.data.page.info
+        _that.book.bookType = _that.getBookTypeName(_that.book.bookType)
+        const arr = _that.book.bookPic.split(',')
+        arr.forEach(item => {
+          const pic = 'http://47.106.222.50:8083' + item
+          _that.url.push(pic)
         })
-      });
+      })
     },
     /*
      * 将类型由数字改为字符串
@@ -151,26 +147,19 @@ export default {
      * @returns {*}
      */
     getBookTypeName(typeNum) {
-      const key = 'bookType';
-      const aValue = storage.getSession(key);
-      let value = aValue[typeNum - 1].text;
+      const key = 'bookType'
+      const aValue = storage.getSession(key)
+      let value = aValue[typeNum - 1].text
       if (typeof value === undefined) {
-        value = '未知';
+        value = '未知'
         console.error('BookView getBookTypeName: value error')
       }
-      return value;
-    }
-  },
-  computed: {
-    power() {
-      return this.$store.getters.power;
-    },
-    powerFlag() {
-      return this.$store.getters.powerFlag;
+      return value
     }
   },
   created() {
-    this.book.id = this.$route.query.id;
+    this.book.id = this.$route.query.id
+    console.log(this.book.id)
     if ((this.book.id).length > 1) {
       this.initData()
     } else {

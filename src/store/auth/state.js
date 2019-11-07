@@ -1,4 +1,3 @@
-
 export default {
   flag: 0,
   user: {

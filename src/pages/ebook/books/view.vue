@@ -8,9 +8,7 @@
       height="150px"
       autoplay
     >
-      <q-carousel-slide img-src="http://47.106.222.50:8083/book/5b7a3b244e79406f8f2c8a03b1996a85.jpg" />
-      <q-carousel-slide img-src="statics/parallax1.jpg" />
-      <q-carousel-slide img-src="statics/parallax2.jpg" />
+      <q-carousel-slide v-for="(item, index) in urls" :key="index" :img-src="item" />
       <q-carousel-control
         slot="control-button"
         slot-scope="carousel"
@@ -28,17 +26,20 @@
     <br>
     <div class="row justify-around">
       <div class="col-3">
-        <img src="statics/boy-avatar.png" style="border-radius: 10px; width: 80%" alt="">
+        <img style="border-radius: 10px; width: 80%"
+             src="statics/boy-avatar.png"
+             alt="head picture"
+        />
       </div>
       <div class="col-5">
         <div class="q-title">
-          <strong>图书名称</strong>
+          <strong>{{ book.bookName }}</strong>
         </div>
         <div class="q-body-2">
-          author:xxx
+          author: {{ book.author }}
         </div>
         <div class="q-caption">
-          出版社：xxxxxx
+          出版社：{{ book.bookPub }}
         </div>
       </div>
       <div class="col-2">
@@ -47,58 +48,28 @@
           size="15px"
           color="primary"
         >
-          ￥10
+          ￥{{ book.bookPrice }}
         </q-btn>
       </div>
     </div>
     <br>
-    <p class="caption q-body-2" style="margin:0 15px">
-      简介:Carousel with custom Quick Navigation and different type of slides content,
-      including a vertical scrolling slide (third one).
-    </p>
-    <br>
     <q-tabs animated swipeable inverted color="secondary" align="justify">
-      <q-tab default name="mails" slot="title" icon="mail" label="简要信息" />
-      <q-tab name="alarms" slot="title" icon="alarm" label="商品描述" />
-      <q-tab name="movies" slot="title" icon="movie" label="卖家信息" />
+      <q-tab default name="mails" slot="title" label="简要信息" />
+      <q-tab name="alarms" slot="title" label="商品描述" />
+      <q-tab name="movies" slot="title" label="卖家信息" />
 
       <q-tab-pane name="mails">
-        <p class="caption">
-          Carousel with a model
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          Carousel with custom Quick Navigation and different type of slides content,
-          including a vertical scrolling slide (third one).
-        </p>
+        <div> book type is {{ book.bookType }}</div>
+        <div> public data is {{ book.pubDate }} </div>
       </q-tab-pane>
       <q-tab-pane name="alarms">
-        <p class="caption">
-          Carousel with a model
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          <q-btn
-            rounded
-            color="primary"
-            icon="arrow_downward"
-            label="Navigate to second slide"
-            class="q-ml-sm"
-          />
+        <p class="caption q-body-2">
+          简介: {{ book.des }}
         </p>
       </q-tab-pane>
       <q-tab-pane name="movies">
-        <p class="caption">
-          Carousel with a model
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          Carousel with custom Quick Navigation and different type of slides content,
-          including a vertical scrolling slide (third one).
-        </p>
+        <div>phone: {{ book.phone }}</div>
+        <div>weixin: {{ book.weiXin }}</div>
       </q-tab-pane>
     </q-tabs>
   </q-page>
@@ -107,7 +78,7 @@
 <script>
 export default {
 
-  data() {
+  data () {
     return {
       // 获取详细信息
       book: {
@@ -128,41 +99,25 @@ export default {
     }
   },
   methods: {
-    initData() {
-      const _that = this;
-
-      this.$axios.get('/book/getById' + this.book.id).then(res => {
-        _that.book = res.data.page.info
-        _that.book.bookType = _that.getBookTypeName(_that.book.bookType)
-        const arr = _that.book.bookPic.split(',')
+    initData () {
+      this.$axios.get('/book/getById/' + this.book.id).then(res => {
+        this.book = res.data.page.info
+        // console.log(this.book)
+        // this.book.bookType = this.getBookTypeName(this.book.bookType)
+        const arr = this.book.bookPic.split(',')
         arr.forEach(item => {
           const pic = 'http://47.106.222.50:8083' + item
-          _that.url.push(pic)
+          this.urls.push(pic)
         })
       })
-    },
-    /*
-     * 将类型由数字改为字符串
-     * @param typeNum
-     * @returns {*}
-     */
-    getBookTypeName(typeNum) {
-      const key = 'bookType'
-      const aValue = storage.getSession(key)
-      let value = aValue[typeNum - 1].text
-      if (typeof value === undefined) {
-        value = '未知'
-        console.error('BookView getBookTypeName: value error')
-      }
-      return value
     }
   },
-  created() {
+  created () {
     this.book.id = this.$route.query.id
-    console.log(this.book.id)
     if ((this.book.id).length > 1) {
       this.initData()
-    } else {
+    }
+    else {
       this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
     }
   }

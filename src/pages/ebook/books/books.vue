@@ -56,10 +56,10 @@ export default {
   },
   methods: {
     switch_go (id) {
-      const itemId = 0
-      // if (!this.powerFlag) {
-      //   itemId = id
-      // }
+      let itemId = 0
+      if (!this.powerFlag) {
+        itemId = id
+      }
       this.$router.push({ name: 'view', query: { id: itemId } })
     },
     splitMth (str) {
@@ -91,9 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', [
-      power, powerFlag
-    ])
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

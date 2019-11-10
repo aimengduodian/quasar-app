@@ -3,6 +3,7 @@
     <q-infinite-scroll :handler="refresher">
       <q-btn v-for="(item, index) in items"
              :key="index"
+             @click="switch_go(item.id)"
              style="text-align: left; width: 100%; margin: 0; padding: 0"
       >
         <q-card
@@ -41,7 +42,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import view from './view'
+
 export default {
   components: {
     view
@@ -58,8 +61,12 @@ export default {
     }
   },
   methods: {
-    switch_go () {
-      this.$router.push('coach_view')
+    switch_go (id) {
+      let itemId = 0
+      if (!this.powerFlag) {
+        itemId = id
+      }
+      this.$router.push({ name: 'coach_view', query: { id: itemId } })
     },
     splitMth (str) {
       const strs = str.split(',')
@@ -87,6 +94,9 @@ export default {
         done()
       }, 100)
     }
+  },
+  computed: {
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

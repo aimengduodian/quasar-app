@@ -32,7 +32,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view_coach',
+        name: 'coach_view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -52,7 +52,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view_electronics',
+        name: 'electronics_view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -72,7 +72,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view_others',
+        name: 'others_view',
         icon: 'linear_scale',
         hash: 'view'
       }

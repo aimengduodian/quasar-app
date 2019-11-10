@@ -1,24 +1,27 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
-      <p v-for="(item, index) in items"
-         :key="index">
-        <q-card inline style="border-radius: 20px" color="secondary" dark class="q-ma-sm">
+      <q-btn v-for="(item, index) in items"
+             :key="index"
+             style="text-align: left; width: 100%; margin: 0; padding: 0"
+      >
+        <q-card
+          inline
+          style="border-radius: 20px; margin: 5px 2%; width: 98%;"
+          :color=cardColor[item.type]>
           <q-card-title>
             {{ item.name }}
             <span slot="subtitle">薪酬：￥ {{ item.price }}</span>
-            <q-icon slot="right" name="alarm" />
+            <q-icon slot="right" :name = type[item.type] />
           </q-card-title>
           <q-card-main>
-            {{ lorem }}
+            begin: {{ item.startTime }}
+            <br>
+            end: {{ item.endTime }}
           </q-card-main>
-          <q-card-separator />
-          <q-card-actions>
-            <q-btn flat>Action 1</q-btn>
-            <q-btn flat>Action 2</q-btn>
-          </q-card-actions>
         </q-card>
-      </p>
+      </q-btn>
+
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
         <q-spinner-dots slot="message" :size="40" />
@@ -45,6 +48,8 @@ export default {
   },
   data () {
     return {
+      type: ['alarm', 'mail'],
+      cardColor: ['secondary', 'primary'],
       pageSize: 5,
       pageNumber: 1,
       lastPage: 0,
@@ -54,7 +59,7 @@ export default {
   },
   methods: {
     switch_go () {
-      this.$router.push('view')
+      this.$router.push('coach_view')
     },
     splitMth (str) {
       const strs = str.split(',')

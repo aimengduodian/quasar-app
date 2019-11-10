@@ -60,7 +60,7 @@ export default {
       if (!this.powerFlag) {
         itemId = id
       }
-      this.$router.push({ name: 'view', query: { id: itemId } })
+      this.$router.push({ name: 'books_view', query: { id: itemId } })
     },
     splitMth (str) {
       const strs = str.split(',')

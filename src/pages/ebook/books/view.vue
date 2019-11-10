@@ -28,8 +28,7 @@
       <div class="col-3">
         <img style="border-radius: 10px; width: 80%"
              src="statics/boy-avatar.png"
-             alt="head picture"
-        />
+             alt="head picture">
       </div>
       <div class="col-5">
         <div class="q-title">
@@ -53,7 +52,7 @@
       </div>
     </div>
     <br>
-    <q-tabs animated swipeable inverted color="secondary" align="justify">
+    <q-tabs animated inverted color="secondary" align="justify">
       <q-tab default name="mails" slot="title" label="简要信息" />
       <q-tab name="alarms" slot="title" label="商品描述" />
       <q-tab name="movies" slot="title" label="卖家信息" />

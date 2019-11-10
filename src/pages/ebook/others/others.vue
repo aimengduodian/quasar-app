@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     switch_go () {
-      this.$router.push('view')
+      this.$router.push('others_view')
     },
     splitMth (str) {
       const strs = str.split(',')

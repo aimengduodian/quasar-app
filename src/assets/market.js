@@ -12,7 +12,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view',
+        name: 'books_view',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -32,7 +32,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view',
+        name: 'view_coach',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -52,7 +52,7 @@ export default [
       },
       {
         title: 'view',
-        name: 'view',
+        name: 'view_electronics',
         icon: 'linear_scale',
         hash: 'view'
       }
@@ -72,22 +72,9 @@ export default [
       },
       {
         title: 'view',
-        name: 'view',
+        name: 'view_others',
         icon: 'linear_scale',
         hash: 'view'
-      }
-    ]
-  },
-  {
-    title: 'verify',
-    icon: 'mode_edit',
-    hash: 'verify',
-    features: [
-      {
-        title: 'verify',
-        name: 'verify',
-        icon: 'play_circle_outline',
-        hash: 'stu'
       }
     ]
   }

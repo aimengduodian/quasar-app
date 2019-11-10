@@ -17,7 +17,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       title: '校园易市'
     }

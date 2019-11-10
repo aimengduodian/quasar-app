@@ -1,20 +1,19 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
-      <p v-for="(item, index) in items" :key="index">
-        <q-btn style="margin: 0; padding: 0" @click.stop="switch_go">
-          <q-card style="margin: 5px 10px; border-radius: 20px;">
-            <q-card-media>
-              <img alt="" :src="item.elecPic">
-              <q-card-title>
-                {{ item.electronicsName }}
-                <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
-                <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
-              </q-card-title>
-            </q-card-media>
-          </q-card>
-        </q-btn>
-      </p>
+      <q-btn v-for="(item, index) in items" :key="index"
+             style="margin: 0; padding: 0; width: 100%" @click.stop="switch_go">
+        <q-card style="margin: 5px 4%; width: 96%; border-radius: 20px;">
+          <q-card-media>
+            <img alt="" :src="item.elecPic">
+            <q-card-title>
+              {{ item.electronicsName }}
+              <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
+              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
+            </q-card-title>
+          </q-card-media>
+        </q-card>
+      </q-btn>
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
         <q-spinner-dots slot="message" :size="40" />
@@ -49,7 +48,7 @@ export default {
   },
   methods: {
     switch_go () {
-      this.$router.push('view')
+      this.$router.push('electronics_view')
     },
     splitMth (str) {
       const strs = str.split(',')

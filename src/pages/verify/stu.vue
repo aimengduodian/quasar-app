@@ -64,7 +64,8 @@ export default {
         this.sessionString = res.data.page.location
         if (Number(res.data.code) === 200) {
           this.$q.notify('获取session失败')
-        } else {
+        }
+        else {
           this.url = 'http://202.203.132.204:8019/' + this.sessionString + '/default2.aspx'
           this.checkCodeUrl = 'http://202.203.132.204:8019/' + this.sessionString + '/CheckCode.aspx'
         }
@@ -72,7 +73,7 @@ export default {
     },
     // 点击刷新验证码
     freshCode () {
-      this.checkCodeUrl = 'http://202.203.132.204:8019/' + this.sessionString + '/CheckCode.aspx?' + Math.random();
+      this.checkCodeUrl = 'http://202.203.132.204:8019/' + this.sessionString + '/CheckCode.aspx?' + Math.random()
     },
     // 提交数据
     submitHandler () {
@@ -89,7 +90,8 @@ export default {
         if (Number(res.data.code) === 200) {
           this.$q.notify(res.data.page.errors)
           this.freshCode()
-        } else {
+        }
+        else {
           this.$q.notify('登陆验证成功')
           this.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
         }

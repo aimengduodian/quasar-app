@@ -43,12 +43,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import view from './view'
 
 export default {
-  components: {
-    view
-  },
   data () {
     return {
       type: ['alarm', 'mail'],

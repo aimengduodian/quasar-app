@@ -2,7 +2,7 @@
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
       <q-btn v-for="(item, index) in items" :key="index"
-             style="margin: 0; padding: 0; width: 100%" @click.stop="switch_go">
+             style="margin: 0; padding: 0; width: 100%" @click.stop="switch_go(item.id)">
         <q-card style="margin: 5px 4%; width: 96%; border-radius: 20px;">
           <q-card-media>
             <img alt="" :src="item.elecPic">
@@ -33,11 +33,8 @@
 </template>
 
 <script>
-import view from './view'
+import { mapGetters } from 'vuex'
 export default {
-  components: {
-    view
-  },
   data () {
     return {
       pageSize: 15,
@@ -47,19 +44,21 @@ export default {
     }
   },
   methods: {
-    switch_go () {
-      this.$router.push('electronics_view')
+    switch_go (id) {
+      let itemId = 0
+      if (!this.powerFlag) {
+        itemId = id
+      }
+      this.$router.push({ name: 'electronics_view', query: { id: itemId } })
     },
     splitMth (str) {
       const strs = str.split(',')
       return strs[0]
     },
     subAdvice () {
-      const _that = this
-
       this.$axios.post('/electronics/electronics', {
-        pageSize: _that.pageSize,
-        pageNumber: _that.pageNumber
+        pageSize: this.pageSize,
+        pageNumber: this.pageNumber
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
@@ -67,7 +66,7 @@ export default {
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {
-          _that.pageNumber++
+          this.pageNumber++
         }
       })
     },
@@ -77,6 +76,9 @@ export default {
         done()
       }, 100)
     }
+  },
+  computed: {
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

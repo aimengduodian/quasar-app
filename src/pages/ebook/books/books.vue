@@ -39,12 +39,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import view from './view'
 
 export default {
-  components: {
-    view
-  },
   data () {
     return {
       pageSize: 5,
@@ -66,11 +62,9 @@ export default {
       return strs[0]
     },
     subAdvice () {
-      const _that = this
-
       this.$axios.post('/book/books', {
-        pageSize: _that.pageSize,
-        pageNumber: _that.pageNumber
+        pageSize: this.pageSize,
+        pageNumber: this.pageNumber
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
@@ -78,7 +72,7 @@ export default {
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {
-          _that.pageNumber++
+          this.pageNumber++
         }
       })
     },

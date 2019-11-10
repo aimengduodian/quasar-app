@@ -48,11 +48,7 @@
 </template>
 
 <script>
-import view from './view'
 export default {
-  components: {
-    view
-  },
   data () {
     return {
       pageSize: 5,

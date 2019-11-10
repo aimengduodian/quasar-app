@@ -17,11 +17,12 @@
       </div>
       <div class="col-2">
         <q-btn
+          :disable="!coach.isScore"
           round
           size="15px"
           color="primary"
         >
-          接单
+          {{ coach.isScore ? '接单' : 'done' }}
         </q-btn>
       </div>
     </div>
@@ -33,6 +34,7 @@
       <q-tab name="movies" slot="title" label="卖家信息" />
 
       <q-tab-pane name="mails">
+        <div> price: ${{ coach.price }} </div>
         <div> begin time: {{ coach.startTime }}</div>
         <div> end time: {{ coach.endTime }} </div>
         <div> place: {{ coach.place }} </div>
@@ -49,6 +51,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 
   data () {
@@ -79,6 +82,9 @@ export default {
         this.coach = res.data.page.info
       })
     }
+  },
+  computed: {
+    ...mapGetters('auth', ['power', 'powerFlag'])
   },
   created () {
     this.coach.id = this.$route.query.id

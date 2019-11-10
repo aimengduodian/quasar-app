@@ -23,7 +23,7 @@
               size="15px"
               color="primary"
               label="Text height: 10px"
-              @click="switch_go"
+              @click="switch_go(item.id)"
             />
           </div>
         </div>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -58,8 +59,12 @@ export default {
     }
   },
   methods: {
-    switch_go () {
-      this.$router.push('others_view')
+    switch_go (id) {
+      let itemId = 0
+      if (!this.powerFlag) {
+        itemId = id
+      }
+      this.$router.push({ name: 'others_view', query: { id: itemId } })
     },
     splitMth (str) {
       const strs = str.split(',')
@@ -88,6 +93,9 @@ export default {
         done()
       }, 100)
     }
+  },
+  computed: {
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

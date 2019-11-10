@@ -8,9 +8,7 @@
       height="150px"
       autoplay
     >
-      <q-carousel-slide img-src="http://47.106.222.50:8083/book/5b7a3b244e79406f8f2c8a03b1996a85.jpg" />
-      <q-carousel-slide img-src="statics/parallax1.jpg" />
-      <q-carousel-slide img-src="statics/parallax2.jpg" />
+      <q-carousel-slide v-for="(item, index) in urls" :key="index" :img-src="item" />
       <q-carousel-control
         slot="control-button"
         slot-scope="carousel"
@@ -25,51 +23,22 @@
         />
       </q-carousel-control>
     </q-carousel>
-    <q-modal v-model="modal" maximized>
-      <q-carousel
-        color="white"
-        arrows
-        quick-nav
-        class="text-white full-height"
-      >
-        <q-carousel-slide
-          v-for="n in 7" :key="`full-${n}`"
-          class="flex flex-center"
-          :class="`bg-${colors[n % 5]}`"
-        >
-          <div class="q-display-3">Step {{ n }}</div>
-        </q-carousel-slide>
-
-        <q-carousel-control
-          slot="control-full"
-          slot-scope="carousel"
-          position="bottom-right"
-          :offset="[18, 22]"
-        >
-          <q-btn
-            rounded push
-            color="amber"
-            icon="close"
-            label="Close me"
-            @click="modal = false"
-          />
-        </q-carousel-control>
-      </q-carousel>
-    </q-modal>
     <br>
     <div class="row justify-around">
       <div class="col-3">
-        <img src="statics/boy-avatar.png" style="width: 80%" alt="">
+        <img style="border-radius: 10px; width: 80%"
+             src="statics/boy-avatar.png"
+             alt="head picture">
       </div>
       <div class="col-5">
         <div class="q-title">
-          <strong>图书名称</strong>
+          <strong>{{ other.otherName }}</strong>
         </div>
         <div class="q-body-2">
-          出版社：xxxxxx
+          original price: {{ other.originalPrice }}
         </div>
         <div class="q-caption">
-          图书名称
+          buy data：{{ other.buyDate }}
         </div>
       </div>
       <div class="col-2">
@@ -77,81 +46,81 @@
           round
           size="15px"
           color="primary"
-          label="Text height: 10px"
-        />
+        >
+          ￥{{ other.presentPrice }}
+        </q-btn>
       </div>
     </div>
     <br>
-    <p class="caption q-body-2" style="margin:0 15px">
-      简介:Carousel with custom Quick Navigation and different type of slides content,
-      including a vertical scrolling slide (third one).
-    </p>
-    <br>
-    <q-tabs animated swipeable inverted color="secondary" align="justify">
-      <q-tab default name="mails" slot="title" icon="mail" label="简要信息" />
-      <q-tab name="alarms" slot="title" icon="alarm" label="商品描述" />
-      <q-tab name="movies" slot="title" icon="movie" label="卖家信息" />
+    <q-tabs animated inverted color="secondary" align="justify">
+      <q-tab default name="mails" slot="title" label="简要信息" />
+      <q-tab name="alarms" slot="title" label="商品描述" />
+      <q-tab name="movies" slot="title" label="卖家信息" />
 
       <q-tab-pane name="mails">
-        <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          Carousel with custom Quick Navigation and different type of slides content,
-          including a vertical scrolling slide (third one).
-        </p>
+        <div> other type is {{ other.otherType }}</div>
+        <div> public data is {{ other.pubDate }} </div>
       </q-tab-pane>
       <q-tab-pane name="alarms">
-        <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          <q-btn
-            rounded
-            color="primary"
-            @click="slide = 1"
-            icon="arrow_downward"
-            label="Navigate to second slide"
-            class="q-ml-sm"
-          />
+        <p class="caption q-body-2">
+          简介: {{ other.des }}
         </p>
       </q-tab-pane>
       <q-tab-pane name="movies">
-        <p class="caption">
-          Carousel with a model (<q-chip small color="primary">{{ slide }}</q-chip>)
-          and some custom controls: an autoplay button, a progressbar showing Carousel progress
-          and a fullscreen toggle button.
-          <br>
-          Controlling from outside of Carousel:
-          Carousel with custom Quick Navigation and different type of slides content,
-          including a vertical scrolling slide (third one).
-        </p>
+        <div>phone: {{ other.phone }}</div>
+        <div>weixin: {{ other.weiXin }}</div>
       </q-tab-pane>
     </q-tabs>
   </q-page>
 </template>
 
 <script>
-
 export default {
-  data: () => ({
-    slide: 0,
-    autoplay: true,
-    colors: [
-      'primary',
-      'secondary',
-      'yellow',
-      'red',
-      'orange',
-      'grey-2'
-    ],
-    modal: false,
-    thumbnailsHorizontal: false
-  })
+  data () {
+    return {
+      // 获取详细信息
+      other: {
+        id: 0,
+        buyDate: 0,
+        createTime: 0,
+        otherName: '',
+        otherType: '',
+        hasInvoice: '',
+        presentPrice: 0,
+        originalPrice: 0,
+        otherPic: '',
+        weiXin: '',
+        phone: '',
+        des: '',
+        viewTimes: ''
+      },
+      // 图片地址轮播
+      urls: []
+    }
+  },
+  methods: {
+    initData () {
+      this.$axios.get('/other/getById/' + this.other.id).then(res => {
+        this.other = res.data.page.info
+        // console.log(this.other)
+        // this.other.otherType = this.getotherTypeName(this.other.otherType)
+        const arr = this.other.otherPic.split(',')
+        arr.forEach(item => {
+          const pic = 'http://47.106.222.50:8083' + item
+          this.urls.push(pic)
+        })
+      })
+    }
+  },
+  created () {
+    this.other.id = this.$route.query.id
+    if ((this.other.id).length > 1) {
+      this.initData()
+    }
+    else {
+      this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
+    }
+  }
 }
 </script>
 

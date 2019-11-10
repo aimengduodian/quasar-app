@@ -1,7 +1,9 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll class="item_style" :handler="refresher">
-      <div v-for="(item, index) in items" :key="index">
+      <q-btn v-for="(item, index) in items" :key="index"
+             style="margin: 0; padding: 0; width: 100%"
+             @click="switch_go(item.id)">
         <div class="row justify-around other-card">
           <div class="col-3">
             <img :src="item.otherPic" style="width: 80%" alt="">
@@ -13,21 +15,12 @@
             <div class="q-body-2">
               价格：￥{{ item.presentPrice }}
             </div>
-            <div class="q-caption">
-              描述
-            </div>
           </div>
           <div class="col-2">
-            <q-btn
-              round
-              size="15px"
-              color="primary"
-              label="Text height: 10px"
-              @click="switch_go(item.id)"
-            />
+            11
           </div>
         </div>
-      </div>
+      </q-btn>
 
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
@@ -130,5 +123,5 @@ export default {
       margin auto
       >img
         border-radius 5px
-        height 80%
+        height 60px
 </style>

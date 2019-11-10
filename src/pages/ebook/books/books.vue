@@ -1,9 +1,10 @@
 <template>
   <q-page class="row justify-center">
     <q-infinite-scroll :handler="refresher">
-      <p v-for="(item, index) in items"
-         :key="index">
-        <q-card style="margin: 5px 10px; border-radius: 20px">
+      <q-btn v-for="(item, index) in items" :key="index"
+             style="margin: 0; padding: 0; width: 100%"
+             @click="switch_go(item.id)">
+        <q-card style="margin: 5px 4%; width: 96%; border-radius: 20px;">
           <q-card-media>
             <img alt="" :src="item.bookPic">
             <q-card-title slot="overlay">
@@ -15,10 +16,10 @@
           <q-card-actions align="around">
             <q-btn flat round color="red" icon="favorite" />
             <q-btn flat round color="faded" icon="bookmark" />
-            <q-btn flat round color="primary" icon="share" @click="switch_go(item.id)" />
+            <q-btn flat round color="primary" icon="share" />
           </q-card-actions>
         </q-card>
-      </p>
+      </q-btn>
       <!--添加消息-->
       <div class="row justify-center" style="margin-bottom: 50px;">
         <q-spinner-dots slot="message" :size="40" />

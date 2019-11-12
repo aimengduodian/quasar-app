@@ -1,7 +1,9 @@
 <template>
   <q-layout view="lHh LpR lFf">
     <!--header-->
-    <q-layout-header :reveal="headerReveal">
+    <q-layout-header :reveal="headerReveal"
+                     style="border: 0; margin: 0; padding: 0"
+    >
       <div class="row header" >
         <div class="col-2">
           <q-btn flat icon="mail" @click.native="show()"/>
@@ -22,7 +24,8 @@
     <q-modal v-model="layoutModal"
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout>
-        <q-toolbar color="secondary" slot="header">
+        <q-toolbar
+          slot="header">
           <q-btn
             flat
             round
@@ -30,7 +33,7 @@
             icon="reply"
           />
           <q-toolbar-title>
-            <q-search inverted color="light"
+            <q-search inverted color="white"
                       @click.native="show()"
                       v-model="terms"
                       placeholder="点击搜索">
@@ -41,20 +44,13 @@
             </q-search>
           </q-toolbar-title>
         </q-toolbar>
-
-        <q-toolbar color="white" slot="footer">
-          <q-toolbar-title>
-            Footer
-          </q-toolbar-title>
-        </q-toolbar>
-
         <div class="layout-padding">
           <!--content-->
         </div>
       </q-modal-layout>
     </q-modal>
 
-    <q-page-container>
+    <q-page-container style="background-color: rgb(242, 242, 242);">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -151,9 +147,9 @@ export default {
 <style lang="stylus">
   @import '~variables'
   .header
-    text-align: center
-    height: 50px
-    background: #26a59a
+    text-align center
+    height 50px
+    background-color #1381de
     > div
       margin: auto 0
 </style>

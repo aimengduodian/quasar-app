@@ -56,20 +56,21 @@
       <q-tab default name="mails" slot="title" label="简要信息" />
       <q-tab name="alarms" slot="title" label="商品描述" />
       <q-tab name="movies" slot="title" label="卖家信息" />
-
-      <q-tab-pane name="mails">
-        <div> other type is {{ other.otherType }}</div>
-        <div> public data is {{ other.pubDate }} </div>
-      </q-tab-pane>
-      <q-tab-pane name="alarms">
-        <p class="caption q-body-2">
-          简介: {{ other.des }}
-        </p>
-      </q-tab-pane>
-      <q-tab-pane name="movies">
-        <div>phone: {{ other.phone }}</div>
-        <div>weixin: {{ other.weiXin }}</div>
-      </q-tab-pane>
+      <div class="bgc">
+        <q-tab-pane name="mails">
+          <div> other type is {{ other.otherType }}</div>
+          <div> public data is {{ other.pubDate }} </div>
+        </q-tab-pane>
+        <q-tab-pane name="alarms">
+          <p class="caption q-body-2">
+            简介: {{ other.des }}
+          </p>
+        </q-tab-pane>
+        <q-tab-pane name="movies">
+          <div>phone: {{ other.phone }}</div>
+          <div>weixin: {{ other.weiXin }}</div>
+        </q-tab-pane>
+      </div>
     </q-tabs>
   </q-page>
 </template>
@@ -135,4 +136,7 @@ export default {
       padding 12px
       color $grey-4
       background rgba(0, 0, 0, .5)
+  .bgc
+    background-color: #fdfff8
+    height 50vh
 </style>

@@ -26,6 +26,12 @@
                  replace
                  label="其他"
     />
+    <q-route-tab slot="title"
+                 icon="people"
+                 :to="{name: 'person'}"
+                 replace
+                 label="我的"
+    />
   </q-tabs>
 </template>
 

@@ -77,5 +77,19 @@ export default [
         hash: 'view'
       }
     ]
+  },
+  {
+    title: 'person',
+    icon: 'mode_edit',
+    name: 'person',
+    hash: 'person',
+    features: [
+      {
+        title: 'person',
+        name: 'person',
+        icon: 'play_circle_outline',
+        hash: 'person'
+      }
+    ]
   }
 ]

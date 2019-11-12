@@ -8,8 +8,7 @@
       >
         <q-card
           inline
-          style="border-radius: 20px; margin: 5px 2%; width: 98%;"
-          :color=cardColor[item.type]>
+          style="border-radius: 20px; margin: 5px 2%; width: 98%;">
           <q-card-title>
             {{ item.name }}
             <span slot="subtitle">薪酬：￥ {{ item.price }}</span>
@@ -48,12 +47,11 @@ export default {
   data () {
     return {
       type: ['alarm', 'mail'],
-      cardColor: ['secondary', 'primary'],
+      // cardColor: ['white', 'white'],
       pageSize: 5,
       pageNumber: 1,
       lastPage: 0,
-      items: [],
-      lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+      items: []
     }
   },
   methods: {
@@ -101,7 +99,6 @@ export default {
   @import '~variables'
 
   .play-backtotop
-    color white
     top 30%
     padding 15px
     width 90px

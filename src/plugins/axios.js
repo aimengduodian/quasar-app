@@ -7,6 +7,7 @@ import qs from 'qs'
 axios.defaults.baseURL = 'http://47.106.222.50:8080'
 axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+axios.defaults.withCredentials = true // 请求后端同步session
 
 // http request 拦截器
 axios.interceptors.request.use(

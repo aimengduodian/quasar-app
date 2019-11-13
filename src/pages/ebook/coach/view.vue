@@ -16,14 +16,7 @@
         </div>
       </div>
       <div class="col-2">
-        <q-btn
-          :disable="!coach.isScore"
-          round
-          size="15px"
-          color="primary"
-        >
-          {{ coach.isScore ? '接单' : 'done' }}
-        </q-btn>
+        <q-btn round size="15px" @click="receipt()" color="primary">接单</q-btn>
       </div>
     </div>
 
@@ -80,6 +73,38 @@ export default {
     initData () {
       this.$axios.get('/tutoring/getById/' + this.coach.id).then(res => {
         this.coach = res.data.page.info
+      })
+    },
+    receipt () {
+      this.$q.dialog({
+        title: '请输入接单码',
+        message: '如果没有，请联系发布者获取!',
+        prompt: {
+          model: '',
+          type: 'text'
+        },
+        cancel: true,
+        color: 'secondary'
+      }).then(data => {
+        this.$axios.post('/tutoring/getOrder', {
+          id: this.coach.id,
+          checkCode: data
+        }).then(res => {
+          switch (Number(res.data.code)) {
+            case 100:
+              this.$q.notify(res.data.page.msg)
+              this.$router.go(-1)
+              break
+            case 101:
+              // 没有学生认证，跳转到学生认证
+              this.$router.push({ name: 'verify' })
+              break
+            default:
+              this.$q.notify(res.data.page.msg)
+          }
+        })
+      }).catch((e) => {
+        console.log(e)
       })
     }
   },

@@ -63,7 +63,7 @@ export default {
       return strs[0]
     },
     subAdvice () {
-      this.$axios.post('/book/books', {
+      this.$axios.post('/book/books?flag=1', {
         pageSize: this.pageSize,
         pageNumber: this.pageNumber
       }).then((res) => {

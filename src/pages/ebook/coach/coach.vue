@@ -6,9 +6,7 @@
              @click="switch_go(item.id)"
              style="text-align: left; width: 100%; margin: 0; padding: 0"
       >
-        <q-card
-          inline
-          style="border-radius: 20px; margin: 5px 2%; width: 98%;">
+        <q-card inline style=" background-color: #fff; border-radius: 20px; margin: 5px 2%; width: 98%;">
           <q-card-title>
             {{ item.name }}
             <span slot="subtitle">薪酬：￥ {{ item.price }}</span>

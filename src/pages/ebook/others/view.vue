@@ -137,6 +137,6 @@ export default {
       color $grey-4
       background rgba(0, 0, 0, .5)
   .bgc
-    background-color: #fdfff8
+    background-color: #ffffff
     height 50vh
 </style>

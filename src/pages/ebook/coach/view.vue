@@ -83,8 +83,13 @@ export default {
           model: '',
           type: 'text'
         },
-        cancel: true,
-        color: 'secondary'
+        ok: {
+          label: '确定'
+        },
+        cancel: {
+          color: 'secondary',
+          label: '取消'
+        },
       }).then(data => {
         this.$axios.post('/tutoring/getOrder', {
           id: this.coach.id,

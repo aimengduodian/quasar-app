@@ -56,27 +56,32 @@
       <q-tab default name="mails" slot="title" label="简要信息" />
       <q-tab name="alarms" slot="title" label="商品描述" />
       <q-tab name="movies" slot="title" label="卖家信息" />
-
-      <q-tab-pane name="mails">
-        <div> electronics type is {{ electronics.electronicsType }}</div>
-        <div> public data is {{ electronics.pubDate }} </div>
-      </q-tab-pane>
-      <q-tab-pane name="alarms">
-        <p class="caption q-body-2">
-          简介: {{ electronics.des }}
-        </p>
-      </q-tab-pane>
-      <q-tab-pane name="movies">
-        <div>phone: {{ electronics.phone }}</div>
-        <div>weixin: {{ electronics.weiXin }}</div>
-      </q-tab-pane>
+      <div class="bgc">
+        <q-tab-pane name="mails">
+          <div> electronics type is {{ electronics.electronicsType }}</div>
+          <div> public data is {{ electronics.pubDate }} </div>
+        </q-tab-pane>
+        <q-tab-pane name="alarms">
+          <p class="caption q-body-2">
+            简介: {{ electronics.des }}
+          </p>
+        </q-tab-pane>
+        <q-tab-pane name="movies">
+          <need-verify />
+          <div v-if="false">
+            <div>phone: {{ electronics.phone }}</div>
+            <div>weixin: {{ electronics.weiXin }}</div>
+          </div>
+        </q-tab-pane>
+      </div>
     </q-tabs>
   </q-page>
 </template>
 
 <script>
-export default {
+import NeedVerify from 'pages/verify/needVerify'
 
+export default {
   data () {
     return {
       // 获取详细信息electronics
@@ -96,6 +101,9 @@ export default {
       // 图片地址轮播
       urls: []
     }
+  },
+  components: {
+    NeedVerify
   },
   methods: {
     initData () {
@@ -134,4 +142,7 @@ export default {
       padding 12px
       color $grey-4
       background rgba(0, 0, 0, .5)
+  .bgc
+    background-color #ffffff
+    height 50vh
 </style>

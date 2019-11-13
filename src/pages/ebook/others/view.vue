@@ -67,8 +67,11 @@
           </p>
         </q-tab-pane>
         <q-tab-pane name="movies">
-          <div>phone: {{ other.phone }}</div>
-          <div>weixin: {{ other.weiXin }}</div>
+          <need-verify />
+          <div v-if="false">
+            <div>phone: {{ other.phone }}</div>
+            <div>weixin: {{ other.weiXin }}</div>
+          </div>
         </q-tab-pane>
       </div>
     </q-tabs>
@@ -76,6 +79,8 @@
 </template>
 
 <script>
+import NeedVerify from 'pages/verify/needVerify'
+
 export default {
   data () {
     return {
@@ -98,6 +103,9 @@ export default {
       // 图片地址轮播
       urls: []
     }
+  },
+  components: {
+    NeedVerify
   },
   methods: {
     initData () {
@@ -137,6 +145,6 @@ export default {
       color $grey-4
       background rgba(0, 0, 0, .5)
   .bgc
-    background-color: #ffffff
+    background-color #ffffff
     height 50vh
 </style>

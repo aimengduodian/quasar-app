@@ -144,5 +144,6 @@ export default {
       background rgba(0, 0, 0, .5)
   .bgc
     background-color #ffffff
-    height 50vh
+    min-height 42.5vh
+    height 100%
 </style>

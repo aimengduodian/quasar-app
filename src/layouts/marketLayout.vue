@@ -140,6 +140,9 @@ export default {
       aArr.push(item)
       return aArr
     }
+  },
+  created () {
+    // this.$q['fullscreen'].toggle()
   }
 }
 </script>

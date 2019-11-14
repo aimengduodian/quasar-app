@@ -1,5 +1,4 @@
-
-
+// 设置进入系统模式 0.我要购买 1.我要发布
 export const setFlag = (state, val) => {
   state.flag = val
 }

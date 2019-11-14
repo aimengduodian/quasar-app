@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -63,7 +63,7 @@ export default {
       return strs[0]
     },
     subAdvice () {
-      this.$axios.post('/book/books?flag=1', {
+      this.$axios.post('/book/books?flag=' + this.flag, {
         pageSize: this.pageSize,
         pageNumber: this.pageNumber
       }).then((res) => {
@@ -85,6 +85,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }

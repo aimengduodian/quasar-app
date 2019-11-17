@@ -54,12 +54,11 @@ export default {
         data: {
           des: this.userAdvice.des
         }
-      }).then(res => {
-        if (res.data.code === 100) {
-          this.$q.notify('感谢您的建议！')
+      }).then(
+        (req) => {
+          history.back()
         }
-        history.back()
-      })
+      )
     }
   }
 }

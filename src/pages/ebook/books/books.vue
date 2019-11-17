@@ -26,7 +26,7 @@
       </div>
     </q-infinite-scroll>
     <!--返回到顶部-->
-    <q-page-sticky v-if="!flag" position="bottom-left" :offset="[0, 100]">
+    <q-page-sticky position="bottom-left" :offset="[0, 100]">
       <a
         v-back-to-top.animate="1000"
         class="animate-pop play-backtotop non-selectable shadow-2"
@@ -34,15 +34,6 @@
       >
         Back to top
       </a>
-    </q-page-sticky>
-    <q-page-sticky v-else position="bottom-right" :offset="[18, 18]">
-      <q-btn
-        round
-        icon="add"
-        direction="up"
-        color="primary"
-        @click="addBooks"
-      />
     </q-page-sticky>
   </q-page>
 </template>
@@ -60,10 +51,6 @@ export default {
     }
   },
   methods: {
-    addBooks () {
-      // goto 发布界面
-      this.$router.push({ name: 'books_add' })
-    },
     switch_go (id) {
       let itemId = 0
       if (!this.powerFlag) {

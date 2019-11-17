@@ -6,7 +6,7 @@
              @click="switch_go(item.id)">
           <q-item>
             <q-item-section top thumbnail class="q-ml-none">
-              <img :src="item.bookPic" alt="" >
+              <img style="border-radius: 10px" :src="item.bookPic" alt="" >
             </q-item-section>
 
             <q-item-section>
@@ -14,11 +14,8 @@
               <q-item-label caption>出版社:{{ item.bookPub }}</q-item-label>
               <q-item-label caption>价格：￥{{ item.bookPrice }}</q-item-label>
             </q-item-section>
-
-            <!-- <q-item-section side top>
-              <q-item-label caption>meta</q-item-label>
-            </q-item-section>-->
           </q-item>
+          <hr>
         </div>
       </q-list>
       <!--添加消息-->
@@ -29,9 +26,11 @@
       </template>
     </q-infinite-scroll>
     <!--回到顶部-->
-    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
-      <q-btn v-if="!flag" fab icon="keyboard_arrow_up" color="primary" />
-      <q-btn v-else fab icon="add" direction="up" color="primary" @click="addBooks" />
+    <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn fab icon="keyboard_arrow_up" color="primary" />
+    </q-page-scroller>
+    <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
+      <q-btn fab icon="add" color="primary" @click="addBooks" />
     </q-page-scroller>
   </div>
 </template>

@@ -1,13 +1,13 @@
 <template>
   <q-layout view="lHh LpR lFf">
     <!--reveal滚动隐藏页眉页脚-->
-    <q-layout-header reveal>
+    <q-header reveal>
       <q-toolbar :inverted="$q.theme === 'ios'">
         <q-toolbar-title>
           {{ title }}
         </q-toolbar-title>
       </q-toolbar>
-    </q-layout-header>
+    </q-header>
     <q-page-container>
       <router-view/>
     </q-page-container>

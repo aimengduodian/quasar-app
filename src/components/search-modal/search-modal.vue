@@ -2,9 +2,8 @@
   <div class="search-modal">
     <pre v-text="$attrs"/>
     <!--modal-->
-    <q-modal v-model="layoutModal"
+    <q-layout v-model="layoutModal"
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
-      <q-modal-layout>
         <q-toolbar
           slot="header">
           <q-btn
@@ -28,8 +27,7 @@
         <div class="layout-padding">
           <!--content-->
         </div>
-      </q-modal-layout>
-    </q-modal>
+    </q-layout>
   </div>
 </template>
 

@@ -2,7 +2,7 @@
 
 module.exports = function (ctx) {
   return {
-    plugins: [
+    boot: [
       'axios',
       'boot',
       'vuelidate'
@@ -12,12 +12,11 @@ module.exports = function (ctx) {
       ctx.mode.cordova ? 'app-cordova.styl' : null // 指向/src/css/app-cordova.styl
     ],
     extras: [
-      ctx.theme.mat ? 'roboto-font' : null,
       'material-icons', // at least for QEditor if "ios" theme
-      ctx.theme.ios ? 'ionicons' : null
+      ctx.theme ? 'ionicons-v4' : null
     ],
     animations: 'all',
-    supportIE: true,
+    supportIE: false,
     build: {
       vueRouterMode: 'hash',
       // analyze: true,
@@ -54,8 +53,8 @@ module.exports = function (ctx) {
     },
     framework: {
       all: true,
-      i18n: 'zh-hans',
-      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      lang: 'zh-hans',
+      iconSet: ctx.theme ? 'material-icons' : 'ionicons-v4'
     },
     ssr: {
       pwa: false
@@ -98,22 +97,6 @@ module.exports = function (ctx) {
             'type': 'image/png'
           }
         ]
-      }
-    },
-    cordova: {
-      // id: 'org.cordova.quasar.app'
-    },
-    electron: {
-      // bundler: 'builder',
-      packager: {
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-
-        // Window only
-        // win32metadata: { ... }
       }
     }
   }

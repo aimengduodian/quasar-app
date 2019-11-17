@@ -1,56 +1,48 @@
 <template>
-  <q-layout view="lHh LpR lFf">
+  <q-layout view="lHh lpr lFf">
     <!--header-->
-    <q-layout-header :reveal="headerReveal"
-                     style="border: 0; margin: 0; padding: 0"
-    >
-      <div class="row header" >
-        <div class="col-2">
-          <q-btn flat icon="mail" @click.native="show()"/>
-        </div>
-        <div class="col-8">
-          <img src="" alt="headerPic">
-        </div>
-        <div class="col-2" style="margin: auto 0">
-          <q-btn flat icon="search" @click.native="show()"/>
-        </div>
-      </div>
-    </q-layout-header>
+    <q-header bordered class="bg-white text-primary">
+      <q-toolbar>
+        <q-toolbar-title class="text-center">
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" alt="">
+          </q-avatar>
+          西林易市
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
     <!--footer-->
-    <q-layout-footer :reveal="footerReveal">
+    <q-footer bordered class="bg-white text-primary">
       <footer-tabs/>
-    </q-layout-footer>
-    <!--modal-->
-    <q-modal v-model="layoutModal"
-             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
-      <q-modal-layout>
-        <q-toolbar
-          slot="header">
-          <q-btn
-            flat
-            round
-            @click="layoutModal = false"
-            icon="reply"
-          />
-          <q-toolbar-title>
-            <q-search inverted color="white"
-                      @click.native="show()"
-                      v-model="terms"
-                      placeholder="点击搜索">
-              <q-autocomplete
-                @search="search"
-                @selected="selected"
-              />
-            </q-search>
-          </q-toolbar-title>
-        </q-toolbar>
-        <div class="layout-padding">
-          <!--content-->
-        </div>
-      </q-modal-layout>
-    </q-modal>
+    </q-footer>
 
-    <q-page-container style="background-color: rgb(242, 242, 242);">
+    <!--modal-->
+    <!-- <q-layout v-model="layoutModal">
+      <q-toolbar
+        slot="header">
+        <q-btn
+          flat
+          round
+          @click="layoutModal = false"
+          icon="reply"
+        />
+        <q-toolbar-title>
+          <q-search inverted color="white"
+                    @click.native="show()"
+                    v-model="terms"
+                    placeholder="点击搜索">
+            <q-autocomplete
+              @search="search"
+              @selected="selected"
+            />
+          </q-search>
+        </q-toolbar-title>
+      </q-toolbar>
+      <div class="layout-padding">
+      </div>
+    </q-layout>-->
+
+    <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
@@ -96,9 +88,7 @@ export default {
     return {
       terms: '',
       layoutModal: false,
-      countries: parseCountries(),
-      headerReveal: false,
-      footerReveal: false
+      countries: parseCountries()
     }
   },
   methods: {
@@ -123,7 +113,6 @@ export default {
         })
       })
       // done(filter(terms, {field: 'value', list: parseCountries()}))
-      console.log(arr)
       done(arr)
     },
     selected (item) {
@@ -140,16 +129,9 @@ export default {
       aArr.push(item)
       return aArr
     }
+  },
+  created () {
+    // this.$q['fullscreen'].toggle()
   }
 }
 </script>
-
-<style lang="stylus">
-
-  .header
-    text-align center
-    height 50px
-    background-color #1381de
-    > div
-      margin: auto 0
-</style>

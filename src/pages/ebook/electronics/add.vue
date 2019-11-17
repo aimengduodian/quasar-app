@@ -2,7 +2,7 @@
   <div class="q-pa-md" style="width: 100%">
     <div class="row">
       <div class="col-9 text-center" >
-        <span class="text-h5">编辑图书信息</span>
+        <span class="text-h5">编辑电子信息</span>
       </div>
       <div class="col-3">
         <q-btn rounded color="blue">发布</q-btn>

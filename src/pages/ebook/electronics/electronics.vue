@@ -1,40 +1,43 @@
 <template>
-  <q-page class="row justify-center">
-    <q-infinite-scroll :handler="refresher">
-      <q-btn v-for="(item, index) in items" :key="index"
-             style="margin: 0; padding: 0; width: 100%"
-             @click.stop="switch_go(item.id)">
-        <q-card style="margin: 5px 4%; width: 96%; border-radius: 20px;">
-          <q-card-media>
-            <img alt="" :src="item.elecPic">
-            <q-card-title>
-              {{ item.electronicsName }}
-              <div slot="subtitle">购买时间:{{ item.buyDate }}</div>
-              <div slot="subtitle">价格：￥{{ item.presentPrice }}</div>
-            </q-card-title>
-          </q-card-media>
-        </q-card>
-      </q-btn>
+  <div class="q-pa-md">
+    <q-infinite-scroll @load="onLoad" :offset="250">
+      <q-list padding>
+        <div v-for="(item, index) in items" :key="index"
+             @click="switch_go(item.id)">
+          <q-item>
+            <q-item-section top thumbnail class="q-ml-none">
+              <img style="border-radius: 10px" :src="item.elecPic" alt="" >
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>{{ item.electronicsName }}</q-item-label>
+              <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ item.buyDate/1000 }}</q-item-label>
+              <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
+            </q-item-section>
+          </q-item>
+          <hr>
+        </div>
+      </q-list>
       <!--添加消息-->
-      <div class="row justify-center" style="margin-bottom: 50px;">
-        <q-spinner-dots slot="message" :size="40" />
-      </div>
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
     </q-infinite-scroll>
-    <!--返回到顶部-->
-    <q-page-sticky position="bottom-left" :offset="[0, 100]">
-      <a
-        v-back-to-top.animate="1000"
-        class="animate-pop play-backtotop non-selectable shadow-2"
-        v-ripple.mat
-      >
-        Back to top
-      </a>
-    </q-page-sticky>
-  </q-page>
+    <!--回到顶部-->
+    <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn fab icon="keyboard_arrow_up" color="primary" />
+    </q-page-scroller>
+    <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
+      <q-btn fab icon="add" color="primary" @click="addElectronics" />
+    </q-page-scroller>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -45,6 +48,10 @@ export default {
     }
   },
   methods: {
+    addElectronics () {
+      // goto 发布界面
+      this.$router.push({ name: 'electronics_add' })
+    },
     switch_go (id) {
       let itemId = 0
       if (!this.powerFlag) {
@@ -71,32 +78,19 @@ export default {
         }
       })
     },
-    refresher (index, done) {
+    onLoad (index, done) {
       setTimeout(() => {
-        this.subAdvice()
-        done()
-      }, 100)
+        if (this.items) {
+          // this.items.splice(0, 0, {}, {}, {}, {}, {}, {}, {})
+          this.subAdvice()
+          done()
+        }
+      }, 1000)
     }
   },
   computed: {
+    ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .play-backtotop
-    color white
-    top 30%
-    padding 15px
-    width 90px
-    background-color $cyan
-    border-radius 0 15px 15px 0
-    &:hover
-      color $grey-4
-
-    .q-card
-      width 80%
-</style>

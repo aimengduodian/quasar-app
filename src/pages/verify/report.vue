@@ -2,16 +2,19 @@
   <q-page padding class="docs-input justify-center">
     <q-list >
       <q-item
-        link
+        clickable
         v-for="(dialog, index) in options"
         :key="index"
         @click.native="reportMsg(dialog.id)"
-        v-ripple.mat
+        active-class="text-orange"
       >
-        <q-item-side :icon="dialog.icon" />
-        <q-item-main :label="dialog.name" />
-        <q-item-side right icon="keyboard_arrow_right" />
+        <q-item-section avatar>
+          <q-icon name="edit" />
+        </q-item-section>
+        <q-item-section>{{ dialog.name }}</q-item-section>
+        <q-item-section side>点击</q-item-section>
       </q-item>
+
     </q-list>
   </q-page>
 </template>
@@ -70,33 +73,38 @@ export default {
           message: '平台将根据《e书平台公约》进行相关处理!',
           prompt: {
             model: '',
-            type: 'text'
+            type: 'text' // optional
           },
           cancel: true,
-          color: 'secondary'
-        }).then(data => {
+          persistent: true
+        }).onOk(data => {
           this.$axios.post('/reportproduct/save', this.product, () => {
             // 跳转回原页面
             this.$router.go(-1)
           })
-        }).catch((e) => {
-          console.log(e)
+          // console.log('>>>> OK, received', data)
+        }).onCancel(() => {
+          // console.log('>>>> Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
         })
       }
       else {
         this.$q.dialog({
           title: '确认举报吗？',
           message: '平台将根据《e书平台公约》进行相关处理!',
-          ok: 'Agree',
-          cancel: 'Disagree'
-        }).then(() => {
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
           this.$axios.post('/reportproduct/save', this.product).then(res => {
             console.log(res)
             // 跳转回原页面
             this.$router.go(-1)
           })
-        }).catch((e) => {
-          console.log(e)
+        }).onCancel(() => {
+          // console.log('>>>> Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
         })
       }
     }

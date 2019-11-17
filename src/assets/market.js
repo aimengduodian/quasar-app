@@ -15,6 +15,12 @@ export default [
         name: 'books_view',
         icon: 'linear_scale',
         hash: 'view'
+      },
+      {
+        title: 'add',
+        name: 'books_add',
+        icon: 'linear_scale',
+        hash: 'add'
       }
     ]
   },

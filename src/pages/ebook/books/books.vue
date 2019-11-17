@@ -36,7 +36,8 @@
       </a>
     </q-page-sticky>
     <q-page-sticky v-else position="bottom-right" :offset="[18, 18]">
-      <q-fab
+      <q-btn
+        round
         icon="add"
         direction="up"
         color="primary"
@@ -61,6 +62,7 @@ export default {
   methods: {
     addBooks () {
       // goto 发布界面
+      this.$router.push({ name: 'books_add' })
     },
     switch_go (id) {
       let itemId = 0

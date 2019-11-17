@@ -1,50 +1,54 @@
 <template>
-  <q-page padding class="docs-input row justify-center">
-    <h3>student verify</h3>
-    <div style="width: 500px; max-width: 90vw;">
-      <q-field
-        icon="account_circle"
-        label="student ID"
-        :count="11"
-        :error="error"
-        :warning="warning"
-      >
-        <q-input v-model="stuId" />
-      </q-field>
-      <q-field
-        icon="card_travel"
-        label="Password"
-        :count="20"
-        :error="error"
-        :warning="warning"
-      >
-        <q-input v-model="password" type="password"/>
-      </q-field>
-      <q-field
-        icon="mail"
-        label="email"
-      >
-        <q-input v-model="email" type="email" />
-      </q-field>
-      <br>
-      <q-field
-        icon="mail"
-        label="verify code"
-      >
-        <img alt= "verify code" style="float: right" @click='freshCode()' :src='checkCodeUrl'>
-        <q-input v-model="checkCode" />
-      </q-field>
-
-      <br>
-      <q-btn color="primary" class="full-width" label="verify" @click="submitHandler" />
+  <div class="q-pa-md" style="width: 100%">
+    <div>
+      <span class="text-h5">学生身份认证</span>
     </div>
-  </q-page>
+    <br>
+    <q-input v-model="stuId" type="number" prefix="学号:">
+      <template v-slot:prepend>
+        <q-icon name="account_circle" />
+      </template>
+    </q-input>
+
+    <q-input v-model="password" :type="isPwd ? 'password' : 'text'" prefix="密码:"
+    >
+      <template v-slot:prepend>
+        <q-icon name="add" />
+      </template>
+      <template v-slot:append>
+        <q-icon
+          :name="isPwd ? 'visibility_off' : 'visibility'"
+          class="cursor-pointer"
+          @click="isPwd = !isPwd"
+        />
+      </template>
+    </q-input>
+
+    <q-input v-model="email" type="email" mask="email" prefix="邮箱:">
+      <template v-slot:prepend>
+        <q-icon name="email" />
+      </template>
+    </q-input>
+
+    <q-input v-model="checkCode" type="text" prefix="验证码:">
+      <template v-slot:prepend>
+        <q-icon name="delete" />
+      </template>
+      <template v-slot:append>
+        <img alt= "code" @click='freshCode()' :src='checkCodeUrl'>
+      </template>
+    </q-input>
+    <br>
+    <q-btn color="primary" class="full-width" label="提交" @click="submitHandler" />
+    <br>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
+      isPwd: true,
       stuId: '',
       checkCode: '',
       checkCodeUrl: '',

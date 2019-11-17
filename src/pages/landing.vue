@@ -1,7 +1,7 @@
 <template>
   <div class="index-page bg-grey-2 window-height window-width column items-center no-wrap">
     <div class="banner bg-primary flex flex-center">
-      app
+      Ebook
     </div>
     <div class="text-center">
       <div class="card bg-white shadow-4 column no-wrap flex-center group">
@@ -17,6 +17,7 @@
           @click="onclickBuy"
           label="我要购买"
         />
+        <br>
         <q-btn
           color="secondary"
           :to="{name: 'books'}"
@@ -27,6 +28,7 @@
           @click="onclickSell"
           label="我要发布"
         />
+        <br>
         <q-btn
           color="secondary"
           :to="{name: 'about'}"

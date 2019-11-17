@@ -86,7 +86,7 @@ export default {
           this.subAdvice()
           done()
         }
-      }, 2000)
+      }, 1000)
     }
   },
   computed: {

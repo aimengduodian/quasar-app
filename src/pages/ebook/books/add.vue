@@ -1,130 +1,149 @@
 <template>
-  <q-page padding class="docs-input row justify-center">
-    <br>
+  <div class="q-pa-md" style="width: 100%">
     <div class="row">
       <div class="col-9 text-center" >
-        <span>编辑图书信息</span>
+        <span class="text-h5">编辑图书信息</span>
       </div>
       <div class="col-3">
-        <q-btn rounded icon="mail" color="blue">发布</q-btn>
+        <q-btn rounded color="blue">发布</q-btn>
       </div>
     </div>
     <br>
-    <div style="margin: 10px 20px; width: 100%">
-      <q-item>
-        <q-item-side icon="monetization_on" />
-        <q-input v-model="num"
-                 type="text"
-                 placeholder="输入名称"
-        />
-      </q-item>
-      <q-list-header>Begin Date & Time</q-list-header>
-      <q-item>
-        <q-item-side icon="notifications" />
-        <q-item-main>
-          <q-datetime class="no-margin"
-                      v-model="t3" type="datetime" />
-        </q-item-main>
-      </q-item>
-    </div>
+    <q-uploader
+      url="http://localhost:4444/upload"
+      label="图片上传，不能大于4M"
+      multiple
+      accept=".jpg, image/*"
+      :max-file-size="2048*2048*4"
+      style="width: 100%"
+      aria-colcount="2"
+    >
+      <template v-slot:list="scope">
+        <q-list separator>
 
-    <div style="margin: 10px 20px">
-      <q-list-header>Begin Date & Time</q-list-header>
-      <q-item>
-        <q-item-side icon="notifications" />
-        <q-item-main>
-          <q-datetime class="no-margin" v-model="t3" type="datetime" />
-        </q-item-main>
-      </q-item>
-      <q-list-header>End Date & Time</q-list-header>
-      <q-item>
-        <q-item-side icon="notifications" />
-        <q-item-main>
-          <q-datetime class="no-margin" v-model="t3" type="datetime" />
-        </q-item-main>
-      </q-item>
-      <q-input v-model="num"
-               type="number"
-               placeholder="出版日期"
-               suffix="开个价"
-               :before="[{icon: 'monetization_on', handler () {}}]"
-      />
-    </div>
-    <q-datetime-picker v-model="model" type="date" />
-    <div style="margin: 10px 20px">
-      <q-input v-model="num"
-               type="number"
-               placeholder="输入价格"
-               suffix="开个价"
-               :before="[{icon: 'monetization_on', handler () {}}]"
-      />
-    </div>
+          <q-item v-for="file in scope.files" :key="file.name">
+            <q-item-section>
+              <q-item-label class="full-width ellipsis">
+                {{ file.name }}
+              </q-item-label>
 
-  </q-page>
+              <q-item-label caption>
+                Status: {{ file.__status }}
+              </q-item-label>
+
+              <q-item-label caption>
+                {{ file.__sizeLabel }} / {{ file.__progressLabel }}
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section
+              v-if="file.__img"
+              thumbnail
+              class="gt-xs"
+            >
+              <img :src="file.__img.src" alt="">
+            </q-item-section>
+
+            <q-item-section top side>
+              <q-btn
+                class="gt-xs"
+                size="12px"
+                flat
+                dense
+                round
+                icon="delete"
+                @click="scope.removeFile(file)"
+              />
+            </q-item-section>
+          </q-item>
+
+        </q-list>
+      </template>
+    </q-uploader>
+    <q-input v-model="book.bookName" type="text" prefix="名称:">
+      <template v-slot:prepend>
+        <q-icon name="book" />
+      </template>
+    </q-input>
+
+    <q-input v-model="book.author" type="text" prefix="作者:">
+      <template v-slot:prepend>
+        <q-icon name="people" />
+      </template>
+    </q-input>
+
+    <q-input v-model="book.bookPub" type="text" prefix="出版社:">
+      <template v-slot:prepend>
+        <q-icon name="mail" />
+      </template>
+    </q-input>
+
+    <q-input v-model="book.pubDate" mask="date" prefix="出版日期:">
+      <template v-slot:append>
+        <q-icon name="event" class="cursor-pointer">
+          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+            <q-date v-model="book.pubDate" @input="() => $refs.qDateProxy.hide()" />
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
+
+    <q-input v-model="book.bookPrice" type="number" prefix="出售价格:" suffix="￥">
+      <template v-slot:prepend>
+        <q-icon name="money" />
+      </template>
+    </q-input>
+
+    <q-input v-model="book.bookType" type="number" prefix="分类:" suffix="选择类型">
+      <template v-slot:prepend>
+        <q-icon name="phone" />
+      </template>
+    </q-input>
+
+    <q-input prefix="详细信息:" v-model="book.des" autogrow />
+    <br>
+  </div>
 </template>
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
-// const today = new Date()
-// const { startOfDate, addToDate, subtractFromDate } = date
 
 export default {
   data () {
     return {
-      // 获取详细信息
-      model: null,
-      num: null,
-      t1: null,
-      t2: null,
-      t3: null,
-      date1: null,
-      date2: null,
-      date3: null,
-      date4: null,
-      date5: null,
-      date6: null,
-      date7: null,
-      date8: null,
-      date9: null,
-      date10: null,
-      lazy: null,
-
-      error: true,
-      warning: false,
-      // today,
-      // tomorrow: addToDate(today, { days: 1 }),
-      // yesterday: subtractFromDate(today, { days: 1 }),
-      // defaultValue: startOfDate(today, 'year')
+      book: {
+        id: 0,
+        bookName: null,
+        bookType: null,
+        author: null,
+        bookPrice: null,
+        pubDate: null,
+        bookPub: null,
+        bookPic: null,
+        des: null
+      },
+      options: [], // 下拉选择框
+      urls: [], // 上传图片
+      btnFlag: false // 发布按钮是否能点击
+    }
+  },
+  methods: {
+    checkFileSize (files) {
+      return files.filter(file => file.size < (2048 * 2048 * 4))
+    },
+    // 初始化图书类型下拉框
+    initBookTypeSelect () {
+      // const value = storage.getSession('bookType')
+      // this.options = value.map((item) => {
+      //   return item.text
+      // })
     }
   },
   components: {
     NeedVerify
   },
-  methods: {
-    initData () {
-    }
-  },
   created () {
+    this.initBookTypeSelect()
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .docs-input
-    .q-if, .q-field, .q-uploader
-      margin 16px 0
-    .q-field, .q-uploader
-      .q-if
-        margin 0
-    .q-field .q-uploader
-      margin 0
-    .caption:not(:first-child)
-      margin-top 40px
-    .dark-example
-      padding 5px 15px 15px
-      box-shadow $shadow-2
-      border-radius 2px
-
-</style>

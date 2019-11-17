@@ -1,16 +1,17 @@
 <template>
   <div class="q-pa-md">
     <q-carousel
+      swipeable
       animated
       v-model="slide"
-      arrows
-      navigation
+      thumbnails
       infinite
       :fullscreen.sync="fullscreen"
-      height="150px"
+      height="180px"
+      autoplay
     >
       <q-carousel-slide v-for="(item, index) in urls"
-                        :key="index" :name="index"
+                        :key="index" :name="index+1"
                         :img-src="item"/>
       <template v-slot:control>
         <q-carousel-control
@@ -54,11 +55,21 @@
       </div>
     </div>
     <br>
-    <q-tabs animated inverted color="secondary" align="justify">
-      <q-tab default name="mails" slot="title" label="简要信息" />
-      <q-tab name="alarms" slot="title" label="商品描述" />
-      <q-tab name="movies" slot="title" label="卖家信息" />
-
+    <q-tabs
+      v-model="tab"
+      dense
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      align="justify"
+      narrow-indicator
+    >
+      <q-tab name="mails" label="简要信息" />
+      <q-tab name="alarms" label="商品描述" />
+      <q-tab name="movies" label="卖家信息" />
+    </q-tabs>
+    <q-separator />
+    <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="mails">
         <div> book type is {{ book.bookType }}</div>
         <div> public data is {{ book.pubDate }} </div>
@@ -75,7 +86,7 @@
           <div>weixin: {{ book.weiXin }}</div>
         </div>
       </q-tab-panel>
-    </q-tabs>
+    </q-tab-panels>
   </div>
 </template>
 
@@ -85,6 +96,7 @@ import NeedVerify from 'pages/verify/needVerify'
 export default {
   data () {
     return {
+      tab: 'mails',
       slide: 1,
       fullscreen: false,
       // 获取详细信息
@@ -133,20 +145,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .docs-carousel
-    p.caption:not(:first-of-type)
-      margin-top 38px
-    .custom-caption
-      text-align center
-      padding 12px
-      color $grey-4
-      background rgba(0, 0, 0, .5)
-  .bgc
-    background-color #ffffff
-    min-height 42.5vh
-    height 100%
-</style>

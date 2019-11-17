@@ -12,8 +12,7 @@ module.exports = {
       'layouts': resolve('/src/layouts'),
       'pages': resolve('/src/pages'),
       'assets': resolve('/src/assets'),
-      'plugins': resolve('/src/plugins'),
-      'variables': resolve('/.quasar/variables')
+      'plugins': resolve('/src/plugins')
     }
   }
 }

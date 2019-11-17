@@ -16,7 +16,7 @@ module.exports = function (ctx) {
       ctx.theme ? 'ionicons-v4' : null
     ],
     animations: 'all',
-    supportIE: true,
+    supportIE: false,
     build: {
       vueRouterMode: 'hash',
       // analyze: true,
@@ -97,22 +97,6 @@ module.exports = function (ctx) {
             'type': 'image/png'
           }
         ]
-      }
-    },
-    cordova: {
-      // id: 'org.cordova.quasar.app'
-    },
-    electron: {
-      // bundler: 'builder',
-      packager: {
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-
-        // Window only
-        // win32metadata: { ... }
       }
     }
   }

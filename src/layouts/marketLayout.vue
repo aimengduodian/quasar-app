@@ -23,7 +23,6 @@
     <!--modal-->
     <q-modal v-model="layoutModal"
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
-      <q-modal-layout>
         <q-toolbar
           slot="header">
           <q-btn
@@ -47,7 +46,6 @@
         <div class="layout-padding">
           <!--content-->
         </div>
-      </q-modal-layout>
     </q-modal>
 
     <q-page-container style="background-color: rgb(242, 242, 242);">
@@ -123,7 +121,6 @@ export default {
         })
       })
       // done(filter(terms, {field: 'value', list: parseCountries()}))
-      console.log(arr)
       done(arr)
     },
     selected (item) {
@@ -148,7 +145,6 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
   .header
     text-align center
     height 50px

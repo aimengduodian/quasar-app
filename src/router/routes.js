@@ -13,8 +13,6 @@ const routes = [
 routes.push(home)
 routes.push(market)
 
-console.log(routes)
-
 // 没有找到路由返回404
 routes.push({path: '*', component: () => import('pages/error404.vue')})
 

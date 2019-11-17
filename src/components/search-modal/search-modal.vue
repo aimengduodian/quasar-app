@@ -4,7 +4,6 @@
     <!--modal-->
     <q-modal v-model="layoutModal"
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
-      <q-modal-layout>
         <q-toolbar
           slot="header">
           <q-btn
@@ -28,7 +27,6 @@
         <div class="layout-padding">
           <!--content-->
         </div>
-      </q-modal-layout>
     </q-modal>
   </div>
 </template>

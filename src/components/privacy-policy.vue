@@ -1,75 +1,38 @@
 <template>
-  <q-modal v-model="opened" :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-    <q-modal-layout>
-      <q-toolbar slot="header">
-        <q-toolbar-title class="text-center">
-          app Privacy Policy
-        </q-toolbar-title>
-      </q-toolbar>
+  <div class="q-pa-md q-gutter-sm">
+    <q-btn flat label="免责条约" @click="fixed = true" />
 
-      <q-toolbar slot="footer">
-        <q-btn @click="opened = false" class="full-width" flat>
-          关闭
-        </q-btn>
-      </q-toolbar>
+    <q-dialog v-model="fixed">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Terms of Agreement</div>
+        </q-card-section>
 
-      <div class="layout-padding privacy-policy">
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-        </p>
+        <q-separator />
 
-        <p class="caption">title</p>
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-        </p>
+        <q-card-section style="max-height: 50vh" class="scroll">
+          <p>
+            content
+          </p>
+        </q-card-section>
 
-        <p class="caption">title</p>
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-        </p>
+        <q-separator />
 
-        <p class="caption">title</p>
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-        </p>
-
-        <p class="caption">title</p>
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-        </p>
-
-        <p class="caption">title</p>
-        <p>
-          内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-          <a href="mailto:razvan.stoenescu@gmail.com">123@gmail.com</a>.
-        </p>
-      </div>
-    </q-modal-layout>
-  </q-modal>
+        <q-card-actions align="right">
+          <q-btn flat label="Decline" color="primary" v-close-popup />
+          <q-btn flat label="Accept" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      opened: false
-    }
-  },
-  methods: {
-    show () {
-      this.opened = true
+      fixed: false
     }
   }
 }
 </script>
-
-<style lang="stylus">
-.privacy-policy
-  h6
-    margin-top 25px
-    margin-bottom 10px
-  p.caption
-    margin-top 0
-    &:first-child
-      margin-bottom 35px
-</style>

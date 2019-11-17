@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
 
   .docs-input
     .q-if, .q-field, .q-uploader

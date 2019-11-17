@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '~variables'
+
 q-btn
   margin 20px
 </style>

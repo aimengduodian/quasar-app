@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
 
   .play-backtotop
     color white

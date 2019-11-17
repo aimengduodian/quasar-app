@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
 
   .item_style
     width 100%

@@ -134,7 +134,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
 
   .docs-carousel
     p.caption:not(:first-of-type)

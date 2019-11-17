@@ -145,7 +145,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
   .header
     text-align center
     height 50px

@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '~variables'
+
   .first-person
     background-color: #fdfff8
     border-radius 5px

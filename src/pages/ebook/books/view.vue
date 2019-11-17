@@ -1,27 +1,29 @@
 <template>
-  <q-page class="docs-carousel">
+  <div class="q-pa-md">
     <q-carousel
-      color="white"
-      quick-nav
-      quick-nav-icon="favorite"
+      animated
+      v-model="slide"
+      arrows
+      navigation
       infinite
+      :fullscreen.sync="fullscreen"
       height="150px"
-      autoplay
     >
-      <q-carousel-slide v-for="(item, index) in urls" :key="index" :img-src="item" />
-      <q-carousel-control
-        slot="control-button"
-        slot-scope="carousel"
-        position="bottom-right"
-        :offset="[18, 100]"
-      >
-        <q-btn
-          round dense
-          color="blue"
-          :icon="carousel.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="carousel.toggleFullscreen()"
-        />
-      </q-carousel-control>
+      <q-carousel-slide v-for="(item, index) in urls"
+                        :key="index" :name="index"
+                        :img-src="item"/>
+      <template v-slot:control>
+        <q-carousel-control
+          position="bottom-right"
+          :offset="[18, 18]"
+        >
+          <q-btn
+            flat round dense color="white" text-color="primary"
+            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="fullscreen = !fullscreen"
+          />
+        </q-carousel-control>
+      </template>
     </q-carousel>
     <br>
     <div class="row justify-around">
@@ -56,26 +58,25 @@
       <q-tab default name="mails" slot="title" label="简要信息" />
       <q-tab name="alarms" slot="title" label="商品描述" />
       <q-tab name="movies" slot="title" label="卖家信息" />
-      <div class="bgc">
-        <q-tab-pane name="mails">
-          <div> book type is {{ book.bookType }}</div>
-          <div> public data is {{ book.pubDate }} </div>
-        </q-tab-pane>
-        <q-tab-pane name="alarms">
-          <p class="caption q-body-2">
-            简介: {{ book.des }}
-          </p>
-        </q-tab-pane>
-        <q-tab-pane name="movies">
-          <need-verify />
-          <div v-if="false">
-            <div>phone: {{ book.phone }}</div>
-            <div>weixin: {{ book.weiXin }}</div>
-          </div>
-        </q-tab-pane>
-      </div>
+
+      <q-tab-panel name="mails">
+        <div> book type is {{ book.bookType }}</div>
+        <div> public data is {{ book.pubDate }} </div>
+      </q-tab-panel>
+      <q-tab-panel name="alarms">
+        <p class="caption q-body-2">
+          简介: {{ book.des }}
+        </p>
+      </q-tab-panel>
+      <q-tab-panel name="movies">
+        <need-verify />
+        <div v-if="false">
+          <div>phone: {{ book.phone }}</div>
+          <div>weixin: {{ book.weiXin }}</div>
+        </div>
+      </q-tab-panel>
     </q-tabs>
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -84,6 +85,8 @@ import NeedVerify from 'pages/verify/needVerify'
 export default {
   data () {
     return {
+      slide: 1,
+      fullscreen: false,
       // 获取详细信息
       book: {
         id: 0,

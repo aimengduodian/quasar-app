@@ -5,14 +5,14 @@
       <q-toolbar>
         <q-toolbar-title class="text-center">
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" alt="">
           </q-avatar>
           西林易市
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
     <!--footer-->
-    <q-footer class="bg-white text-primary">
+    <q-footer bordered class="bg-white text-primary">
       <footer-tabs/>
     </q-footer>
 

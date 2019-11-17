@@ -1,6 +1,5 @@
 <template>
-  <q-page class="docs-carousel">
-    <div><br></div>
+  <div class="q-pa-md">
     <div class="row justify-around">
       <div class="col-3">
         <img style="border-radius: 10px; width: 80%"
@@ -21,34 +20,49 @@
     </div>
 
     <br>
-    <q-tabs animated inverted color="secondary" align="justify">
-      <q-tab default name="mails" slot="title" label="简要信息" />
-      <q-tab name="alarms" slot="title" label="商品描述" />
-      <q-tab name="movies" slot="title" label="卖家信息" />
-
-      <q-tab-pane name="mails">
+    <q-tabs
+      v-model="tab"
+      dense
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      align="justify"
+      narrow-indicator
+    >
+      <q-tab name="mails" label="简要信息" />
+      <q-tab name="alarms" label="商品描述" />
+      <q-tab name="movies" label="卖家信息" />
+    </q-tabs>
+    <q-separator />
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="mails">
         <div> price: ${{ coach.price }} </div>
         <div> begin time: {{ coach.startTime }}</div>
         <div> end time: {{ coach.endTime }} </div>
         <div> place: {{ coach.place }} </div>
-      </q-tab-pane>
-      <q-tab-pane name="alarms">
-        <p v-html='coach.des'>des:</p>
-      </q-tab-pane>
-      <q-tab-pane name="movies">
-        <div>phone: {{ coach.phone }}</div>
-        <div>weixin: {{ coach.weiXin }}</div>
-      </q-tab-pane>
-    </q-tabs>
-  </q-page>
+      </q-tab-panel>
+      <q-tab-panel name="alarms">
+        <p v-html='coach.des'>简介:</p>
+      </q-tab-panel>
+      <q-tab-panel name="movies">
+        <need-verify />
+        <div v-if="false">
+          <div>phone: {{ coach.phone }}</div>
+          <div>weixin: {{ coach.weiXin }}</div>
+        </div>
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script>
+import NeedVerify from 'pages/verify/needVerify'
 import { mapGetters } from 'vuex'
-export default {
 
+export default {
   data () {
     return {
+      tab: 'mails',
       // 获取详细信息
       coach: {
         id: 0,
@@ -69,6 +83,9 @@ export default {
       }
     }
   },
+  components: {
+    NeedVerify
+  },
   methods: {
     initData () {
       this.$axios.get('/tutoring/getById/' + this.coach.id).then(res => {
@@ -76,21 +93,17 @@ export default {
       })
     },
     receipt () {
+      // ‘其他’类型
       this.$q.dialog({
         title: '请输入接单码',
         message: '如果没有，请联系发布者获取!',
         prompt: {
           model: '',
-          type: 'text'
+          type: 'text' // optional
         },
-        ok: {
-          label: '确定'
-        },
-        cancel: {
-          color: 'secondary',
-          label: '取消'
-        },
-      }).then(data => {
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
         this.$axios.post('/tutoring/getOrder', {
           id: this.coach.id,
           checkCode: data
@@ -108,8 +121,10 @@ export default {
               this.$q.notify(res.data.page.msg)
           }
         })
-      }).catch((e) => {
-        console.log(e)
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
       })
     }
   },

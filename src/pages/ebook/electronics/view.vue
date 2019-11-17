@@ -11,7 +11,7 @@
       autoplay
     >
       <q-carousel-slide v-for="(item, index) in urls"
-                        :key="index" :name="index+1"
+                        :key="index" :name="index"
                         :img-src="item"/>
       <template v-slot:control>
         <q-carousel-control
@@ -97,7 +97,7 @@ export default {
   data () {
     return {
       tab: 'mails',
-      slide: 1,
+      slide: 0,
       fullscreen: false,
       // 获取详细信息electronics
       electronics: {

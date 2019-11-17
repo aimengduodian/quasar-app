@@ -1,23 +1,21 @@
 <template>
   <div class="q-pa-md">
     <q-infinite-scroll @load="onLoad" :offset="250">
-      <q-list padding>
-        <div v-for="(item, index) in items" :key="index"
-             @click="switch_go(item.id)">
-          <q-item>
-            <q-item-section top thumbnail class="q-ml-none">
-              <img style="border-radius: 10px" :src="item.elecPic" alt="" >
-            </q-item-section>
+      <div v-for="(item, index) in items" :key="index"
+           @click="switch_go(item.id)">
+        <q-item>
+          <q-item-section top thumbnail class="q-ml-none">
+            <img style="border-radius: 10px" :src="item.elecPic" alt="" >
+          </q-item-section>
 
-            <q-item-section>
-              <q-item-label>{{ item.electronicsName }}</q-item-label>
-              <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ item.buyDate/1000 }}</q-item-label>
-              <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
-            </q-item-section>
-          </q-item>
-          <hr>
-        </div>
-      </q-list>
+          <q-item-section>
+            <q-item-label>{{ item.electronicsName }}</q-item-label>
+            <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ item.buyDate/1000 }}</q-item-label>
+            <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
+          </q-item-section>
+        </q-item>
+        <hr>
+      </div>
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">

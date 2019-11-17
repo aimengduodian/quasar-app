@@ -1,47 +1,36 @@
 <template>
-  <q-page class="row justify-center">
-    <q-infinite-scroll class="item_style" :handler="refresher">
-      <q-btn v-for="(item, index) in items" :key="index"
-             style="margin: 0; padding: 0; width: 100%"
-             @click="switch_go(item.id)">
-        <div class="row justify-around other-card">
-          <div class="col-3">
-            <img :src="item.otherPic" style="width: 80%" alt="">
-          </div>
-          <div class="col-5">
-            <div class="q-title">
-              {{ item.otherName }}
-            </div>
-            <div class="q-body-2">
-              价格：￥{{ item.presentPrice }}
-            </div>
-          </div>
-          <div class="col-2">
-            11
-          </div>
-        </div>
-      </q-btn>
-
-      <!--添加消息-->
-      <div class="row justify-center" style="margin-bottom: 50px;">
-        <q-spinner-dots slot="message" :size="40" />
+  <div class="q-pa-md">
+    <q-infinite-scroll @load="onLoad" :offset="250">
+      <div v-for="(item, index) in items" :key="index"
+           @click="switch_go(item.id)">
+        <q-card style="border-radius: 10px;
+            width: 48%; float: left; margin: 1%">
+          <img :src="item.otherPic" alt="">
+          <q-card-section>
+            <div class="text-h6">{{ item.otherName }}</div>
+            <div class="text-subtitle2">价格：￥{{ item.presentPrice }}</div>
+          </q-card-section>
+        </q-card>
       </div>
+      <!--添加消息-->
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
     </q-infinite-scroll>
-    <!--返回到顶部-->
-    <q-page-sticky position="bottom-left" :offset="[0, 100]">
-      <a
-        v-back-to-top.animate="1000"
-        class="animate-pop play-backtotop non-selectable shadow-2"
-        v-ripple.mat
-      >
-        Back to top
-      </a>
-    </q-page-sticky>
-  </q-page>
+    <!--回到顶部-->
+    <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn fab icon="keyboard_arrow_up" color="primary" />
+    </q-page-scroller>
+    <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
+      <q-btn fab icon="add" color="primary" @click="addOthers" />
+    </q-page-scroller>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -52,6 +41,10 @@ export default {
     }
   },
   methods: {
+    addOthers () {
+      // goto 发布界面
+      this.$router.push({ name: 'others_add' })
+    },
     switch_go (id) {
       let itemId = 0
       if (!this.powerFlag) {
@@ -80,48 +73,16 @@ export default {
         }
       })
     },
-    refresher (index, done) {
+    onLoad (index, done) {
       setTimeout(() => {
         this.subAdvice()
         done()
-      }, 100)
+      }, 1000)
     }
   },
   computed: {
+    ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .item_style
-    width 100%
-    margin 5px 0
-    border-radius 15px
-
-  .play-backtotop
-    color white
-    top 30%
-    padding 15px
-    width 90px
-    background-color $cyan
-    border-radius 0 15px 15px 0
-    &:hover
-      color $grey-4
-
-    .q-card
-      width 80%
-
-  .other-card
-    height 15vh
-    background-color: #fdfff8
-    margin 10px 15px
-    border-radius 10px
-    >div
-      margin auto
-      >img
-        border-radius 5px
-        height 60px
-</style>

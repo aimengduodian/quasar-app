@@ -1,27 +1,30 @@
 <template>
-  <q-page class="docs-carousel">
+  <div class="q-pa-md">
     <q-carousel
-      color="white"
-      quick-nav
-      quick-nav-icon="favorite"
+      swipeable
+      animated
+      v-model="slide"
+      thumbnails
       infinite
-      height="150px"
+      :fullscreen.sync="fullscreen"
+      height="180px"
       autoplay
     >
-      <q-carousel-slide v-for="(item, index) in urls" :key="index" :img-src="item" />
-      <q-carousel-control
-        slot="control-button"
-        slot-scope="carousel"
-        position="bottom-right"
-        :offset="[18, 100]"
-      >
-        <q-btn
-          round dense
-          color="blue"
-          :icon="carousel.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="carousel.toggleFullscreen()"
-        />
-      </q-carousel-control>
+      <q-carousel-slide v-for="(item, index) in urls"
+                        :key="index" :name="index"
+                        :img-src="item"/>
+      <template v-slot:control>
+        <q-carousel-control
+          position="bottom-right"
+          :offset="[18, 18]"
+        >
+          <q-btn
+            flat round dense color="white" text-color="primary"
+            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="fullscreen = !fullscreen"
+          />
+        </q-carousel-control>
+      </template>
     </q-carousel>
     <br>
     <div class="row justify-around">
@@ -35,10 +38,7 @@
           <strong>{{ other.otherName }}</strong>
         </div>
         <div class="q-body-2">
-          original price: {{ other.originalPrice }}
-        </div>
-        <div class="q-caption">
-          buy data：{{ other.buyDate }}
+          售价: {{ other.presentPrice }}
         </div>
       </div>
       <div class="col-2">
@@ -47,35 +47,45 @@
           size="15px"
           color="primary"
         >
-          ￥{{ other.presentPrice }}
         </q-btn>
       </div>
     </div>
     <br>
-    <q-tabs animated inverted color="secondary" align="justify">
-      <q-tab default name="mails" slot="title" label="简要信息" />
-      <q-tab name="alarms" slot="title" label="商品描述" />
-      <q-tab name="movies" slot="title" label="卖家信息" />
-      <div class="bgc">
-        <q-tab-pane name="mails">
-          <div> other type is {{ other.otherType }}</div>
-          <div> public data is {{ other.pubDate }} </div>
-        </q-tab-pane>
-        <q-tab-pane name="alarms">
-          <p class="caption q-body-2">
-            简介: {{ other.des }}
-          </p>
-        </q-tab-pane>
-        <q-tab-pane name="movies">
-          <need-verify />
-          <div v-if="false">
-            <div>phone: {{ other.phone }}</div>
-            <div>weixin: {{ other.weiXin }}</div>
-          </div>
-        </q-tab-pane>
-      </div>
+    <q-tabs
+      v-model="tab"
+      dense
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      align="justify"
+      narrow-indicator
+    >
+      <q-tab name="mails" label="简要信息" />
+      <q-tab name="alarms" label="商品描述" />
+      <q-tab name="movies" label="卖家信息" />
     </q-tabs>
-  </q-page>
+    <q-separator />
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="mails">
+        <div> 购买日期: {{ other.buyDate }}</div>
+        <div> 类型: {{ other.otherType }}</div>
+        <div> 发票: {{ other.hasInvoice }} </div>
+        <div> 购入价格: {{ other.originalPrice }} </div>
+      </q-tab-panel>
+      <q-tab-panel name="alarms">
+        <p class="caption q-body-2">
+          简介: {{ other.des }}
+        </p>
+      </q-tab-panel>
+      <q-tab-panel name="movies">
+        <need-verify />
+        <div v-if="false">
+          <div>phone: {{ other.phone }}</div>
+          <div>weixin: {{ other.weiXin }}</div>
+        </div>
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script>
@@ -84,6 +94,9 @@ import NeedVerify from 'pages/verify/needVerify'
 export default {
   data () {
     return {
+      slide: 0,
+      tab: 'mails',
+      fullscreen: false,
       // 获取详细信息
       other: {
         id: 0,
@@ -132,19 +145,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .docs-carousel
-    p.caption:not(:first-of-type)
-      margin-top 38px
-    .custom-caption
-      text-align center
-      padding 12px
-      color $grey-4
-      background rgba(0, 0, 0, .5)
-  .bgc
-    background-color #ffffff
-    height 50vh
-</style>

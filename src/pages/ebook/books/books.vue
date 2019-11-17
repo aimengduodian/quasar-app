@@ -1,50 +1,39 @@
 <template>
-  <q-page class="row justify-center">
-    <q-infinite-scroll :handler="refresher">
-      <q-btn v-for="(item, index) in items" :key="index"
-             style="margin: 0; padding: 0; width: 100%"
+  <div class="q-pa-md">
+    <q-infinite-scroll @load="onLoad" :offset="250">
+      <q-list padding>
+        <div v-for="(item, index) in items" :key="index"
              @click="switch_go(item.id)">
-        <q-card style="margin: 5px 4%; width: 96%; border-radius: 20px;">
-          <q-card-media>
-            <img alt="" :src="item.bookPic">
-            <q-card-title slot="overlay">
-              {{ item.bookName }}
-              <div slot="subtitle">出版社:{{ item.bookPub }}</div>
-              <div slot="subtitle">价格：￥{{ item.bookPrice }}</div>
-            </q-card-title>
-          </q-card-media>
-          <q-card-actions align="around">
-            <q-btn flat round color="red" icon="favorite" />
-            <q-btn flat round color="faded" icon="bookmark" />
-            <q-btn flat round color="primary" icon="share" />
-          </q-card-actions>
-        </q-card>
-      </q-btn>
+          <q-item>
+            <q-item-section top thumbnail class="q-ml-none">
+              <img :src="item.bookPic" alt="" >
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>{{ item.bookName }}</q-item-label>
+              <q-item-label caption>出版社:{{ item.bookPub }}</q-item-label>
+              <q-item-label caption>价格：￥{{ item.bookPrice }}</q-item-label>
+            </q-item-section>
+
+            <!-- <q-item-section side top>
+              <q-item-label caption>meta</q-item-label>
+            </q-item-section>-->
+          </q-item>
+        </div>
+      </q-list>
       <!--添加消息-->
-      <div class="row justify-center" style="margin-bottom: 50px;">
-        <q-spinner-dots slot="message" :size="40" />
-      </div>
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
     </q-infinite-scroll>
-    <!--返回到顶部-->
-    <q-page-sticky v-if="!flag" position="bottom-left" :offset="[0, 100]">
-      <a
-        v-back-to-top.animate="1000"
-        class="animate-pop play-backtotop non-selectable shadow-2"
-        v-ripple.mat
-      >
-        Back to top
-      </a>
-    </q-page-sticky>
-    <q-page-sticky v-else position="bottom-right" :offset="[18, 18]">
-      <q-btn
-        round
-        icon="add"
-        direction="up"
-        color="primary"
-        @click="addBooks"
-      />
-    </q-page-sticky>
-  </q-page>
+    <!--回到顶部-->
+    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn v-if="!flag" fab icon="keyboard_arrow_up" color="primary" />
+      <q-btn v-else fab icon="add" direction="up" color="primary" @click="addBooks" />
+    </q-page-scroller>
+  </div>
 </template>
 
 <script>
@@ -53,7 +42,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      pageSize: 5,
+      pageSize: 15,
       pageNumber: 1,
       lastPage: 0,
       items: []
@@ -90,11 +79,14 @@ export default {
         }
       })
     },
-    refresher (index, done) {
+    onLoad (index, done) {
       setTimeout(() => {
-        this.subAdvice()
-        done()
-      }, 100)
+        if (this.items) {
+          // this.items.splice(0, 0, {}, {}, {}, {}, {}, {}, {})
+          this.subAdvice()
+          done()
+        }
+      }, 2000)
     }
   },
   computed: {
@@ -103,20 +95,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-
-
-  .play-backtotop
-    color white
-    top 30%
-    padding 15px
-    width 90px
-    background-color $cyan
-    border-radius 0 15px 15px 0
-    &:hover
-      color $grey-4
-
-    .q-card
-      width 80%
-</style>

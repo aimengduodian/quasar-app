@@ -32,7 +32,7 @@
     />
     <q-route-tab name="person"
                  class="col"
-                 icon="people"
+                 icon="person"
                  :to="{name: 'person'}"
                  replace
                  label="我的"

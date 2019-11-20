@@ -3,13 +3,21 @@
     <q-infinite-scroll @load="onLoad" :offset="250">
       <div v-for="(item, index) in items" :key="index"
            @click="switch_go(item.id)">
-        <q-card style="border-radius: 10px;
+        <q-card class="my-card" style="border-radius: 10px;
             width: 48%; float: left; margin: 1%">
-          <img :src="item.otherPic" alt="">
-          <q-card-section>
-            <div class="text-h6">{{ item.otherName }}</div>
-            <div class="text-subtitle2">价格：￥{{ item.presentPrice }}</div>
-          </q-card-section>
+          <img style="object-fit: cover; width: 100%; height: 100px;" :src="item.otherPic" alt="">
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>{{ item.otherName }}</q-item-label>
+              <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-card>
       </div>
       <!--添加消息-->
@@ -34,7 +42,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      pageSize: 5,
+      pageSize: 15,
       pageNumber: 1,
       lastPage: 0,
       items: []

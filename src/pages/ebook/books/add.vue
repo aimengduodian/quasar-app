@@ -9,57 +9,9 @@
       </div>
     </div>
     <br>
-    <q-uploader
-      url="http://localhost:4444/upload"
-      label="图片上传，不能大于4M"
-      multiple
-      accept=".jpg, image/*"
-      :max-file-size="2048*2048*4"
-      style="width: 100%"
-      aria-colcount="2"
-    >
-      <template v-slot:list="scope">
-        <q-list separator>
-
-          <q-item v-for="file in scope.files" :key="file.name">
-            <q-item-section>
-              <q-item-label class="full-width ellipsis">
-                {{ file.name }}
-              </q-item-label>
-
-              <q-item-label caption>
-                Status: {{ file.__status }}
-              </q-item-label>
-
-              <q-item-label caption>
-                {{ file.__sizeLabel }} / {{ file.__progressLabel }}
-              </q-item-label>
-            </q-item-section>
-
-            <q-item-section
-              v-if="file.__img"
-              thumbnail
-              class="gt-xs"
-            >
-              <img :src="file.__img.src" alt="">
-            </q-item-section>
-
-            <q-item-section top side>
-              <q-btn
-                class="gt-xs"
-                size="12px"
-                flat
-                dense
-                round
-                icon="delete"
-                @click="scope.removeFile(file)"
-              />
-            </q-item-section>
-          </q-item>
-
-        </q-list>
-      </template>
-    </q-uploader>
+    <div class="row">
+      <pic-upload ref="refFiles" :urls="urls" />
+    </div>
     <q-input v-model="book.bookName" type="text" prefix="名称:">
       <template v-slot:prepend>
         <q-icon name="book" />
@@ -72,6 +24,12 @@
       </template>
     </q-input>
 
+    <q-input v-model="book.bookType" type="number" prefix="分类:" suffix="选择类型">
+      <template v-slot:prepend>
+        <q-icon name="phone" />
+      </template>
+    </q-input>
+
     <q-input v-model="book.bookPub" type="text" prefix="出版社:">
       <template v-slot:prepend>
         <q-icon name="mail" />
@@ -79,6 +37,9 @@
     </q-input>
 
     <q-input v-model="book.pubDate" mask="date" prefix="出版日期:">
+      <template v-slot:prepend>
+        <q-icon name="send" />
+      </template>
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -93,20 +54,15 @@
         <q-icon name="money" />
       </template>
     </q-input>
-
-    <q-input v-model="book.bookType" type="number" prefix="分类:" suffix="选择类型">
-      <template v-slot:prepend>
-        <q-icon name="phone" />
-      </template>
-    </q-input>
-
-    <q-input prefix="详细信息:" v-model="book.des" autogrow />
+    <br>
+    <q-editor v-model="book.des"/>
     <br>
   </div>
 </template>
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
+import picUpload from 'components/picUpload'
 
 export default {
   data () {
@@ -140,7 +96,8 @@ export default {
     }
   },
   components: {
-    NeedVerify
+    NeedVerify,
+    picUpload
   },
   created () {
     this.initBookTypeSelect()

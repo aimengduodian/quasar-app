@@ -1,19 +1,16 @@
 <template>
-  <q-page padding class="row justify-center">
-    <div style="width: 500px; max-width: 90vw;">
-      <p class="caption pcontent">{{ version.des }}</p>
-
-      <blockquote>
-        <small>服务电话：14787484930</small>
-        <br>
-        <small>服务QQ：690345407</small>
-      </blockquote>
+  <div class="q-pa-md">
+    <p class="caption pcontent">{{ version.des }}</p>
+    <blockquote>
+      <small>服务电话：14787484930</small>
       <br>
-      <div class="areaWrap justify-center">
-        <img src="~assets/map.png" alt="">
-      </div>
+      <small>服务QQ：690345407</small>
+    </blockquote>
+    <br>
+    <div class="areaWrap justify-center">
+      <img src="~assets/map.png" alt="">
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script>

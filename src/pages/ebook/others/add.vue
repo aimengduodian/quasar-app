@@ -2,7 +2,7 @@
   <div class="q-pa-md" style="width: 100%">
     <div class="row">
       <div class="col-9 text-center" >
-        <span class="text-h5">编辑电子信息</span>
+        <span class="text-h5">宝贝信息</span>
       </div>
       <div class="col-3">
         <q-btn rounded color="blue">发布</q-btn>
@@ -10,17 +10,15 @@
     </div>
     <br>
     <q-uploader
-      url="http://localhost:4444/upload"
       label="图片上传，不能大于4M"
       multiple
       accept=".jpg, image/*"
-      :max-file-size="2048*2048*4"
+      :max-file-size="1024*1024*4"
       style="width: 100%"
       aria-colcount="2"
     >
       <template v-slot:list="scope">
         <q-list separator>
-
           <q-item v-for="file in scope.files" :key="file.name">
             <q-item-section>
               <q-item-label class="full-width ellipsis">

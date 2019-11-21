@@ -11,10 +11,13 @@
     <br>
 
     <q-uploader
-      label="上传图片"
+      label="上传图片，图片大小不能超过4M"
       multiple
+      hide-upload-btn
       accept=".jpg, image/*"
       :filter="checkFile"
+      @added="addImage"
+      @removed="reImage"
       style="width: 100%"
     />
 
@@ -49,7 +52,7 @@
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="book.pubDate" @input="() => $refs.qDateProxy.hide()" />
+            <q-date v-model="book.pubDate" mask="YYYY-MM-DD" @input="() => $refs.qDateProxy.hide()" />
           </q-popup-proxy>
         </q-icon>
       </template>
@@ -69,6 +72,7 @@
 <script>
 import NeedVerify from 'pages/verify/needVerify'
 import picUpload from 'components/picUpload'
+import { date } from 'quasar'
 
 export default {
   data () {
@@ -82,10 +86,12 @@ export default {
         pubDate: null,
         bookPub: null,
         bookPic: null,
-        des: ''
+        phone: '14787461136',
+        weiXin: '1111',
+        des: '',
+        files: [] // 上传图片
       },
       options: [], // 下拉选择框
-      urls: [], // 上传图片
       btnFlag: false // 发布按钮是否能点击
     }
   },
@@ -93,15 +99,35 @@ export default {
     checkFile (files) {
       return files.filter(file => file.size < 2048 * 2048 * 4)
     },
+    addImage (files) {
+      files.forEach(item => {
+        this.book.files.push(item)
+      })
+      console.log(this.book.files)
+    },
+    reImage (files) {
+      for (let i = 0; i < this.book.files.length; i++) {
+        const item = this.book.files[i]
+        if (item.name === files[0].name) {
+          this.book.files.splice(i, 1)
+          break
+        }
+      }
+      console.log(this.book.files)
+    },
     onClickSubmit () {
-      console.log(this.urls)
+      const params = JSON.parse(JSON.stringify(this.book))
+      params.pubDate = date.formatDate(params.pubDate, 'X')
+      this.$axios.post('/book/save', params).then((res) => {
+        res.data.page.pageInfo.list.forEach(item => {
+          item.otherPic = 'http://47.106.222.50:8083' + this.splitMth(item.otherPic)
+          this.items.push(item)
+        })
+      })
     },
     // 初始化图书类型下拉框
     initBookTypeSelect () {
-      // const value = storage.getSession('bookType')
-      // this.options = value.map((item) => {
-      //   return item.text
-      // })
+
     }
   },
   components: {

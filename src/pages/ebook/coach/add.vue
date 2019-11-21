@@ -5,7 +5,7 @@
         <span class="text-h5">编辑辅导信息</span>
       </div>
       <div class="col-3">
-        <q-btn rounded color="blue">发布</q-btn>
+        <q-btn rounded color="blue" @click="onClickSubmit">发布</q-btn>
       </div>
     </div>
     <br>
@@ -22,18 +22,25 @@
       </template>
     </q-input>
 
-    <q-input v-model="teach.startTime" mask="date" prefix="日期:">
-      <template v-slot:prepend>
-        <q-icon name="send" />
-      </template>
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="teach.startTime" @input="() => $refs.qDateProxy.hide()" />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+    <template>
+        <q-input readonly v-model="teach.endTime" prefix="日期:">
+          <template v-slot:prepend>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy transition-show="scale" transition-hide="scale">
+                <q-date v-model="teach.endTime" mask="YYYY-MM-DD HH:mm" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+
+          <template v-slot:append>
+            <q-icon name="access_time" class="cursor-pointer">
+              <q-popup-proxy transition-show="scale" transition-hide="scale">
+                <q-time v-model="teach.endTime" mask="YYYY-MM-DD HH:mm" format24h />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+    </template>
 
     <q-input v-model="teach.place" type="text" prefix="辅导地点:">
       <template v-slot:prepend>
@@ -54,13 +61,14 @@
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
+import { date } from 'quasar'
 
 export default {
   data () {
     return {
       options: ['辅导', '讲座'],
       teach: {
-        id: '',
+        id: 0,
         name: '',
         type: '1', // 0：辅导  1：讲座
         price: '500',
@@ -75,8 +83,17 @@ export default {
     }
   },
   methods: {
-    checkFileSize (files) {
-      return files.filter(file => file.size < (2048 * 2048 * 4))
+    onClickSubmit () {
+      const params = JSON.parse(JSON.stringify(this.teach))
+      params.startTime = date.formatDate(params.startTime, 'X')
+      params.endTime = date.formatDate(params.endTime, 'X')
+
+      this.$axios.post('/tutoring/save', params).then((res) => {
+        res.data.page.pageInfo.list.forEach(item => {
+          item.otherPic = 'http://47.106.222.50:8083' + this.splitMth(item.otherPic)
+          this.items.push(item)
+        })
+      })
     },
     // 初始化图书类型下拉框
     initteachTypeSelect () {

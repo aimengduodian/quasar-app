@@ -96,7 +96,7 @@ export default [
       },
       {
         title: 'add',
-        name: 'view_add',
+        name: 'others_add',
         icon: 'linear_scale',
         hash: 'add'
       }

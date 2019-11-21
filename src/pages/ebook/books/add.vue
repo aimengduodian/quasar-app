@@ -5,13 +5,19 @@
         <span class="text-h5">编辑图书信息</span>
       </div>
       <div class="col-3">
-        <q-btn rounded color="blue">发布</q-btn>
+        <q-btn rounded color="blue" @click="onClickSubmit">发布</q-btn>
       </div>
     </div>
     <br>
-    <div class="row">
-      <pic-upload ref="refFiles" :urls="urls" />
-    </div>
+
+    <q-uploader
+      label="上传图片"
+      multiple
+      accept=".jpg, image/*"
+      :filter="checkFile"
+      style="width: 100%"
+    />
+
     <q-input v-model="book.bookName" type="text" prefix="名称:">
       <template v-slot:prepend>
         <q-icon name="book" />
@@ -76,7 +82,7 @@ export default {
         pubDate: null,
         bookPub: null,
         bookPic: null,
-        des: null
+        des: ''
       },
       options: [], // 下拉选择框
       urls: [], // 上传图片
@@ -84,8 +90,11 @@ export default {
     }
   },
   methods: {
-    checkFileSize (files) {
-      return files.filter(file => file.size < (2048 * 2048 * 4))
+    checkFile (files) {
+      return files.filter(file => file.size < 2048 * 2048 * 4)
+    },
+    onClickSubmit () {
+      console.log(this.urls)
     },
     // 初始化图书类型下拉框
     initBookTypeSelect () {

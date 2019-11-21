@@ -41,6 +41,12 @@ export default [
         name: 'coach_view',
         icon: 'linear_scale',
         hash: 'view'
+      },
+      {
+        title: 'add',
+        name: 'coach_add',
+        icon: 'linear_scale',
+        hash: 'add'
       }
     ]
   },
@@ -61,6 +67,12 @@ export default [
         name: 'electronics_view',
         icon: 'linear_scale',
         hash: 'view'
+      },
+      {
+        title: 'add',
+        name: 'electronics_add',
+        icon: 'linear_scale',
+        hash: 'add'
       }
     ]
   },
@@ -81,6 +93,12 @@ export default [
         name: 'others_view',
         icon: 'linear_scale',
         hash: 'view'
+      },
+      {
+        title: 'add',
+        name: 'view_add',
+        icon: 'linear_scale',
+        hash: 'add'
       }
     ]
   },

@@ -53,8 +53,8 @@ module.exports = function (ctx) {
     },
     framework: {
       all: true,
-      lang: 'zh-hans',
-      iconSet: ctx.theme ? 'material-icons' : 'ionicons-v4'
+      lang: 'zh-hans'
+      // iconSet: ctx.theme ? 'material-icons' : 'ionicons-v4'
     },
     ssr: {
       pwa: false

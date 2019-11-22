@@ -7,11 +7,8 @@
   "author": "Razvan Stoenescu <razvan.stoenescu@gmail.com>",
   "private": true,
   "scripts": {
-    "dev-ios": "quasar dev -t ios",
-    "dev-mat": "quasar dev -t mat",
-    "dev-pwa": "quasar dev -m pwa",
-    "dev-server": "$ quasar serve",
-    "build": "quasar build -t ios",
+    "dev": "quasar dev",
+    "build": "quasar build",
     "clean": "quasar clean"
   },
   "dependencies": {

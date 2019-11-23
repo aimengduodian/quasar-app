@@ -6,13 +6,13 @@ const resolve = dir => require('path').join(__dirname, dir)
 module.exports = {
   resolve: {
     alias: {
-      'quasar': resolve('node_modules/quasar/dist/quasar.esm.js'),
       'src': resolve('/src'),
+      'app': resolve('/'),
       'components': resolve('/src/components'),
       'layouts': resolve('/src/layouts'),
       'pages': resolve('/src/pages'),
       'assets': resolve('/src/assets'),
-      'plugins': resolve('/src/plugins')
+      'boot': resolve('/src/boot')
     }
   }
 }

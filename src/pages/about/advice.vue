@@ -12,7 +12,7 @@
              float-label="在此输入建议"
              @input="hasContent()"
              v-model="userAdvice.des"
-             autogrow />
+             autogrow value=""/>
     <br>
     <q-btn color="primary"
            :disabled="disabled"

@@ -12,12 +12,11 @@
 
     <q-uploader
       label="上传图片，图片大小不能超过4M"
+      :factory="factoryFn"
       multiple
       hide-upload-btn
       accept=".jpg, image/*"
       :filter="checkFile"
-      @added="addImage"
-      @removed="reImage"
       style="width: 100%"
     />
 
@@ -99,23 +98,12 @@ export default {
     checkFile (files) {
       return files.filter(file => file.size < 2048 * 2048 * 4)
     },
-    addImage (files) {
-      files.forEach(item => {
-        this.book.files.push(item)
-      })
-      console.log(this.book.files)
-    },
-    reImage (files) {
-      for (let i = 0; i < this.book.files.length; i++) {
-        const item = this.book.files[i]
-        if (item.name === files[0].name) {
-          this.book.files.splice(i, 1)
-          break
-        }
-      }
-      console.log(this.book.files)
+    factoryFn () {
+
     },
     onClickSubmit () {
+      console.log(this.book)
+      return
       const params = JSON.parse(JSON.stringify(this.book))
       params.pubDate = date.formatDate(params.pubDate, 'X')
       this.$axios.post('/book/save', params).then((res) => {

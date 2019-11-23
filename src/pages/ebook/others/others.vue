@@ -5,11 +5,11 @@
            @click="switch_go(item.id)">
         <q-card class="my-card" style="border-radius: 10px;
             width: 48%; float: left; margin: 1%">
-          <img style="object-fit: cover; width: 100%; height: 100px;" :src="item.otherPic" alt="">
+          <img style="object-fit: cover; width: 100%; height: 200px;" :src="item.otherPic" alt="">
           <q-item>
             <q-item-section avatar>
               <q-avatar>
-                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+                <img src="https://cdn.quasar.dev/img/avatar2.jpg" alt="">
               </q-avatar>
             </q-item-section>
 

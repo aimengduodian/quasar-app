@@ -77,7 +77,6 @@
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
-import { date } from 'quasar'
 
 export default {
   data () {

@@ -11,6 +11,7 @@
       autoplay
     >
       <q-carousel-slide v-for="(item, index) in urls"
+                        @click="handleImgsClick(index)"
                         :key="index" :name="index"
                         :img-src="item"/>
       <template v-slot:control>
@@ -132,6 +133,27 @@ export default {
           this.urls.push(pic)
         })
       })
+    },
+    handleImgsClick (index) {
+      const imgArr = []
+      for (const i in this.urls) {
+        imgArr.push(this.urls[i].image)
+      }
+      this.initialIndex = index
+      const params = {
+        $props: {
+          imgs: imgArr,
+          initialIndex: 'initialIndex', // 响应式数据的key名
+          loop: false
+        },
+        $events: {
+          change: (i) => {
+            // 必须更新 initialIndex
+            this.initialIndex = i
+          }
+        }
+      }
+      this.$createImagePreview({ ...params }).show()
     }
   },
   created () {

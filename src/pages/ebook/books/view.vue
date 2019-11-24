@@ -11,7 +11,6 @@
       autoplay
     >
       <q-carousel-slide v-for="(item, index) in urls"
-                        @click="handleImgsClick(index)"
                         :key="index" :name="index"
                         :img-src="item"/>
       <template v-slot:control>
@@ -39,20 +38,15 @@
           <strong>{{ book.bookName }}</strong>
         </div>
         <div class="q-body-2">
-          author: {{ book.author }}
+          作者: {{ book.author }}
         </div>
         <div class="q-caption">
           出版社：{{ book.bookPub }}
         </div>
       </div>
       <div class="col-2">
-        <q-btn
-          round
-          size="15px"
-          color="primary"
-        >
-          ￥{{ book.bookPrice }}
-        </q-btn>
+        <q-btn flat text-color="primary" icon="more"
+               @click="show(true)" />
       </div>
     </div>
     <br>
@@ -67,24 +61,25 @@
     >
       <q-tab name="mails" label="简要信息" />
       <q-tab name="alarms" label="商品描述" />
-      <q-tab name="movies" label="卖家信息" />
+      <q-tab name="movies" v-if="!flag" label="卖家信息" />
     </q-tabs>
     <q-separator />
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="mails">
-        <div> book type is {{ book.bookType }}</div>
-        <div> public data is {{ book.pubDate }} </div>
+        <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
+        <div> 类型: {{ book.bookType }}</div>
+        <div> 出版日期: {{ book.pubDate }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
         <p class="caption q-body-2">
           简介: {{ book.des }}
         </p>
       </q-tab-panel>
-      <q-tab-panel name="movies">
+      <q-tab-panel v-if="!flag" name="movies">
         <need-verify />
         <div v-if="false">
-          <div>phone: {{ book.phone }}</div>
-          <div>weixin: {{ book.weiXin }}</div>
+          <div>电话: {{ book.phone }}</div>
+          <div>微信: {{ book.weiXin }}</div>
         </div>
       </q-tab-panel>
     </q-tab-panels>
@@ -93,6 +88,7 @@
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -134,26 +130,121 @@ export default {
         })
       })
     },
-    handleImgsClick (index) {
-      const imgArr = []
-      for (const i in this.urls) {
-        imgArr.push(this.urls[i].image)
-      }
-      this.initialIndex = index
-      const params = {
-        $props: {
-          imgs: imgArr,
-          initialIndex: 'initialIndex', // 响应式数据的key名
-          loop: false
+    show () {
+      const report = [
+        {
+          show: !this.flag,
+          label: '举报',
+          icon: 'report',
+          id: 'report'
+        }
+      ]
+      const seller = [
+        {
+          show: this.flag,
+          label: '编辑',
+          icon: 'edit',
+          color: 'primary',
+          id: 'edit'
         },
-        $events: {
-          change: (i) => {
-            // 必须更新 initialIndex
-            this.initialIndex = i
-          }
+        {
+          show: this.flag,
+          label: '下架',
+          icon: 'delete',
+          color: 'primary',
+          id: 'delete'
+        }
+      ]
+      const action = [
+        {},
+        {
+          label: '分享',
+          icon: 'share',
+          id: 'share'
+        }
+      ]
+      if (this.flag) {
+        seller.forEach(item => {
+          action.unshift(item)
+        })
+      }
+      else {
+        report.forEach(item => {
+          action.push(item)
+        })
+      }
+
+      this.$q.bottomSheet({
+        message: '更多',
+        grid: false,
+        actions: action
+      }).onOk(action => {
+        console.log('Action chosen:', action.id)
+        switch (action.id) {
+          case 'report':
+            this.reportBook()
+            break
+          case 'edit':
+            this.editBook()
+            break
+          case 'delete':
+            this.deleteBook()
+            break
+          case 'share':
+            this.shareBook()
+            break
+          default:
+            break
+        }
+      }).onCancel(() => {
+        // console.log('Dismissed')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    editBook () {
+      const item = {
+        name: 'books_add',
+        query: {
+          id: this.book.id
         }
       }
-      this.$createImagePreview({ ...params }).show()
+      this.$router.push(item)
+    },
+    deleteBook () {
+      this.$q.dialog({
+        title: '确认下架？',
+        message: '下架后可在我的界面重新发布!',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$axios.post('/book/delete', {
+          id: this.book.id
+        }).then((res) => {
+          console.log(res)
+          if (res.data.code === 100) {
+            this.$q.notify('删除成功')
+            // 跳转回原页面
+            this.$router.go(-1)
+          }
+          else {
+            this.$q.notify('失败')
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    reportBook () {
+      const item = {
+        name: 'report'
+      }
+      this.$router.push(item)
+    },
+    shareBook () {
+      this.$q.notify('点击了分享')
     }
   },
   created () {
@@ -164,6 +255,10 @@ export default {
     else {
       this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
     }
+  },
+  computed: {
+    ...mapState('auth', ['flag']),
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

@@ -90,6 +90,7 @@
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
+import config from 'assets/config'
 
 export default {
   data () {
@@ -128,7 +129,7 @@ export default {
         // this.other.otherType = this.getotherTypeName(this.other.otherType)
         const arr = this.other.otherPic.split(',')
         arr.forEach(item => {
-          const pic = 'http://47.106.222.50:8083' + item
+          const pic = config.picUrl + item
           this.urls.push(pic)
         })
       })

@@ -35,6 +35,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import config from 'assets/config'
 
 export default {
   data () {
@@ -68,7 +69,7 @@ export default {
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
-          item.bookPic = 'http://47.106.222.50:8083' + this.splitMth(item.bookPic)
+          item.bookPic = config.picUrl + this.splitMth(item.bookPic)
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {

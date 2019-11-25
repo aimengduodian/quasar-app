@@ -72,7 +72,7 @@
 <script>
 import NeedVerify from 'pages/verify/needVerify'
 import picUpload from 'components/picUpload'
-
+import config from 'assets/config'
 import { date } from 'quasar'
 
 export default {
@@ -123,7 +123,7 @@ export default {
       })
       this.$axios.post('/book/save', this.book).then((res) => {
         res.data.page.pageInfo.list.forEach(item => {
-          item.otherPic = 'http://47.106.222.50:8083' + this.splitMth(item.otherPic)
+          item.otherPic = config.picUrl + this.splitMth(item.otherPic)
           this.items.push(item)
         })
       })

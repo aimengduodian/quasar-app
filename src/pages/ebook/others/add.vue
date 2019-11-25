@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import NeedVerify from 'pages/verify/needVerify'
+import NeedVerify from 'components/needVerify'
 
 export default {
   data () {

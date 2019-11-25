@@ -4,13 +4,13 @@
       <span class="text-h5">学生身份认证</span>
     </div>
     <br>
-    <q-input v-model="stuId" type="number" prefix="学号:">
+    <q-input value="" v-model="stuId" type="number" prefix="学号:">
       <template v-slot:prepend>
         <q-icon name="account_circle" />
       </template>
     </q-input>
 
-    <q-input v-model="password" :type="isPwd ? 'password' : 'text'" prefix="密码:"
+    <q-input value="" v-model="password" :type="isPwd ? 'password' : 'text'" prefix="密码:"
     >
       <template v-slot:prepend>
         <q-icon name="add" />
@@ -24,13 +24,13 @@
       </template>
     </q-input>
 
-    <q-input v-model="email" type="email" mask="email" prefix="邮箱:">
+    <q-input value="" v-model="email" type="email" mask="email" prefix="邮箱:">
       <template v-slot:prepend>
         <q-icon name="email" />
       </template>
     </q-input>
 
-    <q-input v-model="checkCode" type="text" prefix="验证码:">
+    <q-input value="" v-model="checkCode" type="text" prefix="验证码:">
       <template v-slot:prepend>
         <q-icon name="delete" />
       </template>
@@ -48,6 +48,7 @@
 export default {
   data () {
     return {
+      schoolUrl: 'http://202.203.132.204:8019/',
       isPwd: true,
       stuId: '',
       checkCode: '',
@@ -70,14 +71,14 @@ export default {
           this.$q.notify('获取session失败')
         }
         else {
-          this.url = 'http://202.203.132.204:8019/' + this.sessionString + '/default2.aspx'
-          this.checkCodeUrl = 'http://202.203.132.204:8019/' + this.sessionString + '/CheckCode.aspx'
+          this.url = this.schoolUrl + this.sessionString + '/default2.aspx'
+          this.checkCodeUrl = this.schoolUrl + this.sessionString + '/CheckCode.aspx'
         }
       })
     },
     // 点击刷新验证码
     freshCode () {
-      this.checkCodeUrl = 'http://202.203.132.204:8019/' + this.sessionString + '/CheckCode.aspx?' + Math.random()
+      this.checkCodeUrl = this.schoolUrl + this.sessionString + '/CheckCode.aspx?' + Math.random()
     },
     // 提交数据
     submitHandler () {

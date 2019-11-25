@@ -67,11 +67,9 @@ export default {
       return strs[0]
     },
     subAdvice () {
-      const _that = this
-
       this.$axios.post('/other/others', {
-        pageSize: _that.pageSize,
-        pageNumber: _that.pageNumber
+        pageSize: this.pageSize,
+        pageNumber: this.pageNumber
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
@@ -79,7 +77,7 @@ export default {
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {
-          _that.pageNumber++
+          this.pageNumber++
         }
       })
     },

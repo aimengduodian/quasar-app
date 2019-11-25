@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import NeedVerify from 'pages/verify/needVerify'
+import NeedVerify from 'components/needVerify'
 import { mapState, mapGetters } from 'vuex'
 import config from 'assets/config'
 
@@ -222,7 +222,6 @@ export default {
         this.$axios.post('/book/delete', {
           id: this.book.id
         }).then((res) => {
-          console.log(res)
           if (res.data.code === 100) {
             this.$q.notify('删除成功')
             // 跳转回原页面

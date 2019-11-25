@@ -36,14 +36,14 @@ module.exports = function (ctx) {
       proxy: {
         // 将所有以/api开头的请求代理到jsonplaceholder
         '/api': {
-          target: 'http://47.106.222.50:8080',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           pathRewrite: {
             '^/api': ''
           }
         },
         '/pic': {
-          target: 'http://47.106.222.50:8083',
+          target: 'http://localhost:8083',
           changeOrigin: true,
           pathRewrite: {
             '^/pic': ''

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import NeedVerify from 'pages/verify/needVerify'
+import NeedVerify from 'components/needVerify'
 import picUpload from 'components/picUpload'
 import config from 'assets/config'
 import { date } from 'quasar'
@@ -114,7 +114,6 @@ export default {
           break
         }
       }
-      console.log(this.book.files)
     },
     onClickSubmit () {
       // console.log(this.files_arr)

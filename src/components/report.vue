@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="docs-input justify-center">
+  <div class="q-pa-md" style="width: 100%">
     <q-list >
       <q-item
         clickable
@@ -16,7 +16,7 @@
       </q-item>
 
     </q-list>
-  </q-page>
+  </div>
 </template>
 
 <script>

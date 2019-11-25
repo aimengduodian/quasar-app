@@ -12,7 +12,27 @@ axios.defaults.withCredentials = true // 请求后端同步session
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    console.log(config)
+    if (config.method === 'post') {
+      // config.data = qs.stringify(config.data)
+      const form = new FormData()
+      Object.keys(config.data).forEach(key => {
+        if (key === 'files') {
+          try {
+            const aArr = config.data[key]
+            aArr.forEach(item => {
+              form.append(key, item)
+            })
+          }
+          catch (e) {
+            console.log(e)
+          }
+        }
+        else {
+          form.append(key, config.data[key])
+        }
+      })
+      config.data = form
+    }
     // 判断是否存在ticket，如果存在的话，则每个http header都加上ticket
     if (cookie.get('token')) {
       // 用户每次操作，都将cookie设置成2小时

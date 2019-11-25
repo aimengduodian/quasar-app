@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import NeedVerify from 'pages/verify/needVerify'
+import NeedVerify from 'components/needVerify'
 import { mapState, mapGetters } from 'vuex'
 
 export default {

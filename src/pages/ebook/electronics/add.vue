@@ -10,7 +10,6 @@
     </div>
     <br>
     <q-uploader
-      url="http://localhost:4444/upload"
       label="图片上传，不能大于4M"
       multiple
       accept=".jpg, image/*"

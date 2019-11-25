@@ -57,7 +57,7 @@
 
 <script>
 import NeedVerify from 'pages/verify/needVerify'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -129,6 +129,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag'])
   },
   created () {
@@ -144,8 +145,6 @@ export default {
 </script>
 
 <style lang="stylus">
-
-
   .docs-carousel
     p.caption:not(:first-of-type)
       margin-top 38px

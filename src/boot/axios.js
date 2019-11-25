@@ -1,20 +1,17 @@
 // import something here
 import axios from 'axios'
 import cookie from 'vue-cookie'
-import qs from 'qs'
+import config from 'assets/config'
 
 // axios默认配置
-axios.defaults.baseURL = 'http://47.106.222.50:8080'
-axios.defaults.timeout = 10000
+axios.defaults.baseURL = config.baseUrl
+axios.defaults.timeout = config.timeout
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 axios.defaults.withCredentials = true // 请求后端同步session
 
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if (config.method === 'post') {
-      config.data = qs.stringify(config.data)
-    }
     // 判断是否存在ticket，如果存在的话，则每个http header都加上ticket
     if (cookie.get('token')) {
       // 用户每次操作，都将cookie设置成2小时

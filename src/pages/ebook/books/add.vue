@@ -105,7 +105,6 @@ export default {
       files.forEach(item => {
         this.files_arr.push(item)
       })
-      console.log(this.book.files)
     },
     reImage (files) {
       for (let i = 0; i < this.files_arr.length; i++) {
@@ -120,7 +119,7 @@ export default {
     onClickSubmit () {
       // console.log(this.files_arr)
       this.files_arr.forEach(item => {
-        this.book.files.push(item.__img.currentSrc)
+        this.book.files.push(item)
       })
       this.$axios.post('/book/save', this.book).then((res) => {
         res.data.page.pageInfo.list.forEach(item => {

@@ -8,14 +8,13 @@
       infinite
       :fullscreen.sync="fullscreen"
       height="180px"
-      :autoplay="2000"
     >
       <q-carousel-slide v-for="(item, index) in urls"
                         :key="index" :name="index"
                         :img-src="item"/>
       <template v-slot:control>
         <q-carousel-control
-          position="bottom-right"
+          position="top-right"
           :offset="[18, 18]"
         >
           <q-btn

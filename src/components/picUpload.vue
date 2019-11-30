@@ -6,14 +6,15 @@
       <div class="col-3" v-for="(item, index) in curls" :key="index" >
         <q-img
           :src="item.url"
+          :ratio="1"
           class="imgStyle"
           spinner-color="primary"
         >
           <q-btn flat round size="xs" @click="delImg(item)">
-            <q-icon size="xs" name="delete" />
+            <q-icon color="blue" size="xs" name="delete" />
           </q-btn>
-          <div v-if="index === firstImg" class="absolute-bottom text-center">
-            <q-badge floating color="teal">首页</q-badge>
+          <div class="absolute-bottom" @click="setImgFirstPage(item)">
+            <q-badge v-if="index === firstImg" floating color="teal">首页</q-badge>
           </div>
         </q-img>
       </div>
@@ -47,10 +48,7 @@ export default {
   watch: {
     files: {
       handler (n, o) {
-        let fileList = []
-        fileList = JSON.parse(JSON.stringify(n))
-        [fileList[0], fileList[this.firstImg]] = [fileList[this.firstImg], fileList[0]]
-        this.$emit('filesArr', fileList)
+        this.$emit('filesArr', n)
       },
       immediate: true,
       deep: true
@@ -85,6 +83,10 @@ export default {
     showImg: function (e) {
       let files = e.target.files
       for (let i = 0; i < files.length; i++) {
+        if (this.files.length === 8) {
+          this.$q.notify('最多上传8张图片')
+          break
+        }
         this.readFile(files[i])
       }
     },
@@ -133,9 +135,9 @@ export default {
 
 <style lang="stylus">
   .imgStyle
+    border 1px solid lightgray
     object-fit: cover
     margin 5px
     border-radius: 10px
     width: 90%
-    height: 20vw
 </style>

@@ -10,3 +10,7 @@ export const power = state => {
 export const getFlag = state => {
   return state.flag
 }
+
+export const getPageMsg = state => {
+  return state.pageMsg
+}

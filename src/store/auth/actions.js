@@ -9,3 +9,9 @@ export const updateFlag = ({commit}, val) => {
 export const updateUser = ({commit}, val) => {
   commit('setUser', val)
 }
+
+//
+export const updatePageMsg = ({commit}, val) => {
+  const pageMsg = JSON.stringify(val)
+  commit('setPageMsg', pageMsg)
+}

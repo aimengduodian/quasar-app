@@ -6,3 +6,7 @@ export const setFlag = (state, val) => {
 export const setUser = (state, val) => {
   state.user = val
 }
+
+export const setPageMsg = (state, val) => {
+  state.pageMsg = val
+}

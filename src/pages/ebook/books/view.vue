@@ -71,9 +71,7 @@
         <div> 出版日期: {{ book.pubDate }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
-        <p class="caption q-body-2">
-          简介: {{ book.des }}
-        </p>
+        <p class="caption q-body-2" v-html="book.des"/>
       </q-tab-panel>
       <q-tab-panel v-if="!flag" name="movies">
         <need-verify />
@@ -88,7 +86,7 @@
 
 <script>
 import NeedVerify from 'components/needVerify'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import config from 'src/common/config'
 
 export default {
@@ -119,6 +117,7 @@ export default {
     NeedVerify
   },
   methods: {
+    ...mapActions('auth', ['updatePageMsg']),
     initData () {
       this.$axios.get('/book/getById/' + this.book.id).then(res => {
         this.book = res.data.page.info
@@ -129,6 +128,9 @@ export default {
           const pic = config.picUrl + item
           this.urls.push(pic)
         })
+        const pageMsg = JSON.parse(JSON.stringify(this.book))
+        pageMsg.url = JSON.parse(JSON.stringify(this.urls))
+        this.updatePageMsg(pageMsg)
       })
     },
     show () {
@@ -258,7 +260,7 @@ export default {
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag']),
   }
 }
 </script>

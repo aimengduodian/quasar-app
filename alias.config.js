@@ -9,6 +9,7 @@ module.exports = {
       'src': resolve('/src'),
       'app': resolve('/'),
       'components': resolve('/src/components'),
+      'statics': resolve('/src/statics'),
       'layouts': resolve('/src/layouts'),
       'pages': resolve('/src/pages'),
       'assets': resolve('/src/assets'),

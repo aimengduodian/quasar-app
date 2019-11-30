@@ -8,7 +8,7 @@
       infinite
       :fullscreen.sync="fullscreen"
       height="180px"
-      autoplay
+      :autoplay="2000"
     >
       <q-carousel-slide v-for="(item, index) in urls"
                         :key="index" :name="index"

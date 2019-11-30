@@ -4,10 +4,22 @@
            multiple='multiple' @change='showImg' style='display:none' >
     <div class="row wrap">
       <div class="col-3" v-for="(item, index) in curls" :key="index" >
-        <img class="imgStyle" :src="item.url" alt="picture">
+        <q-img
+          :src="item.url"
+          class="imgStyle"
+          spinner-color="primary"
+        >
+          <q-btn flat round size="xs" @click="delImg(item)">
+            <q-icon size="xs" name="delete" />
+          </q-btn>
+          <div v-if="index === firstImg" class="absolute-bottom text-center">
+            <q-badge floating color="teal">首页</q-badge>
+          </div>
+        </q-img>
       </div>
-      <div class="col-3">
-        <img class="imgStyle" src="statics/upload.png" alt="upload" @click='bindEven'>
+      <div class="col-3" v-if="curls.length < 8">
+        <img class="imgStyle" src="statics/upload.png"
+             alt="upload" @click='bindEven'>
       </div>
     </div>
   </div>
@@ -18,6 +30,7 @@ import lrz from 'lrz'
 export default {
   data () {
     return {
+      firstImg: 0,
       files: [],
       curls: []
     }
@@ -34,7 +47,10 @@ export default {
   watch: {
     files: {
       handler (n, o) {
-        this.$emit('filesArr', n)
+        let fileList = []
+        fileList = JSON.parse(JSON.stringify(n))
+        [fileList[0], fileList[this.firstImg]] = [fileList[this.firstImg], fileList[0]]
+        this.$emit('filesArr', fileList)
       },
       immediate: true,
       deep: true
@@ -57,6 +73,14 @@ export default {
         data.url = res.base64
       })
       this.curls.push(data)
+    },
+    setImgFirstPage (item) {
+      this.firstImg = this.curls.indexOf(item)
+    },
+    delImg (item) {
+      const itemIndex = this.curls.indexOf(item)
+      this.curls.splice(itemIndex, 1)
+      this.files.splice(itemIndex, 1)
     },
     showImg: function (e) {
       let files = e.target.files
@@ -110,6 +134,7 @@ export default {
 <style lang="stylus">
   .imgStyle
     object-fit: cover
+    margin 5px
     border-radius: 10px
     width: 90%
     height: 20vw

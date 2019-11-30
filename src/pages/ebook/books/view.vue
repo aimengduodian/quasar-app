@@ -259,7 +259,7 @@ export default {
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('auth', ['power', 'powerFlag'])
   }
 }
 </script>

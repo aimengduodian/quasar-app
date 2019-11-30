@@ -65,12 +65,12 @@
 import { mapGetters } from 'vuex'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
-import config from 'src/common/config'
 // import { date } from 'quasar'
 
 export default {
   data () {
     return {
+      updateFlag: false,
       book: {
         id: 0,
         bookName: null,
@@ -95,7 +95,12 @@ export default {
       this.book.files = files
     },
     onClickSubmit () {
-      this.$axios.post('/book/save', this.book).then((res) => {
+      let url = '/book/save'
+      if (this.updateFlag) {
+        url = '/book/update'
+      }
+
+      this.$axios.post(url, this.book).then((res) => {
         if (res.data.code === 100) {
           this.$q.notify(res.data.msgs.msg)
         }
@@ -128,6 +133,7 @@ export default {
   created () {
     this.book.id = this.$route.query.id
     if (this.book.id) {
+      this.updateFlag = true
       this.getBookMsg(this.book.id)
     }
     this.initBookTypeSelect()

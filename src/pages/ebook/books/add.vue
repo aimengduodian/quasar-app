@@ -10,7 +10,8 @@
     </div>
     <br>
 
-    <q-uploader
+<!--    <q-uploader
+      style="width: 100%"
       label="上传图片，图片大小不能超过4M"
       multiple
       hide-upload-btn
@@ -18,8 +19,10 @@
       :filter="checkFile"
       @added="addImage"
       @removed="reImage"
-      style="width: 100%"
-    />
+      :url-factory="this.urls"
+    />-->
+    <pic-upload />
+
 
     <q-input value="" v-model="book.bookName" type="text" prefix="名称:">
       <template v-slot:prepend>
@@ -66,13 +69,15 @@
     <br>
     <q-editor v-model="book.des" value=""/>
     <br>
+    <q-btn @click="showMsg()">11111</q-btn>
   </div>
 </template>
 
 <script>
 import NeedVerify from 'components/needVerify'
-import picUpload from 'components/picUpload'
-import config from 'assets/config'
+import PicUpload from 'components/picUpload'
+import config from 'src/common/config'
+import picFiles from 'src/common/file'
 import { date } from 'quasar'
 
 export default {
@@ -93,11 +98,15 @@ export default {
         files: [] // 上传图片
       },
       files_arr: [],
+      urls: [],
       options: [], // 下拉选择框
       btnFlag: false // 发布按钮是否能点击
     }
   },
   methods: {
+    showMsg () {
+      console.log(this.urls)
+    },
     checkFile (files) {
       return files.filter(file => file.size < 2048 * 2048 * 4)
     },
@@ -131,23 +140,28 @@ export default {
     initBookTypeSelect () {
 
     },
-    getBookMsg () {
-      this.$axios.get('/book/getById/' + this.book.id).then(res => {
+    async getBookMsg () {
+      const urlArr = []
+      await this.$axios.get('/book/getById/' + this.book.id).then(res => {
         if (res.data.code === 100) {
           this.book = res.data.page.info
           this.book.pubDate = date.formatDate(this.book.pubDate, 'YYYY-MM-DD')
           const arr = this.book.bookPic.split(',')
-          console.log(arr)
-          // $.each(arr, (index, item) => {
-          //   this.urls.push({ url: this.$file(item) })
-          // })
+          try {
+            arr.forEach(item => {
+              urlArr.push({ url: config.picUrl + item })
+            })
+          }
+          catch (e) {
+            console.log(e)
+          }
         }
       })
     }
   },
   components: {
     NeedVerify,
-    picUpload
+    PicUpload
   },
   created () {
     this.book.id = this.$route.query.id

@@ -35,7 +35,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import config from 'assets/config'
+import config from 'src/common/config'
 export default {
   data () {
     return {

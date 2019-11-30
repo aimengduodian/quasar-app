@@ -1,7 +1,7 @@
 // import something here
 import axios from 'axios'
 import cookie from 'vue-cookie'
-import config from 'assets/config'
+import config from 'src/common/config'
 
 // axios默认配置
 axios.defaults.baseURL = config.baseUrl

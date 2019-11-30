@@ -90,7 +90,7 @@
 
 <script>
 import NeedVerify from 'components/needVerify'
-import config from 'assets/config'
+import config from 'src/common/config'
 
 export default {
   data () {

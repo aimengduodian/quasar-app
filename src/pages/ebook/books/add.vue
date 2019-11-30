@@ -96,10 +96,14 @@ export default {
     },
     onClickSubmit () {
       this.$axios.post('/book/save', this.book).then((res) => {
-        res.data.page.pageInfo.list.forEach(item => {
-          item.otherPic = config.picUrl + this.splitMth(item.otherPic)
-          this.items.push(item)
-        })
+        if (res.data.code === 100) {
+          this.$q.notify(res.data.msgs.msg)
+        }
+        else {
+          this.$q.notify('Fail')
+        }
+        // 跳转回原页面
+        this.$router.go(-1)
       })
     },
     // 初始化图书类型下拉框

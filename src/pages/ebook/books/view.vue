@@ -121,8 +121,7 @@ export default {
     initData () {
       this.$axios.get('/book/getById/' + this.book.id).then(res => {
         this.book = res.data.page.info
-        // console.log(this.book)
-        // this.book.bookType = this.getBookTypeName(this.book.bookType)
+        // modify book type name
         const arr = this.book.bookPic.split(',')
         arr.forEach(item => {
           const pic = config.picUrl + item

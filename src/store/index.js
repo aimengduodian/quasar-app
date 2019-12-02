@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from './auth'
+import staticData from './staticData'
 
 Vue.use(Vuex)
 
 export default function () {
   const Store = new Vuex.Store({
     modules: {
-      auth
+      auth,
+      staticData
     }
   })
 
@@ -16,6 +18,10 @@ export default function () {
     module.hot.accept(['./auth'], () => {
       const newAuth = require('./auth').default
       Store.hotUpdate({ modules: {auth: newAuth} })
+    })
+    module.hot.accept(['./staticData'], () => {
+      const newStatic = require('./staticData').default
+      Store.hotUpdate({ modules: {staticData: newStatic} })
     })
   }
 

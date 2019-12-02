@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { uid } from 'quasar'
 import FooterTabs from 'components/market-tabs'
 import countries from 'assets/autocomplete.json'
@@ -92,6 +93,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('staticData', ['updateStaticCache']),
     show () {
       this.layoutModal = true
     },
@@ -128,10 +130,21 @@ export default {
       }
       aArr.push(item)
       return aArr
+    },
+    async init () {
+      const bookType = await this.$axios.get('/booktype/booktypes').then(res => {
+        return res.data.page.booktypes
+      })
+
+      const electronicsType = await this.$axios.get('/electronicstype/electronicsTypes').then(res => {
+        return res.data.page.electronicsType
+      })
+      await this.updateStaticCache({bookType, electronicsType})
     }
   },
   created () {
     // this.$q['fullscreen'].toggle()
+    this.init()
   }
 }
 </script>

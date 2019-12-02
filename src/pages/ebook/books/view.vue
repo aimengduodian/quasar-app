@@ -66,11 +66,11 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="mails">
         <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
-        <div> 类型: {{ book.bookType }}</div>
-        <div> 出版日期: {{ book.pubDate }} </div>
+        <div> 类型: {{ BookTypeName }}</div>
+        <div> 出版日期: {{ sformatDate }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
-        <p class="caption q-body-2" v-html="book.des"/>
+        <p class="caption q-body-2" v-html="book.des" />
       </q-tab-panel>
       <q-tab-panel v-if="!flag" name="movies">
         <need-verify />
@@ -87,6 +87,7 @@
 import NeedVerify from 'components/needVerify'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import config from 'src/common/config'
+import { date } from 'quasar'
 
 export default {
   data () {
@@ -101,7 +102,7 @@ export default {
         bookType: '',
         author: '',
         bookPrice: '20',
-        pubDate: '2013-12-12',
+        pubDate: '',
         bookPub: '',
         bookPic: '',
         weiXin: '',
@@ -258,7 +259,16 @@ export default {
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('staticData', ['getBookTypeNameByNumber']),
+    sformatDate: function () {
+      const val = this.book.pubDate
+      return date.formatDate(val, 'YYYY-MM-DD')
+    },
+    BookTypeName: function () {
+      const type = this.book.bookType
+      return this.getBookTypeNameByNumber(type)
+    }
   }
 }
 </script>

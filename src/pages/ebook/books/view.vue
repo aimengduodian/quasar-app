@@ -66,7 +66,7 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="mails">
         <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
-        <div> 类型: {{ BookTypeName(book.bookType) }}</div>
+        <div> 类型: {{ getBookTypeNameByNumber(book.bookType) }}</div>
         <div> 出版日期: {{ formatBookDate(book.pubDate) }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
@@ -98,16 +98,16 @@ export default {
       // 获取详细信息
       book: {
         id: 0,
-        bookName: '',
-        bookType: '',
-        author: '',
-        bookPrice: '20',
-        pubDate: '',
-        bookPub: '',
-        bookPic: '',
-        weiXin: '',
-        phone: '',
-        des: ''
+        bookName: null,
+        bookType: null,
+        author: null,
+        bookPrice: null,
+        pubDate: null,
+        bookPub: null,
+        bookPic: null,
+        weiXin: null,
+        phone: null,
+        des: null
       },
       // 图片地址轮播
       urls: []
@@ -128,7 +128,7 @@ export default {
         })
         const pageMsg = JSON.parse(JSON.stringify(this.book))
         pageMsg.pubDate = this.formatBookDate(pageMsg.pubDate)
-        pageMsg.bookType = this.BookTypeName(pageMsg.bookType)
+        pageMsg.bookType = this.getBookTypeNameByNumber(pageMsg.bookType)
         pageMsg.url = JSON.parse(JSON.stringify(this.urls))
         this.updatePageMsg(pageMsg)
       })
@@ -250,9 +250,6 @@ export default {
     },
     formatBookDate (val) {
       return date.formatDate(val, 'YYYY-MM-DD')
-    },
-    BookTypeName (type) {
-      return this.getBookTypeNameByNumber(type)
     }
   },
   created () {

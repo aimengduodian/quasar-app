@@ -42,12 +42,7 @@
         </div>
       </div>
       <div class="col-2">
-        <q-btn
-          round
-          size="15px"
-          color="primary"
-        >
-        </q-btn>
+        <q-btn round size="15px" color="primary"/>
       </div>
     </div>
     <br>

@@ -98,6 +98,7 @@ export default {
         url = '/book/update'
       }
       const bookMsg = JSON.parse(JSON.stringify(this.book))
+      bookMsg.files = this.book.files
       bookMsg.bookType = this.getBookTypeNumberByName(bookMsg.bookType)
       this.$axios.post(url, bookMsg).then((res) => {
         if (res.data.code === 100) {

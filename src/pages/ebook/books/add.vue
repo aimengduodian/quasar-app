@@ -26,11 +26,11 @@
       </template>
     </q-input>
 
-    <q-input value="" v-model="book.bookType" type="number" prefix="分类:" suffix="选择类型">
+    <q-select v-model="book.bookType" :options="getBookTypeNameArr" prefix="分类:">
       <template v-slot:prepend>
-        <q-icon name="phone" />
+        <q-icon name="event" />
       </template>
-    </q-input>
+    </q-select>
 
     <q-input value="" v-model="book.bookPub" type="text" prefix="出版社:">
       <template v-slot:prepend>
@@ -65,7 +65,6 @@
 import { mapGetters } from 'vuex'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
-// import { date } from 'quasar'
 
 export default {
   data () {
@@ -86,7 +85,6 @@ export default {
         files: [] // 上传图片
       },
       urls: [],
-      options: [], // 下拉选择框
       btnFlag: false // 发布按钮是否能点击
     }
   },
@@ -99,8 +97,9 @@ export default {
       if (this.updateFlag) {
         url = '/book/update'
       }
-
-      this.$axios.post(url, this.book).then((res) => {
+      const bookMsg = JSON.parse(JSON.stringify(this.book))
+      bookMsg.bookType = this.getBookTypeNumberByName(bookMsg.bookType)
+      this.$axios.post(url, bookMsg).then((res) => {
         if (res.data.code === 100) {
           this.$q.notify(res.data.msgs.msg)
         }
@@ -110,10 +109,6 @@ export default {
         // 跳转回原页面
         this.$router.go(-1)
       })
-    },
-    // 初始化图书类型下拉框
-    initBookTypeSelect () {
-
     },
     getBookMsg () {
       const bookMsg = JSON.parse(this.getPageMsg)
@@ -128,7 +123,8 @@ export default {
     PicUpload
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg'])
+    ...mapGetters('auth', ['getPageMsg']),
+    ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName'])
   },
   created () {
     this.book.id = this.$route.query.id
@@ -136,7 +132,6 @@ export default {
       this.updateFlag = true
       this.getBookMsg(this.book.id)
     }
-    this.initBookTypeSelect()
   }
 }
 </script>

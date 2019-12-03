@@ -66,8 +66,8 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="mails">
         <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
-        <div> 类型: {{ BookTypeName }}</div>
-        <div> 出版日期: {{ sformatDate }} </div>
+        <div> 类型: {{ BookTypeName(book.bookType) }}</div>
+        <div> 出版日期: {{ formatBookDate(book.pubDate) }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
         <p class="caption q-body-2" v-html="book.des" />
@@ -121,13 +121,14 @@ export default {
     initData () {
       this.$axios.get('/book/getById/' + this.book.id).then(res => {
         this.book = res.data.page.info
-        // modify book type name
         const arr = this.book.bookPic.split(',')
         arr.forEach(item => {
           const pic = config.picUrl + item
           this.urls.push(pic)
         })
         const pageMsg = JSON.parse(JSON.stringify(this.book))
+        pageMsg.pubDate = this.formatBookDate(pageMsg.pubDate)
+        pageMsg.bookType = this.BookTypeName(pageMsg.bookType)
         pageMsg.url = JSON.parse(JSON.stringify(this.urls))
         this.updatePageMsg(pageMsg)
       })
@@ -246,6 +247,12 @@ export default {
     },
     shareBook () {
       this.$q.notify('点击了分享')
+    },
+    formatBookDate (val) {
+      return date.formatDate(val, 'YYYY-MM-DD')
+    },
+    BookTypeName (type) {
+      return this.getBookTypeNameByNumber(type)
     }
   },
   created () {
@@ -260,15 +267,7 @@ export default {
   computed: {
     ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag']),
-    ...mapGetters('staticData', ['getBookTypeNameByNumber']),
-    sformatDate: function () {
-      const val = this.book.pubDate
-      return date.formatDate(val, 'YYYY-MM-DD')
-    },
-    BookTypeName: function () {
-      const type = this.book.bookType
-      return this.getBookTypeNameByNumber(type)
-    }
+    ...mapGetters('staticData', ['getBookTypeNameByNumber'])
   }
 }
 </script>

@@ -37,7 +37,7 @@ export const getBookTypeNumberByName = (state) => (typeName) => {
 export const getElectronicsTypeNameByNumber = (state) => (typeNumber) => {
   let result = 'null'
   if (isNumber(typeNumber)) {
-    const item = state.bookCached.find(item => item.id === String(typeNumber))
+    const item = state.electronicsCached.find(item => item.id === String(typeNumber))
     result = item.name
   }
   return result
@@ -45,7 +45,7 @@ export const getElectronicsTypeNameByNumber = (state) => (typeNumber) => {
 // 获取电子类型id通过电子类型名称
 export const getElectronicsTypeNumberByName = (state) => (typeName) => {
   try {
-    const item = state.bookCached.find(item => item.name === typeName)
+    const item = state.electronicsCached.find(item => item.name === typeName)
     return item.id
   }
   catch (e) {

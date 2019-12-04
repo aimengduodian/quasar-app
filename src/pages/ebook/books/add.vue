@@ -10,9 +10,7 @@
     </div>
     <br>
 
-    <pic-upload :urls="JSON.stringify(urls)"
-                @filesArr="getPicFiles"
-    />
+    <pic-upload :urls="JSON.stringify(urls)" @filesArr="getPicFiles"/>
 
     <q-input :rules="[val => val && val.length > 0 || '图书名称不能为空']"
              lazy-rules ref="book.bookName" type="text" prefix="名称:"
@@ -36,26 +34,28 @@
       </template>
     </q-select>
 
-    <q-input value="" v-model="book.bookPub" type="text" prefix="出版社:">
+    <q-input :rules="[val => val && val.length > 0 || '出版社不能为空']"
+             lazy-rules ref="book.bookPub" value="" v-model="book.bookPub"
+             type="text" prefix="出版社:">
       <template v-slot:prepend>
         <q-icon name="mail" />
       </template>
     </q-input>
 
-    <q-input value="" v-model="book.pubDate" prefix="出版日期:">
+    <q-input :rules="[val => val && val.length > 0 || '出版日期不能为空']"
+             lazy-rules ref="book.pubDate" readonly value=""
+             v-model="book.pubDate" prefix="出版日期:">
       <template v-slot:prepend>
         <q-icon name="send" />
       </template>
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="book.pubDate" mask="YYYY-MM-DD" @input="() => $refs.qDateProxy.hide()" value=""/>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
+      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+        <date-time :date-string="book.pubDate" :is-time=false @input="setBookPubDate"/>
+      </q-popup-proxy>
     </q-input>
 
-    <q-input value="" v-model="book.bookPrice" type="number" prefix="出售价格:" suffix="￥">
+    <q-input :rules="[val => val && val.length > 0 || '出售价格不能为空']"
+             lazy-rules ref="book.bookPrice" value="" v-model="book.bookPrice"
+             type="number" prefix="出售价格:" suffix="￥">
       <template v-slot:prepend>
         <q-icon name="money" />
       </template>
@@ -67,11 +67,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { required, email } from 'vuelidate'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
+import DateTime from 'components/dateTimeOption'
 
 export default {
+  components: {
+    NeedVerify,
+    PicUpload,
+    DateTime
+  },
   data () {
     return {
       updateFlag: false,
@@ -93,23 +98,11 @@ export default {
       btnFlag: false // 发布按钮是否能点击
     }
   },
-  validations: {
-    book: {
-      id: 0,
-      bookName: {required},
-      bookType: {required},
-      author: {required},
-      bookPrice: {required},
-      pubDate: {required},
-      bookPub: {required},
-      bookPic: {required},
-      phone: '14787461136',
-      weiXin: '1111',
-      des: '',
-      files: [] // 上传图片
-    },
-  },
   methods: {
+    setBookPubDate (val) {
+      this.book.pubDate = val
+      this.$refs.qDateProxy.hide()
+    },
     getPicFiles (files) {
       this.book.files = files
     },
@@ -146,10 +139,6 @@ export default {
       })
       this.urls = bookMsg.url
     }
-  },
-  components: {
-    NeedVerify,
-    PicUpload
   },
   computed: {
     ...mapGetters('auth', ['getPageMsg']),

@@ -143,7 +143,7 @@ export default {
     }
   },
   created () {
-    this.$q['fullscreen'].toggle()
+    // this.$q['fullscreen'].toggle()
     this.init()
   }
 }

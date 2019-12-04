@@ -14,13 +14,17 @@
                 @filesArr="getPicFiles"
     />
 
-    <q-input value="" v-model="book.bookName" type="text" prefix="名称:">
+    <q-input :rules="[val => val && val.length > 0 || '图书名称不能为空']"
+             lazy-rules ref="book.bookName" type="text" prefix="名称:"
+             value="" v-model="book.bookName">
       <template v-slot:prepend>
         <q-icon name="book" />
       </template>
     </q-input>
 
-    <q-input value="" v-model="book.author" type="text" prefix="作者:">
+    <q-input :rules="[val => val && val.length > 0 || '作者不能为空']"
+             lazy-rules ref="book.author" value="" v-model="book.author"
+             type="text" prefix="作者:">
       <template v-slot:prepend>
         <q-icon name="people" />
       </template>
@@ -63,6 +67,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { required, email } from 'vuelidate'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
 
@@ -88,11 +93,34 @@ export default {
       btnFlag: false // 发布按钮是否能点击
     }
   },
+  validations: {
+    book: {
+      id: 0,
+      bookName: {required},
+      bookType: {required},
+      author: {required},
+      bookPrice: {required},
+      pubDate: {required},
+      bookPub: {required},
+      bookPic: {required},
+      phone: '14787461136',
+      weiXin: '1111',
+      des: '',
+      files: [] // 上传图片
+    },
+  },
   methods: {
     getPicFiles (files) {
       this.book.files = files
     },
     onClickSubmit () {
+      // 校验
+      this.$v.book.$touch()
+
+      if (this.$v.book.$error) {
+        return
+      }
+
       let url = '/book/save'
       if (this.updateFlag) {
         url = '/book/update'

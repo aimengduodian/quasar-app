@@ -53,8 +53,7 @@
       </q-popup-proxy>
     </q-input>
 
-    <q-input :rules="[val => val && val.length > 0 || '出售价格不能为空']"
-             lazy-rules ref="book.bookPrice" value="" v-model="book.bookPrice"
+    <q-input value="" v-model="book.bookPrice"
              type="number" prefix="出售价格:" suffix="￥">
       <template v-slot:prepend>
         <q-icon name="money" />

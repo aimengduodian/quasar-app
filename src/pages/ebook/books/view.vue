@@ -1,5 +1,9 @@
 <template>
   <div class="q-pa-md">
+    <report :show-dialog="showReport"
+            :product="reportMsg"
+            @closeDialog="showReport = false"
+    />
     <q-carousel
       swipeable
       animated
@@ -45,7 +49,7 @@
       </div>
       <div class="col-2">
         <q-btn flat text-color="primary" icon="more"
-               @click="show(true)" />
+               @click="moreMsgShow(true)" />
       </div>
     </div>
     <br>
@@ -85,13 +89,20 @@
 
 <script>
 import NeedVerify from 'components/needVerify'
+import Report from 'components/report'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import config from 'src/common/config'
 import { date } from 'quasar'
 
 export default {
+  components: {
+    NeedVerify,
+    Report
+  },
   data () {
     return {
+      showReport: false,
+      reportMsg: null,
       tab: 'mails',
       slide: 0,
       fullscreen: false,
@@ -113,9 +124,6 @@ export default {
       urls: []
     }
   },
-  components: {
-    NeedVerify
-  },
   methods: {
     ...mapActions('auth', ['updatePageMsg']),
     initData () {
@@ -133,7 +141,7 @@ export default {
         this.updatePageMsg(pageMsg)
       })
     },
-    show () {
+    moreMsgShow () {
       const report = [
         {
           show: !this.flag,
@@ -182,7 +190,6 @@ export default {
         grid: false,
         actions: action
       }).onOk(action => {
-        console.log('Action chosen:', action.id)
         switch (action.id) {
           case 'report':
             this.reportBook()
@@ -240,10 +247,13 @@ export default {
       })
     },
     reportBook () {
-      const item = {
-        name: 'report'
+      this.showReport = true
+      this.reportMsg = {
+        productId: this.book.id, // 产品id
+        productName: this.book.bookName, // 产品name
+        // 产品类型 {1：图书，2：电子，3：其他}
+        productType: 1
       }
-      this.$router.push(item)
     },
     shareBook () {
       this.$q.notify('点击了分享')

@@ -7,8 +7,7 @@ const about = {
     {path: 'index', name: 'about', component: () => import('pages/about/index')},
     {path: 'version', name: 'version', component: () => import('pages/about/version')},
     {path: 'advice', name: 'advice', component: () => import('pages/about/advice')},
-    {path: 'verify', name: 'verify', component: () => import('components/stu')},
-    {path: 'report', name: 'report', component: () => import('components/report')}
+    {path: 'verify', name: 'verify', component: () => import('components/stu')}
   ]
 }
 

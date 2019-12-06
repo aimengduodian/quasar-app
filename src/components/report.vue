@@ -1,58 +1,74 @@
 <template>
-  <div class="q-pa-md" style="width: 100%">
-    <q-list >
-      <q-item
-        clickable
-        v-for="(dialog, index) in options"
-        :key="index"
-        @click.native="reportMsg(dialog.id)"
-        active-class="text-orange"
-      >
-        <q-item-section avatar>
-          <q-icon name="edit" />
-        </q-item-section>
-        <q-item-section>{{ dialog.name }}</q-item-section>
-        <q-item-section side>点击</q-item-section>
-      </q-item>
-
-    </q-list>
+  <div class="q-pa-md q-gutter-sm">
+    <q-dialog v-model="showDialog"
+              :maximized="maximizedToggle"
+              transition-show="slide-up"
+              transition-hide="slide-down"
+    >
+      <q-card>
+        <q-bar>
+          <q-btn dense flat icon="close" @click="closeDialog">
+            <q-tooltip content-class="bg-white text-primary">Close</q-tooltip>
+          </q-btn>
+        </q-bar>
+        <q-item
+          v-for="(dialog, index) in options"
+          :key="index"
+          @click.native="reportMsg(dialog.id)"
+          active-class="text-orange"
+        >
+          <q-item-section avatar>
+            <q-icon name="edit" />
+          </q-item-section>
+          <q-item-section>{{ dialog.name }}</q-item-section>
+          <q-item-section side>点击</q-item-section>
+        </q-item>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Report',
   data () {
     return {
-      product: {
-        productId: String, // 产品id
-        productName: String, // 产品name
-        productType: String // 产品类型 {1：图书，2：电子，3：其他}
-      },
+      maximizedToggle: true,
       selected: 0, // 举报类型
       options: [],
       value: '', // 其他类型描述
       disabled: true
     }
   },
+  props: {
+    showDialog: {
+      type: Boolean,
+      default: false
+    },
+    product: {
+      type: Object,
+      default: function () {
+        return {
+          productId: null,
+          productName: null,
+          // 产品类型 {1：图书，2：电子，3：其他}
+          productType: null
+        }
+      }
+    }
+  },
   created () {
     // 获取举报类型
     this.getReportType()
-    // 初始化接受的数据
-    this.product.productId = this.$route.query.productId
-    this.product.productName = this.$route.query.productName
-    this.product.productType = this.$route.query.productType
   },
   methods: {
-    /*
-     * 获取举报类型
-     * @returns {null}
-     */
+    // 获取举报类型
     getReportType () {
       if (this.options.length !== 0) {
         return
       }
-      this.$axios.post('/reporttype/reporttypeinfo').then((res) => {
+      this.$axios.post('/reporttype/reporttypeinfo', {
+
+      }).then((res) => {
         if (Number(res.data.code) === 100) {
           this.options = res.data.page.pageinfo
         }
@@ -61,11 +77,8 @@ export default {
         }
       })
     },
-    /*
-     * 提交举报信息
-     * @param index
-     */
     reportMsg (index) {
+      this.product['reportType'] = index
       if (parseInt(index) === 1) {
         // ‘其他’类型
         this.$q.dialog({
@@ -78,10 +91,18 @@ export default {
           cancel: true,
           persistent: true
         }).onOk(data => {
-          this.$axios.post('/reportproduct/save', this.product, () => {
-            // 跳转回原页面
-            this.$router.go(-1)
-          })
+          try {
+            this.product['des'] = data
+            this.$axios.post('/reportproduct/save', this.product).then((res) => {
+              this.$q.notify('感谢亲们的举报，我们会尽快处理！')
+            })
+          }
+          catch (e) {
+            console.log(e)
+          }
+          finally {
+            this.closeDialog()
+          }
           // console.log('>>>> OK, received', data)
         }).onCancel(() => {
           // console.log('>>>> Cancel')
@@ -96,17 +117,26 @@ export default {
           cancel: true,
           persistent: true
         }).onOk(() => {
-          this.$axios.post('/reportproduct/save', this.product).then(res => {
-            console.log(res)
-            // 跳转回原页面
-            this.$router.go(-1)
-          })
+          try {
+            this.$axios.post('/reportproduct/save', this.product).then((res) => {
+              this.$q.notify('感谢亲们的举报，我们会尽快处理！')
+            })
+          }
+          catch (e) {
+            console.log(e)
+          }
+          finally {
+            this.closeDialog()
+          }
         }).onCancel(() => {
           // console.log('>>>> Cancel')
         }).onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         })
       }
+    },
+    closeDialog () {
+      this.$emit('closeDialog')
     }
   }
 }

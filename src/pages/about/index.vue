@@ -8,7 +8,7 @@
           class="full-width"
           target="_blank"
           no-ripple
-          label="version"
+          label="关于我们"
         />
         <div><br></div>
         <q-btn
@@ -17,7 +17,7 @@
           class="full-width"
           target="_blank"
           no-ripple
-          label="advice"
+          label="提供建议"
         />
         <div><br></div>
         <q-btn
@@ -26,17 +26,9 @@
           class="full-width"
           target="_blank"
           no-ripple
-          label="verify"
+          label="学生认证"
         />
         <div><br></div>
-        <q-btn
-          color="secondary"
-          :to="{name: 'report'}"
-          class="full-width"
-          target="_blank"
-          no-ripple
-          label="report"
-        />
       </div>
     </div>
   </q-page>

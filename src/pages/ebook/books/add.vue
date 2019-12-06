@@ -53,7 +53,7 @@
           <q-icon name="send" />
         </template>
         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-          <date-time :date-string="book.pubDate" :is-time=false @input="setBookPubDate"/>
+          <date-time :max-date="maxDate" :date-string="book.pubDate" :is-time=false @input="setBookPubDate"/>
         </q-popup-proxy>
       </q-input>
 
@@ -73,6 +73,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
 import DateTime from 'components/dateTimeOption'
@@ -85,6 +86,7 @@ export default {
   },
   data () {
     return {
+      maxDate: null,
       updateFlag: false,
       book: {
         id: 0,
@@ -182,6 +184,7 @@ export default {
       this.updateFlag = true
       this.getBookMsg(this.book.id)
     }
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
   }
 }
 </script>

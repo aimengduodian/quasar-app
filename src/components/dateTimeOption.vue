@@ -4,6 +4,8 @@
     float-label="floatLabel"
     v-model="dateSelect"
     :mask="dateTimeMask"
+    :options="setDateRange()"
+    first-day-of-week="1"
     value=""
   />
 
@@ -40,19 +42,44 @@ export default {
     isTime: {
       type: Boolean,
       default: true
+    },
+    minDate: {
+      type: String,
+      default: null // YYYY/MM/DD
+    },
+    maxDate: {
+      type: String,
+      default: null // YYYY/MM/DD
     }
   },
   created () {
     if (this.isTime) {
       this.dateTimeMask = 'YYYY-MM-DD HH:mm'
       this.dateSelect = this.dateString
-      console.log(this.dateSelect)
     }
     else {
       this.dateTimeMask = 'YYYY-MM-DD'
     }
   },
   methods: {
+    // 设置日期范围
+    setDateRange (date) {
+      if (this.minDate || this.maxDate) {
+        if (this.minDate && this.maxDate) {
+          return date => date >= this.minDate && date <= this.maxDate
+        }
+        else if (this.minDate) {
+          return date => date >= this.minDate
+        }
+        else {
+          return date => date <= this.maxDate
+        }
+      }
+    },
+    // 设置时间范围
+    setTimeRange () {
+
+    },
     saveDateTime () {
       this.$emit('input', this.dateTimeSelect)
     }

@@ -65,7 +65,7 @@ export default {
   methods: {
     // 请求session字符串
     getSessionString () {
-      this.$axios.post('/user/getKey').then((res) => {
+      this.$axios.get('/user/getKey').then((res) => {
         this.sessionString = res.data.page.location
         if (Number(res.data.code) === 200) {
           this.$q.notify('获取session失败')

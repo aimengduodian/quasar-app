@@ -1,9 +1,5 @@
 <template>
-  <div class="q-pa-md">
-    <report :show-dialog="showReport"
-            :product="reportMsg"
-            @closeDialog="showReport = false"
-    />
+  <div >
     <q-carousel
       swipeable
       animated
@@ -29,61 +25,68 @@
         </q-carousel-control>
       </template>
     </q-carousel>
-    <br>
-    <div class="row justify-around">
-      <div class="col-3">
-        <img style="border-radius: 10px; width: 80%"
-             src="statics/boy-avatar.png"
-             alt="head picture">
-      </div>
-      <div class="col-5">
-        <div class="q-title">
-          <strong>{{ book.bookName }}</strong>
+    <div class="q-pa-md">
+      <br>
+      <div class="row justify-around">
+        <div class="col-3">
+          <img style="border-radius: 10px; width: 80%"
+               src="statics/boy-avatar.png"
+               alt="head picture">
         </div>
-        <div class="q-body-2">
-          作者: {{ book.author }}
+        <div class="col-5">
+          <div class="q-title">
+            <strong>{{ book.bookName }}</strong>
+          </div>
+          <div class="q-body-2">
+            作者: {{ book.author }}
+          </div>
+          <div class="q-caption">
+            出版社：{{ book.bookPub }}
+          </div>
         </div>
-        <div class="q-caption">
-          出版社：{{ book.bookPub }}
+        <div class="col-2">
+          <q-btn flat text-color="primary" icon="more"
+                 @click="moreMsgShow(true)" />
         </div>
       </div>
-      <div class="col-2">
-        <q-btn flat text-color="primary" icon="more"
-               @click="moreMsgShow(true)" />
-      </div>
+      <br>
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="mails" label="简要信息" />
+        <q-tab name="alarms" label="商品描述" />
+        <q-tab name="movies" v-if="!flag" label="卖家信息" />
+      </q-tabs>
+      <q-separator />
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="mails">
+          <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
+          <div> 类型: {{ getBookTypeNameByNumber(book.bookType) }}</div>
+          <div> 出版日期: {{ formatBookDate(book.pubDate) }} </div>
+        </q-tab-panel>
+        <q-tab-panel name="alarms">
+          <p class="caption q-body-2" v-html="book.des" />
+        </q-tab-panel>
+        <q-tab-panel v-if="!flag" name="movies">
+          <need-verify />
+          <div v-if="false">
+            <div>电话: {{ book.phone }}</div>
+            <div>微信: {{ book.weiXin }}</div>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+      <!--举报-->
+      <report :show-dialog="showReport"
+              :product="reportMsg"
+              @closeDialog="showReport = false"
+      />
     </div>
-    <br>
-    <q-tabs
-      v-model="tab"
-      dense
-      class="text-grey"
-      active-color="primary"
-      indicator-color="primary"
-      align="justify"
-      narrow-indicator
-    >
-      <q-tab name="mails" label="简要信息" />
-      <q-tab name="alarms" label="商品描述" />
-      <q-tab name="movies" v-if="!flag" label="卖家信息" />
-    </q-tabs>
-    <q-separator />
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="mails">
-        <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
-        <div> 类型: {{ getBookTypeNameByNumber(book.bookType) }}</div>
-        <div> 出版日期: {{ formatBookDate(book.pubDate) }} </div>
-      </q-tab-panel>
-      <q-tab-panel name="alarms">
-        <p class="caption q-body-2" v-html="book.des" />
-      </q-tab-panel>
-      <q-tab-panel v-if="!flag" name="movies">
-        <need-verify />
-        <div v-if="false">
-          <div>电话: {{ book.phone }}</div>
-          <div>微信: {{ book.weiXin }}</div>
-        </div>
-      </q-tab-panel>
-    </q-tab-panels>
   </div>
 </template>
 

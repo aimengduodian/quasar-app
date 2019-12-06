@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <q-carousel
       swipeable
       animated
@@ -91,11 +91,11 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { date } from 'quasar'
+import config from 'src/common/config'
 import NeedVerify from 'components/needVerify'
 import Report from 'components/report'
-import { mapState, mapActions, mapGetters } from 'vuex'
-import config from 'src/common/config'
-import { date } from 'quasar'
 
 export default {
   components: {
@@ -121,11 +121,26 @@ export default {
         bookPic: null,
         weiXin: null,
         phone: null,
-        des: null
+        des: null,
+        viewTimes: null
       },
       // 图片地址轮播
       urls: []
     }
+  },
+  created () {
+    this.book.id = this.$route.query.id
+    if ((this.book.id).length > 1) {
+      this.initData()
+    }
+    else {
+      this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
+    }
+  },
+  computed: {
+    ...mapState('auth', ['flag']),
+    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('staticData', ['getBookTypeNameByNumber'])
   },
   methods: {
     ...mapActions('auth', ['updatePageMsg']),
@@ -264,20 +279,6 @@ export default {
     formatBookDate (val) {
       return date.formatDate(val, 'YYYY-MM-DD')
     }
-  },
-  created () {
-    this.book.id = this.$route.query.id
-    if ((this.book.id).length > 1) {
-      this.initData()
-    }
-    else {
-      this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
-    }
-  },
-  computed: {
-    ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag']),
-    ...mapGetters('staticData', ['getBookTypeNameByNumber'])
   }
 }
 </script>

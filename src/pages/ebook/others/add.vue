@@ -1,147 +1,180 @@
 <template>
-  <div class="q-pa-md" style="width: 100%">
-    <div class="row">
-      <div class="col-9 text-center" >
-        <span class="text-h5">宝贝信息</span>
+  <div class="q-pa-md">
+    <form @submit.prevent.stop="onSubmit" class="q-gutter-md">
+      <div class="row">
+        <div class="col-9 text-center" >
+          <span class="text-h5">宝贝信息</span>
+        </div>
+        <div class="col-3">
+          <q-btn rounded color="blue" label="发布" @click="onSubmit" />
+        </div>
       </div>
-      <div class="col-3">
-        <q-btn rounded color="blue">发布</q-btn>
-      </div>
-    </div>
-    <br>
-    <q-uploader
-      label="图片上传，不能大于4M"
-      multiple
-      accept=".jpg, image/*"
-      :max-file-size="1024*1024*4"
-      style="width: 100%"
-      aria-colcount="2"
-    >
-      <template v-slot:list="scope">
-        <q-list separator>
-          <q-item v-for="file in scope.files" :key="file.name">
-            <q-item-section>
-              <q-item-label class="full-width ellipsis">
-                {{ file.name }}
-              </q-item-label>
+      <br>
 
-              <q-item-label caption>
-                Status: {{ file.__status }}
-              </q-item-label>
+      <pic-upload :urls="JSON.stringify(urls)" @filesArr="getPicFiles"/>
 
-              <q-item-label caption>
-                {{ file.__sizeLabel }} / {{ file.__progressLabel }}
-              </q-item-label>
-            </q-item-section>
+      <q-input :rules="[val => val && val.length > 0 || '名称不能为空']"
+               ref="name" type="text" prefix="名称:" value=""
+               v-model="others.name">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
 
-            <q-item-section
-              v-if="file.__img"
-              thumbnail
-              class="gt-xs"
-            >
-              <img :src="file.__img.src" alt="">
-            </q-item-section>
+      <q-input :rules="[val => val && val.length > 0 || '购入时间不能为空']"
+               ref="buytime" type="text" prefix="购买时间:" value=""
+               v-model="others.buyTime">
+        <template v-slot:prepend>
+          <q-icon name="mail" />
+        </template>
+        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+          <date-time :max-date="maxDate" :date-string="others.pubDate" :is-time=false @input="setOthersPubDate"/>
+        </q-popup-proxy>
+      </q-input>
 
-            <q-item-section top side>
-              <q-btn
-                class="gt-xs"
-                size="12px"
-                flat
-                dense
-                round
-                icon="delete"
-                @click="scope.removeFile(file)"
-              />
-            </q-item-section>
-          </q-item>
+      <q-select :rules="[val => val && val.length > 0 || '不能为空']"
+                v-model="others.hasInvoice" ref="hasInvoice" value=""
+                :options="['有', '没有']" prefix="是否有发票:">
+        <template v-slot:prepend>
+          <q-icon name="event" />
+        </template>
+      </q-select>
 
-        </q-list>
-      </template>
-    </q-uploader>
-    <q-input v-model="book.bookName" type="text" prefix="名称:">
-      <template v-slot:prepend>
-        <q-icon name="book" />
-      </template>
-    </q-input>
+      <q-input :rules="[ val => val > 0 || '购入价格非法']"
+               v-model="others.originalPrice" ref="originalPrice" value=""
+               type="number" prefix="购买价格:" suffix="￥">
+        <template v-slot:prepend>
+          <q-icon name="money" />
+        </template>
+      </q-input>
 
-    <q-input v-model="book.author" type="text" prefix="作者:">
-      <template v-slot:prepend>
-        <q-icon name="people" />
-      </template>
-    </q-input>
+      <q-input :rules="[ val => val > 0 || '出售价格非法']"
+               v-model="others.presentPrice" ref="presentPrice" value=""
+               type="number" prefix="出售价格:" suffix="￥">
+        <template v-slot:prepend>
+          <q-icon name="money" />
+        </template>
+      </q-input>
 
-    <q-input v-model="book.bookPub" type="text" prefix="出版社:">
-      <template v-slot:prepend>
-        <q-icon name="mail" />
-      </template>
-    </q-input>
-
-    <q-input v-model="book.pubDate" mask="date" prefix="出版日期:">
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="book.pubDate" @input="() => $refs.qDateProxy.hide()" />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-
-    <q-input v-model="book.bookPrice" type="number" prefix="出售价格:" suffix="￥">
-      <template v-slot:prepend>
-        <q-icon name="money" />
-      </template>
-    </q-input>
-
-    <q-input v-model="book.bookType" type="number" prefix="分类:" suffix="选择类型">
-      <template v-slot:prepend>
-        <q-icon name="phone" />
-      </template>
-    </q-input>
-
-    <q-input prefix="详细信息:" v-model="book.des" autogrow />
-    <br>
+      <q-editor v-model="others.des" value=""/>
+      <br>
+    </form>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
+import PicUpload from 'components/picUpload'
+import DateTime from 'components/dateTimeOption'
 
 export default {
+  components: {
+    NeedVerify,
+    PicUpload,
+    DateTime
+  },
   data () {
     return {
-      book: {
+      maxDate: null,
+      updateFlag: false,
+      others: {
         id: 0,
-        bookName: null,
-        bookType: null,
-        author: null,
-        bookPrice: null,
-        pubDate: null,
-        bookPub: null,
-        bookPic: null,
-        des: null
+        name: null,
+        buyTime: null,
+        originalPrice: null,
+        presentPrice: null,
+        hasInvoice: null,
+        otherPic: null,
+        weiXin: null,
+        phone: null,
+        des: null,
+        files: [] // 上传图片
       },
-      options: [], // 下拉选择框
       urls: [], // 上传图片
       btnFlag: false // 发布按钮是否能点击
     }
   },
-  methods: {
-    checkFileSize (files) {
-      return files.filter(file => file.size < (2048 * 2048 * 4))
-    },
-    // 初始化图书类型下拉框
-    initBookTypeSelect () {
-      // const value = storage.getSession('bookType')
-      // this.options = value.map((item) => {
-      //   return item.text
-      // })
-    }
-  },
-  components: {
-    NeedVerify
-  },
   created () {
-    this.initBookTypeSelect()
+    this.others.id = this.$route.query.id
+    if (this.others.id) {
+      this.updateFlag = true
+      this.getOthersMsg(this.others.id)
+    }
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+  },
+  computed: {
+    ...mapGetters('auth', ['getPageMsg'])
+  },
+  methods: {
+    setOthersPubDate (val) {
+      this.others.buyTime = val
+      this.$refs.qDateProxy.hide()
+    },
+    getPicFiles (files) {
+      this.others.files = files
+    },
+    async onSubmit () {
+      let url = '/others/save'
+      if (this.updateFlag) {
+        url = '/others/update'
+      }
+      // 判断图片是否为空
+      if (this.others.files.length < 1) {
+        this.$q.notify('至少添加一张图片')
+        return
+      }
+      // 判断图片是否为空
+      if (this.others.des.length < 1) {
+        this.$q.notify('描述不能为空')
+        return
+      }
+      this.$refs.name.validate()
+      this.$refs.buytime.validate()
+      this.$refs.hasInvoice.validate()
+      this.$refs.originalPrice.validate()
+      this.$refs.presentPrice.validate()
+      // 校验
+      if (this.$refs.name.hasError ||
+        this.$refs.buytime.hasError ||
+        this.$refs.hasInvoice.hasError ||
+        this.$refs.originalPrice.hasError ||
+        this.$refs.presentPrice.hasError) {
+        return
+      }
+
+      const othersMsg = JSON.parse(JSON.stringify(this.others))
+      othersMsg.files = this.others.files
+      try {
+        this.$q.loading.show({
+          message: '上传中...'
+        })
+        await this.$axios.post(url, othersMsg).then((res) => {
+          if (res.data.code === 100) {
+            this.$q.notify(res.data.msgs.msg)
+          }
+          else {
+            this.$q.notify('Fail')
+          }
+          // 跳转回原页面
+          this.$router.go(-1)
+        })
+      }
+      catch (e) {
+        console.log(e)
+      }
+      finally {
+        this.$q.loading.hide()
+      }
+    },
+    getOthersMsg () {
+      const othersMsg = JSON.parse(this.getPageMsg)
+      Object.keys(this.others).forEach(key => {
+        this.others[key] = othersMsg[key]
+      })
+      this.urls = othersMsg.url
+    }
   }
 }
 </script>

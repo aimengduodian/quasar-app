@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="width: 100%">
+  <div class="q-pa-md">
     <form @submit.prevent.stop="onSubmit" class="q-gutter-md">
       <div class="row">
         <div class="col-9 text-center" >
@@ -14,15 +14,15 @@
       <pic-upload :urls="JSON.stringify(urls)" @filesArr="getPicFiles"/>
 
       <q-input :rules="[val => val && val.length > 0 || '图书名称不能为空']"
-               ref="bookName" type="text" prefix="名称:"
-               value="" v-model="book.bookName">
+               ref="bookName" type="text" prefix="名称:" value=""
+               v-model="book.bookName">
         <template v-slot:prepend>
           <q-icon name="book" />
         </template>
       </q-input>
 
       <q-input :rules="[val => val && val.length > 0 || '作者不能为空']"
-               ref="author" value="" v-model="book.author"
+               ref="author" v-model="book.author" value=""
                type="text" prefix="作者:">
         <template v-slot:prepend>
           <q-icon name="people" />
@@ -30,7 +30,7 @@
       </q-input>
 
       <q-input :rules="[val => val && val.length > 0 || '出版社不能为空']"
-               v-model="book.bookPub" ref="bookPub"
+               v-model="book.bookPub" ref="bookPub" value=""
                type="text" prefix="出版社:">
         <template v-slot:prepend>
           <q-icon name="mail" />
@@ -38,7 +38,7 @@
       </q-input>
 
       <q-select :rules="[val => val && val.length > 0 || '图书类型不能为空']"
-                v-model="book.bookType" ref="bookType"
+                v-model="book.bookType" ref="bookType" value=""
                 :options="getBookTypeNameArr" prefix="分类:"
       >
         <template v-slot:prepend>
@@ -47,7 +47,7 @@
       </q-select>
 
       <q-input :rules="[val => val && val.length > 0 || '出版日期不能为空']"
-               v-model="book.pubDate" ref="pubDate"
+               v-model="book.pubDate" ref="pubDate" value=""
                readonly prefix="出版日期:">
         <template v-slot:prepend>
           <q-icon name="send" />
@@ -58,7 +58,7 @@
       </q-input>
 
       <q-input :rules="[ val => val > 0 && val < 1000 || '出售价格非法']"
-               v-model="book.bookPrice" ref="bookPrice"
+               v-model="book.bookPrice" ref="bookPrice" value=""
                type="number" prefix="出售价格:" suffix="￥"
       >
         <template v-slot:prepend>
@@ -106,6 +106,18 @@ export default {
       btnFlag: false // 发布按钮是否能点击
     }
   },
+  created () {
+    this.book.id = this.$route.query.id
+    if (this.book.id) {
+      this.updateFlag = true
+      this.getBookMsg(this.book.id)
+    }
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+  },
+  computed: {
+    ...mapGetters('auth', ['getPageMsg']),
+    ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName'])
+  },
   methods: {
     setBookPubDate (val) {
       this.book.pubDate = val
@@ -122,6 +134,11 @@ export default {
       // 判断图片是否为空
       if (this.book.files.length < 1) {
         this.$q.notify('至少添加一张图片')
+        return
+      }
+      // 判断图片是否为空
+      if (this.book.des.length < 1) {
+        this.$q.notify('描述不能为空')
         return
       }
       this.$refs.bookName.validate()
@@ -170,21 +187,8 @@ export default {
       Object.keys(this.book).forEach(key => {
         this.book[key] = bookMsg[key]
       })
-      console.log(this.book.bookPrice)
       this.urls = bookMsg.url
     }
-  },
-  computed: {
-    ...mapGetters('auth', ['getPageMsg']),
-    ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName'])
-  },
-  created () {
-    this.book.id = this.$route.query.id
-    if (this.book.id) {
-      this.updateFlag = true
-      this.getBookMsg(this.book.id)
-    }
-    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
   }
 }
 </script>

@@ -10,7 +10,7 @@
 
           <q-item-section>
             <q-item-label>{{ item.electronicsName }}</q-item-label>
-            <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ item.buyDate/1000 }}</q-item-label>
+            <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ formatElectronicsDate(item.buyDate) }}</q-item-label>
             <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
           </q-item-section>
         </q-item>
@@ -35,7 +35,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { date } from 'quasar'
 import config from 'src/common/config'
+
 export default {
   data () {
     return {
@@ -84,6 +86,9 @@ export default {
           done()
         }
       }, 1000)
+    },
+    formatElectronicsDate (val) {
+      return date.formatDate(val, 'YYYY-MM-DD')
     }
   },
   computed: {

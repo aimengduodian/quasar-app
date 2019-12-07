@@ -121,7 +121,7 @@ export default {
         bookPic: null,
         weiXin: null,
         phone: null,
-        des: null,
+        des: '',
         viewTimes: null
       },
       // 图片地址轮播

@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <q-carousel
       swipeable
       animated
@@ -8,14 +8,13 @@
       infinite
       :fullscreen.sync="fullscreen"
       height="180px"
-      autoplay
     >
       <q-carousel-slide v-for="(item, index) in urls"
                         :key="index" :name="index"
                         :img-src="item"/>
       <template v-slot:control>
         <q-carousel-control
-          position="bottom-right"
+          position="top-right"
           :offset="[18, 18]"
         >
           <q-btn
@@ -26,113 +25,107 @@
         </q-carousel-control>
       </template>
     </q-carousel>
-    <br>
-    <div class="row justify-around">
-      <div class="col-3">
-        <img style="border-radius: 10px; width: 80%"
-             src="statics/boy-avatar.png"
-             alt="head picture">
-      </div>
-      <div class="col-5">
-        <div class="q-title">
-          <strong>{{ electronics.electronicsName }}</strong>
+    <div class="q-pa-md">
+      <br>
+      <div class="row justify-around">
+        <div class="col-3">
+          <img style="border-radius: 10px; width: 80%"
+               src="statics/boy-avatar.png"
+               alt="head picture">
         </div>
-        <div class="q-body-2">
-          type: {{ electronics.electronicsType }}
+        <div class="col-5">
+          <div class="q-title">
+            <strong>{{ electronics.electronicsName }}</strong>
+          </div>
+          <div class="q-body-2">
+            类型: {{ getElectronicsTypeNameByNumber(electronics.electronicsType) }}
+          </div>
+          <div class="q-caption">
+            售价: ￥{{ electronics.presentPrice }}
+          </div>
         </div>
-        <div class="q-caption">
-          buy data：{{ electronics.buyDate }}
+        <div class="col-2">
+          <q-btn flat text-color="primary" icon="more"
+                 @click="moreMsgShow(true)" />
         </div>
       </div>
-      <div class="col-2">
-        <q-btn
-          round
-          size="15px"
-          color="primary"
-        >
-          ￥{{ electronics.presentPrice }}
-        </q-btn>
-      </div>
+      <br>
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="mails" label="简要信息" />
+        <q-tab name="alarms" label="商品描述" />
+        <q-tab name="movies" v-if="!flag" label="卖家信息" />
+      </q-tabs>
+      <q-separator />
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="mails">
+          <div> 购买价格：￥ {{ electronics.originalPrice }} </div>
+          <div> 是否有发票： {{ electronics.hasInvoice ? '有' : '没有' }} </div>
+          <div> 购买时间：{{ formatElectronicsDate(electronics.buyDate) }} </div>
+        </q-tab-panel>
+        <q-tab-panel name="alarms">
+          <p class="caption q-body-2" v-html="electronics.des" />
+        </q-tab-panel>
+        <q-tab-panel v-if="!flag" name="movies">
+          <need-verify />
+          <div v-if="false">
+            <div>phone: {{ electronics.phone }}</div>
+            <div>weixin: {{ electronics.weiXin }}</div>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+      <!--举报-->
+      <report :show-dialog="showReport"
+              :product="reportMsg"
+              @closeDialog="showReport = false"
+      />
     </div>
-    <br>
-    <q-tabs
-      v-model="tab"
-      dense
-      class="text-grey"
-      active-color="primary"
-      indicator-color="primary"
-      align="justify"
-      narrow-indicator
-    >
-      <q-tab name="mails" label="简要信息" />
-      <q-tab name="alarms" label="商品描述" />
-      <q-tab name="movies" label="卖家信息" />
-    </q-tabs>
-    <q-separator />
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="mails">
-        <div> electronics type is {{ electronics.electronicsType }}</div>
-        <div> public data is {{ electronics.pubDate }} </div>
-      </q-tab-panel>
-      <q-tab-panel name="alarms">
-        <p class="caption q-body-2">
-          简介: {{ electronics.des }}
-        </p>
-      </q-tab-panel>
-      <q-tab-panel name="movies">
-        <need-verify />
-        <div v-if="false">
-          <div>phone: {{ electronics.phone }}</div>
-          <div>weixin: {{ electronics.weiXin }}</div>
-        </div>
-      </q-tab-panel>
-    </q-tab-panels>
   </div>
 </template>
 
 <script>
-import NeedVerify from 'components/needVerify'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { date } from 'quasar'
 import config from 'src/common/config'
+import NeedVerify from 'components/needVerify'
+import Report from 'components/report'
 
 export default {
+  components: {
+    NeedVerify,
+    Report
+  },
   data () {
     return {
+      showReport: false,
+      reportMsg: null,
       tab: 'mails',
       slide: 0,
       fullscreen: false,
       // 获取详细信息electronics
       electronics: {
         id: 0,
-        buyDate: 0,
-        electronicsName: '',
-        electronicsPic: '',
-        electronicsType: '',
-        hasInvoice: 0,
-        originalPrice: 0,
-        presentPrice: 0,
-        weiXin: '',
-        phone: '',
-        des: ''
+        buyDate: null,
+        electronicsName: null,
+        electronicsPic: null,
+        electronicsType: null,
+        hasInvoice: null,
+        originalPrice: null,
+        presentPrice: null,
+        weiXin: null,
+        phone: null,
+        des: '',
+        viewTimes: null
       },
       // 图片地址轮播
       urls: []
-    }
-  },
-  components: {
-    NeedVerify
-  },
-  methods: {
-    initData () {
-      this.$axios.get('/electronics/getById/' + this.electronics.id).then(res => {
-        this.electronics = res.data.page.info
-        // console.log(this.electronics)
-        // this.electronics.electronicsType = this.getelectronicsTypeName(this.electronics.electronicsType)
-        const arr = this.electronics.electronicsPic.split(',')
-        arr.forEach(item => {
-          const pic = config.picUrl + item
-          this.urls.push(pic)
-        })
-      })
     }
   },
   created () {
@@ -142,6 +135,149 @@ export default {
     }
     else {
       this.$q.notify('[error]选择的物品id为0，请检查物品id是否正确!')
+    }
+  },
+  computed: {
+    ...mapState('auth', ['flag']),
+    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('staticData', ['getElectronicsTypeNameByNumber'])
+  },
+  methods: {
+    ...mapActions('auth', ['updatePageMsg']),
+    initData () {
+      this.$axios.get('/electronics/getById/' + this.electronics.id).then(res => {
+        this.electronics = res.data.page.info
+        const arr = this.electronics.electronicsPic.split(',')
+        arr.forEach(item => {
+          const pic = config.picUrl + item
+          this.urls.push(pic)
+        })
+        const pageMsg = JSON.parse(JSON.stringify(this.electronics))
+        pageMsg.buyDate = this.formatElectronicsDate(pageMsg.buyDate)
+        pageMsg.electronicsType = this.getElectronicsTypeNameByNumber(pageMsg.electronicsType)
+        pageMsg.url = JSON.parse(JSON.stringify(this.urls))
+        this.updatePageMsg(pageMsg)
+      })
+    },
+    moreMsgShow () {
+      const report = [
+        {
+          show: !this.flag,
+          label: '举报',
+          icon: 'report',
+          id: 'report'
+        }
+      ]
+      const seller = [
+        {
+          show: this.flag,
+          label: '编辑',
+          icon: 'edit',
+          color: 'primary',
+          id: 'edit'
+        },
+        {
+          show: this.flag,
+          label: '下架',
+          icon: 'delete',
+          color: 'primary',
+          id: 'delete'
+        }
+      ]
+      const action = [
+        {},
+        {
+          label: '分享',
+          icon: 'share',
+          id: 'share'
+        }
+      ]
+      if (this.flag) {
+        seller.forEach(item => {
+          action.unshift(item)
+        })
+      }
+      else {
+        report.forEach(item => {
+          action.push(item)
+        })
+      }
+
+      this.$q.bottomSheet({
+        message: '更多',
+        grid: false,
+        actions: action
+      }).onOk(action => {
+        switch (action.id) {
+          case 'report':
+            this.reportElectronics()
+            break
+          case 'edit':
+            this.editElectronics()
+            break
+          case 'delete':
+            this.deleteElectronics()
+            break
+          case 'share':
+            this.shareElectronics()
+            break
+          default:
+            break
+        }
+      }).onCancel(() => {
+        // console.log('Dismissed')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    editElectronics () {
+      const item = {
+        name: 'electronics_add',
+        query: {
+          id: this.electronics.id
+        }
+      }
+      this.$router.push(item)
+    },
+    deleteElectronics () {
+      this.$q.dialog({
+        title: '确认下架？',
+        message: '下架后可在我的界面重新发布!',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$axios.post('/electronics/delete', {
+          id: this.electronics.id
+        }).then((res) => {
+          if (res.data.code === 100) {
+            this.$q.notify('删除成功')
+            // 跳转回原页面
+            this.$router.go(-1)
+          }
+          else {
+            this.$q.notify('失败')
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    reportElectronics () {
+      this.showReport = true
+      this.reportMsg = {
+        productId: this.electronics.id, // 产品id
+        productName: this.electronics.electronicsName, // 产品name
+        // 产品类型 {1：图书，2：电子，3：其他}
+        productType: 1
+      }
+    },
+    shareElectronics () {
+      this.$q.notify('点击了分享')
+    },
+    formatElectronicsDate (val) {
+      return date.formatDate(val, 'YYYY-MM-DD')
     }
   }
 }

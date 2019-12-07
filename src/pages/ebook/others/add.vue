@@ -14,16 +14,16 @@
       <pic-upload :urls="JSON.stringify(urls)" @filesArr="getPicFiles"/>
 
       <q-input :rules="[val => val && val.length > 0 || '名称不能为空']"
-               ref="name" type="text" prefix="名称:" value=""
-               v-model="others.name">
+               ref="otherName" type="text" prefix="名称:" value=""
+               v-model="others.otherName">
         <template v-slot:prepend>
           <q-icon name="book" />
         </template>
       </q-input>
 
       <q-input :rules="[val => val && val.length > 0 || '购入时间不能为空']"
-               ref="buytime" type="text" prefix="购买时间:" value=""
-               v-model="others.buyTime">
+               ref="buyDate" type="text" prefix="购买时间:" value=""
+               v-model="others.buyDate">
         <template v-slot:prepend>
           <q-icon name="mail" />
         </template>
@@ -34,7 +34,7 @@
 
       <q-select :rules="[val => val && val.length > 0 || '不能为空']"
                 v-model="others.hasInvoice" ref="hasInvoice" value=""
-                :options="['有', '没有']" prefix="是否有发票:">
+                :options="options" prefix="是否有发票:">
         <template v-slot:prepend>
           <q-icon name="event" />
         </template>
@@ -81,18 +81,19 @@ export default {
       updateFlag: false,
       others: {
         id: 0,
-        name: null,
-        buyTime: null,
+        otherName: null,
+        buyDate: null,
         originalPrice: null,
         presentPrice: null,
         hasInvoice: null,
         otherPic: null,
         weiXin: null,
         phone: null,
-        des: null,
+        des: '',
         files: [] // 上传图片
       },
       urls: [], // 上传图片
+      options: ['没有', '有'],
       btnFlag: false // 发布按钮是否能点击
     }
   },
@@ -109,16 +110,16 @@ export default {
   },
   methods: {
     setOthersPubDate (val) {
-      this.others.buyTime = val
+      this.others.buyDate = val
       this.$refs.qDateProxy.hide()
     },
     getPicFiles (files) {
       this.others.files = files
     },
     async onSubmit () {
-      let url = '/others/save'
+      let url = '/other/save'
       if (this.updateFlag) {
-        url = '/others/update'
+        url = '/other/update'
       }
       // 判断图片是否为空
       if (this.others.files.length < 1) {
@@ -130,14 +131,14 @@ export default {
         this.$q.notify('描述不能为空')
         return
       }
-      this.$refs.name.validate()
-      this.$refs.buytime.validate()
+      this.$refs.otherName.validate()
+      this.$refs.buyDate.validate()
       this.$refs.hasInvoice.validate()
       this.$refs.originalPrice.validate()
       this.$refs.presentPrice.validate()
       // 校验
-      if (this.$refs.name.hasError ||
-        this.$refs.buytime.hasError ||
+      if (this.$refs.otherName.hasError ||
+        this.$refs.buyDate.hasError ||
         this.$refs.hasInvoice.hasError ||
         this.$refs.originalPrice.hasError ||
         this.$refs.presentPrice.hasError) {
@@ -145,6 +146,7 @@ export default {
       }
 
       const othersMsg = JSON.parse(JSON.stringify(this.others))
+      othersMsg.hasInvoice = this.options.indexOf(this.others.hasInvoice)
       othersMsg.files = this.others.files
       try {
         this.$q.loading.show({

@@ -65,7 +65,7 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="mails">
           <div> 购买日期: {{ formatOtherDate(other.buyDate) }}</div>
-          <div> 发票: {{ other.hasInvoice }} </div>
+          <div> 发票: {{ other.hasInvoice ? '有' : '没有' }} </div>
           <div> 购入价格: {{ other.originalPrice }} ￥</div>
         </q-tab-panel>
         <q-tab-panel name="alarms">
@@ -150,7 +150,8 @@ export default {
           this.urls.push(pic)
         })
         const pageMsg = JSON.parse(JSON.stringify(this.other))
-        pageMsg.pubDate = this.formatOtherDate(pageMsg.pubDate)
+        pageMsg.hasInvoice = pageMsg.hasInvoice ? '有' : '没有'
+        pageMsg.buyDate = this.formatOtherDate(pageMsg.buyDate)
         pageMsg.url = JSON.parse(JSON.stringify(this.urls))
         this.updatePageMsg(pageMsg)
       })

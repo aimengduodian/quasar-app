@@ -33,7 +33,7 @@
       </q-input>
 
       <q-select :rules="[val => val && val.length > 0 || '不能为空']"
-                v-model="others.hasInvoice" ref="hasInvoice" value=""
+                v-model="options[others.hasInvoice]" ref="hasInvoice" value=""
                 :options="options" prefix="是否有发票:">
         <template v-slot:prepend>
           <q-icon name="event" />

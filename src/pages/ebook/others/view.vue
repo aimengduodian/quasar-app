@@ -150,7 +150,6 @@ export default {
           this.urls.push(pic)
         })
         const pageMsg = JSON.parse(JSON.stringify(this.other))
-        pageMsg.hasInvoice = pageMsg.hasInvoice ? '有' : '没有'
         pageMsg.buyDate = this.formatOtherDate(pageMsg.buyDate)
         pageMsg.url = JSON.parse(JSON.stringify(this.urls))
         this.updatePageMsg(pageMsg)

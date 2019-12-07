@@ -33,6 +33,19 @@ export const getBookTypeNumberByName = (state) => (typeName) => {
     console.log(e)
   }
 }
+
+export const getElectronicsTypeNameArr = (state) => {
+  const items = []
+  try {
+    state.electronicsCached.forEach(item => {
+      items.push(item.name)
+    })
+  }
+  catch (e) {
+    console.log(e)
+  }
+  return items
+}
 // 获取电子类型通过类型id
 export const getElectronicsTypeNameByNumber = (state) => (typeNumber) => {
   let result = 'null'

@@ -110,7 +110,7 @@ export default {
     this.book.id = this.$route.query.id
     if (this.book.id) {
       this.updateFlag = true
-      this.getBookMsg(this.book.id)
+      this.getBookMsg()
     }
     this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
   },

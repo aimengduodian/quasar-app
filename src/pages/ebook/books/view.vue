@@ -66,7 +66,7 @@
       <q-separator />
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="mails">
-          <div v-if="!flag"> 出售价格: ￥{{ book.bookPrice }} </div>
+          <div> 出售价格: ￥{{ book.bookPrice }} </div>
           <div> 类型: {{ getBookTypeNameByNumber(book.bookType) }}</div>
           <div> 出版日期: {{ formatBookDate(book.pubDate) }} </div>
         </q-tab-panel>

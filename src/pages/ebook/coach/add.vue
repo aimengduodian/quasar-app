@@ -30,25 +30,25 @@
 
       <q-input :rules="[val => val && val.length > 0 || '开始日期不能为空']"
                v-model="coach.startTime" ref="startTime" value=""
-               readonly prefix="出版日期:">
+               readonly prefix="开始日期:">
         <template v-slot:prepend>
           <q-icon name="send" />
         </template>
-        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-          <date-time :max-date="maxDate" :date-string="coach.startTime"
-                     :is-time=true @input="setCoachDateTime" />
+        <q-popup-proxy ref="qStartTimeProxy" transition-show="scale" transition-hide="scale">
+          <date-time :min-date="minStartDateTime" :max-date="maxStartDateTime" :date-string="coach.startTime"
+                     :is-time=true @input="setCoachStartTime" />
         </q-popup-proxy>
       </q-input>
 
       <q-input :rules="[val => val && val.length > 0 || '结束日期不能为空']"
                v-model="coach.endTime" ref="endTime" value=""
-               readonly prefix="出版日期:">
+               readonly prefix="结束日期:">
         <template v-slot:prepend>
           <q-icon name="send" />
         </template>
-        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-          <date-time :max-date="minDate" :date-string="coach.endTime"
-                     :is-time=true @input="setCoachDateTime" />
+        <q-popup-proxy ref="qEndTimeProxy" transition-show="scale" transition-hide="scale">
+          <date-time :min-date="minEndDateTime" :date-string="coach.endTime"
+                     :is-time=true @input="setCoachEndTime" />
         </q-popup-proxy>
       </q-input>
 
@@ -88,8 +88,7 @@ export default {
   },
   data () {
     return {
-      maxDate: null,
-      minDate: null,
+      minStartDateTime: null,
       updateFlag: false,
       coach: {
         name: null, // 辅导名称
@@ -97,14 +96,12 @@ export default {
         price: null, // 辅导价格
         startTime: null, // 开始时间
         endTime: null, // 结束时间
-        endDate: null, // 辅导截止日期
         place: null, // 讲座地点
         weiXin: null, // 微信
         phone: null, // 手机号
         des: '' // 描述
       },
-      options: ['辅导', '讲座'],
-      submitBtn: false
+      options: ['辅导', '讲座']
     }
   },
   created () {
@@ -113,15 +110,27 @@ export default {
       this.updateFlag = true
       this.getCoachMsg()
     }
-    this.minDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+    this.minStartDateTime = date.formatDate(Date.now(), 'YYYY/MM/DD')
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg'])
+    ...mapGetters('auth', ['getPageMsg']),
+    minEndDateTime: function () {
+      const startTime = this.coach.startTime || Date.now()
+      return date.formatDate(startTime, 'YYYY/MM/DD')
+    },
+    maxStartDateTime: function () {
+      const endTime = this.coach.endTime || Date.now()
+      return date.formatDate(endTime, 'YYYY/MM/DD')
+    }
   },
   methods: {
-    setCoachDateTime (val) {
+    setCoachStartTime (val) {
       this.coach.startTime = val
-      this.$refs.qDateProxy.hide()
+      this.$refs.qStartTimeProxy.hide()
+    },
+    setCoachEndTime (val) {
+      this.coach.endTime = val
+      this.$refs.qEndTimeProxy.hide()
     },
     async onSubmit () {
       let url = '/tutoring/save'

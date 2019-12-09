@@ -4,7 +4,7 @@
     float-label="floatLabel"
     v-model="dateSelect"
     :mask="dateTimeMask"
-    :options="setDateRange()"
+    :options="setDateRange"
     first-day-of-week="1"
     value=""
   />
@@ -14,6 +14,7 @@
     float-label="float-label"
     v-model="dateTimeSelect"
     :mask="dateTimeMask"
+    :options="setTimeRange"
     format24h
     value=""
   >
@@ -66,19 +67,19 @@ export default {
     setDateRange (date) {
       if (this.minDate || this.maxDate) {
         if (this.minDate && this.maxDate) {
-          return date => date >= this.minDate && date <= this.maxDate
+          return date >= this.minDate && date <= this.maxDate
         }
         else if (this.minDate) {
-          return date => date >= this.minDate
+          return date >= this.minDate
         }
         else {
-          return date => date <= this.maxDate
+          return date <= this.maxDate
         }
       }
     },
     // 设置时间范围
-    setTimeRange () {
-
+    setTimeRange (hr) {
+      return !(hr < 7 || hr > 22)
     },
     saveDateTime () {
       this.$emit('input', this.dateTimeSelect)

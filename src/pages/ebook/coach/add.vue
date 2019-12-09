@@ -20,7 +20,7 @@
       </q-input>
 
       <q-select :rules="[val => val && val.length > 0 || '选择类型不能为空']"
-                v-model="options[coach.type]" ref="type" value=""
+                v-model="optionsValue" ref="type" value=""
                 :options="options" prefix="分类:"
       >
         <template v-slot:prepend>
@@ -35,8 +35,8 @@
           <q-icon name="send" />
         </template>
         <q-popup-proxy ref="qStartTimeProxy" transition-show="scale" transition-hide="scale">
-          <date-time :min-date="minStartDateTime" :max-date="maxStartDateTime" :date-string="coach.startTime"
-                     :is-time=true @input="setCoachStartTime" />
+          <date-time :min-date="minStartDateTime" :max-date="maxStartDateTime"
+                     :date-string="coach.startTime" :is-time=true @input="setCoachStartTime" />
         </q-popup-proxy>
       </q-input>
 
@@ -101,6 +101,7 @@ export default {
         phone: null, // 手机号
         des: '' // 描述
       },
+      optionsValue: '',
       options: ['辅导', '讲座']
     }
   },
@@ -157,7 +158,7 @@ export default {
       }
 
       const coachMsg = JSON.parse(JSON.stringify(this.coach))
-      coachMsg.type = this.options.indexOf(this.type)
+      coachMsg.type = this.options.indexOf(this.optionsValue)
       try {
         this.$q.loading.show({
           message: '上传中...'
@@ -165,6 +166,8 @@ export default {
         await this.$axios.post(url, coachMsg).then((res) => {
           if (res.data.code === 100) {
             this.$q.notify(res.data.msgs.msg)
+            // 跳转回原页面
+            this.$router.go(-1)
           }
           else if (res.data.code === 200) {
             let msg = ''
@@ -190,6 +193,7 @@ export default {
       Object.keys(this.coach).forEach(key => {
         this.coach[key] = coachMsg[key]
       })
+      this.optionsValue = this.options[coachMsg.type] || this.options[0]
     }
   }
 }

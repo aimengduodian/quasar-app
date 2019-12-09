@@ -1,145 +1,187 @@
 <template>
-  <div class="q-pa-md" style="width: 100%">
-    <div class="row">
-      <div class="col-9 text-center" >
-        <span class="text-h5">编辑辅导信息</span>
+  <div class="q-pa-md">
+    <form @submit.prevent.stop="onSubmit" class="q-gutter-md">
+      <div class="row">
+        <div class="col-9 text-center" >
+          <span class="text-h5">编辑辅导信息</span>
+        </div>
+        <div class="col-3">
+          <q-btn rounded color="blue" label="发布" @click="onSubmit" />
+        </div>
       </div>
-      <div class="col-3">
-        <q-btn rounded color="blue" @click="onClickSubmit">发布</q-btn>
-      </div>
-    </div>
-    <br>
+      <br>
 
-    <q-input v-model="teach.name" type="text" prefix="名称:">
-      <template v-slot:prepend>
-        <q-icon name="book" />
-      </template>
-    </q-input>
+      <q-input :rules="[val => val && val.length > 0 || '名称不能为空']"
+               ref="name" type="text" prefix="名称:" value=""
+               v-model="coach.name">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
 
-    <q-select v-model="type" :options="options" prefix="类别:" suffix="选择类型">
-      <template v-slot:prepend>
-        <q-icon name="event" />
-      </template>
-    </q-select>
+      <q-select :rules="[val => val && val.length > 0 || '选择类型不能为空']"
+                v-model="options[coach.type]" ref="type" value=""
+                :options="options" prefix="分类:"
+      >
+        <template v-slot:prepend>
+          <q-icon name="event" />
+        </template>
+      </q-select>
 
-    <q-input readonly v-model="teach.startTime" prefix="开始日期:">
-      <template v-slot:prepend>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-date v-model="teach.startTime" mask="YYYY-MM-DD HH:mm" />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
+      <q-input :rules="[val => val && val.length > 0 || '开始日期不能为空']"
+               v-model="coach.startTime" ref="startTime" value=""
+               readonly prefix="出版日期:">
+        <template v-slot:prepend>
+          <q-icon name="send" />
+        </template>
+        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+          <date-time :max-date="maxDate" :date-string="coach.startTime"
+                     :is-time=true @input="setCoachDateTime" />
+        </q-popup-proxy>
+      </q-input>
 
-      <template v-slot:append>
-        <q-icon name="access_time" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-time v-model="teach.startTime" mask="YYYY-MM-DD HH:mm" format24h />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+      <q-input :rules="[val => val && val.length > 0 || '结束日期不能为空']"
+               v-model="coach.endTime" ref="endTime" value=""
+               readonly prefix="出版日期:">
+        <template v-slot:prepend>
+          <q-icon name="send" />
+        </template>
+        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+          <date-time :max-date="minDate" :date-string="coach.endTime"
+                     :is-time=true @input="setCoachDateTime" />
+        </q-popup-proxy>
+      </q-input>
 
-    <q-input readonly v-model="teach.endTime" prefix="结束日期:">
-      <template v-slot:prepend>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-date v-model="teach.endTime" mask="YYYY-MM-DD HH:mm" />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
+      <q-input :rules="[val => val && val.length > 0 || '辅导地点不能为空']"
+               v-model="coach.place" ref="place" value=""
+               type="text" prefix="辅导地点:">
+        <template v-slot:prepend>
+          <q-icon name="people" />
+        </template>
+      </q-input>
 
-      <template v-slot:append>
-        <q-icon name="access_time" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-time v-model="teach.endTime" mask="YYYY-MM-DD HH:mm" format24h />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+      <q-input :rules="[ val => val > 0 && val < 1000 || '薪酬非法']"
+               v-model="coach.price" ref="price" value=""
+               type="number" prefix="薪酬:" suffix="￥"
+      >
+        <template v-slot:prepend>
+          <q-icon name="money" />
+        </template>
+      </q-input>
 
-    <q-input v-model="teach.place" type="text" prefix="辅导地点:">
-      <template v-slot:prepend>
-        <q-icon name="people" />
-      </template>
-    </q-input>
-
-    <q-input v-model="teach.price" type="number" prefix="薪酬:" suffix="￥">
-      <template v-slot:prepend>
-        <q-icon name="money" />
-      </template>
-    </q-input>
-
-    <q-editor v-model="teach.des"/>
-    <br>
+      <q-editor v-model="coach.des" value=""/>
+      <br>
+    </form>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
+import DateTime from 'components/dateTimeOption'
 
 export default {
+  components: {
+    NeedVerify,
+    DateTime
+  },
   data () {
     return {
-      options: ['辅导', '讲座'],
-      type: '',
-      teach: {
-        id: 0,
-        name: '',
-        type: '1', // 0：辅导  1：讲座
-        price: '500',
-        startTime: '2019-11-30 15:52',
-        endTime: '2019-12-30 15:52',
-        place: 'A栋',
-        phone: 14787461136,
-        weiXin: 123546,
-        des: '帅气男学渣求女学霸辅导，男女搭配学习不累'
+      maxDate: null,
+      minDate: null,
+      updateFlag: false,
+      coach: {
+        name: null, // 辅导名称
+        type: null, // 辅导类型{0：辅导，1：讲座}
+        price: null, // 辅导价格
+        startTime: null, // 开始时间
+        endTime: null, // 结束时间
+        endDate: null, // 辅导截止日期
+        place: null, // 讲座地点
+        weiXin: null, // 微信
+        phone: null, // 手机号
+        des: '' // 描述
       },
+      options: ['辅导', '讲座'],
       submitBtn: false
     }
   },
-  methods: {
-    onClickSubmit () {
-      for (let i = 0; i < this.options.length; i++) {
-        if (this.options[i] === this.type) {
-          this.teach.type = i
-          break
-        }
-      }
-      this.$axios.post('/tutoring/save', this.teach).then((res) => {
-        if (res.data.code === 100) {
-          this.$q.notify(res.data.msgs.msg)
-        }
-        else if (res.data.code === 200) {
-          let msg = ''
-          Object.keys(res.data.page.errors).forEach(key => {
-            msg = msg + key + res.data.page.errors[key]
-          })
-          this.$q.notify(msg)
-        }
-        else {
-          this.$q.notify('未知错误')
-        }
-      })
-    },
-    // 初始化图书类型下拉框
-    initteachTypeSelect () {
-      // const value = storage.getSession('teachType')
-      // this.options = value.map((item) => {
-      //   return item.text
-      // })
-    },
-    initData () {
-      // const params = JSON.parse(JSON.stringify(this.teach))
-      // params.startTime = date.formatDate(params.startTime, 'X')
-      // params.endTime = date.formatDate(params.endTime, 'X')
-    }
-  },
-  components: {
-    NeedVerify
-  },
   created () {
-    this.initteachTypeSelect()
+    this.coach.id = this.$route.query.id
+    if (this.coach.id) {
+      this.updateFlag = true
+      this.getCoachMsg()
+    }
+    this.minDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+  },
+  computed: {
+    ...mapGetters('auth', ['getPageMsg'])
+  },
+  methods: {
+    setCoachDateTime (val) {
+      this.coach.startTime = val
+      this.$refs.qDateProxy.hide()
+    },
+    async onSubmit () {
+      let url = '/tutoring/save'
+      if (this.updateFlag) {
+        url = '/tutoring/update'
+      }
+      // 判断图片是否为空
+      if (this.coach.des.length < 1) {
+        this.$q.notify('描述不能为空')
+        return
+      }
+      this.$refs.name.validate()
+      this.$refs.type.validate()
+      this.$refs.startTime.validate()
+      this.$refs.endTime.validate()
+      this.$refs.place.validate()
+      // 校验
+      if (this.$refs.name.hasError ||
+        this.$refs.type.hasError ||
+        this.$refs.startTime.hasError ||
+        this.$refs.endTime.hasError ||
+        this.$refs.place.hasError) {
+        return
+      }
+
+      const coachMsg = JSON.parse(JSON.stringify(this.coach))
+      coachMsg.type = this.options.indexOf(this.type)
+      try {
+        this.$q.loading.show({
+          message: '上传中...'
+        })
+        await this.$axios.post(url, coachMsg).then((res) => {
+          if (res.data.code === 100) {
+            this.$q.notify(res.data.msgs.msg)
+          }
+          else if (res.data.code === 200) {
+            let msg = ''
+            Object.keys(res.data.page.errors).forEach(key => {
+              msg = msg + key + res.data.page.errors[key]
+            })
+            this.$q.notify(msg)
+          }
+          else {
+            this.$q.notify('未知错误')
+          }
+        })
+      }
+      catch (e) {
+        console.log(e)
+      }
+      finally {
+        this.$q.loading.hide()
+      }
+    },
+    getCoachMsg () {
+      const coachMsg = JSON.parse(this.getPageMsg)
+      Object.keys(this.coach).forEach(key => {
+        this.coach[key] = coachMsg[key]
+      })
+    }
   }
 }
 </script>

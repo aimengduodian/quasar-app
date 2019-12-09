@@ -18,7 +18,7 @@
     value=""
   >
     <div class="row items-center justify-end q-gutter-sm">
-      <q-btn label="返回修改日期" color="primary" flat @click="flag = !flag" v-close-popup />
+      <q-btn label="返回修改日期" color="primary" flat @click="firstStep = !firstStep" v-close-popup />
       <q-btn label="确定" color="primary" flat @click="saveDateTime" v-close-popup />
     </div>
   </q-time>

@@ -121,7 +121,8 @@ export default {
       this.$axios.get('/tutoring/getById/' + this.coach.id).then(res => {
         this.coach = res.data.page.info
         const pageMsg = JSON.parse(JSON.stringify(this.coach))
-        // pageMsg.pubDate = this.formatCoachDate(pageMsg.pubDate)
+        pageMsg.startTime = this.formatCoachDate(pageMsg.startTime)
+        pageMsg.endTime = this.formatCoachDate(pageMsg.endTime)
         this.updatePageMsg(pageMsg)
       })
     },
@@ -233,9 +234,9 @@ export default {
     },
     editCoach () {
       const item = {
-        name: 'books_add',
+        name: 'coach_add',
         query: {
-          id: this.book.id
+          id: this.coach.id
         }
       }
       this.$router.push(item)

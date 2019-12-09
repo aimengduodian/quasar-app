@@ -10,7 +10,7 @@ export const updateUser = ({commit}, val) => {
   commit('setUser', val)
 }
 
-//
+// 存储页面详情信息，用于修改
 export const updatePageMsg = ({commit}, val) => {
   const pageMsg = JSON.stringify(val)
   commit('setPageMsg', pageMsg)

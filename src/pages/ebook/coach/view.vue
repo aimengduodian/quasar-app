@@ -6,7 +6,16 @@
              src="statics/boy-avatar.png"
              alt="head picture">
       </div>
-      <div class="col-5">
+      <div class="col-5" v-if="coach.orderUser"
+           style="background: url('statics/bg.jpg') center no-repeat">
+        <div class="q-title">
+          <strong>{{ coach.name }}</strong>
+        </div>
+        <div class="q-body-2">
+          类型: {{ typeOptions[coach.type] }}
+        </div>
+      </div>
+      <div class="col-5" v-else>
         <div class="q-title">
           <strong>{{ coach.name }}</strong>
         </div>
@@ -46,7 +55,7 @@
         <div> 地点: {{ coach.place }} </div>
       </q-tab-panel>
       <q-tab-panel name="alarms">
-        <p class="caption q-body-2" v-html='coach.des' />
+        <p class="caption q-body-2" v-html='coach.des'/>
       </q-tab-panel>
       <q-tab-panel v-if="!flag" name="movies">
         <need-verify />
@@ -59,8 +68,44 @@
     <!--举报-->
     <report :show-dialog="showReport"
             :product="reportMsg"
-            @closeDialog="showReport = false"
-    />
+            @closeDialog="showReport = false"/>
+
+    <q-dialog v-model="orderUser.isShow">
+      <q-card>
+        <img src="~assets/donuts.png" alt="" >
+        <q-card-section>
+          <q-btn
+            fab
+            color="primary"
+            icon="place"
+            class="absolute"
+            style="top: 0; right: 12px; transform: translateY(-50%);"
+          />
+
+          <div class="row no-wrap items-center">
+            <div class="col text-h6 ellipsis">{{ this.orderUser.nickname }}</div>
+            <div class="col-auto text-grey q-pt-md">
+              <q-icon name="place" /> 250 ft
+            </div>
+          </div>
+
+          <q-rating v-model="this.orderUser.score" :max="5" size="32px" />
+        </q-card-section>
+
+        <q-card-section>
+          <div class="text-subtitle1"> 学号: {{ this.orderUser.studNo }}</div>
+          <div class="text-subtitle2 text-grey"> 邮箱: {{ this.orderUser.email }} </div>
+          <div class="text-subtitle2 text-grey"> 微信: {{ this.orderUser.weiXin }} </div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat icon="book" v-close-popup />
+          <q-btn flat color="primary" @click="cancelOrder">撤销接单</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -99,7 +144,16 @@ export default {
         des: '',
         checkCode: null // 接单码
       },
-      typeOptions: ['辅导', '讲座']
+      typeOptions: ['辅导', '讲座'],
+      // 接单人
+      orderUser: {
+        isShow: false,
+        nickname: null,
+        weiXin: null,
+        score: null,
+        studNo: null,
+        email: null
+      }
     }
   },
   created () {
@@ -120,14 +174,46 @@ export default {
     initData () {
       this.$axios.get('/tutoring/getById/' + this.coach.id).then(res => {
         this.coach = res.data.page.info
+        if (this.coach.orderUser) {
+          this.getOrderUserMsg()
+        }
         const pageMsg = JSON.parse(JSON.stringify(this.coach))
         pageMsg.startTime = this.formatCoachDate(pageMsg.startTime)
         pageMsg.endTime = this.formatCoachDate(pageMsg.endTime)
         this.updatePageMsg(pageMsg)
       })
     },
-    receipt () {
-      // ‘其他’类型
+    async getOrderUserMsg () {
+      await this.$axios.get('/user/getById/' + this.coach.orderUser).then(res => {
+        if (Number(res.data.code) === 200) {
+          this.$q.notify('......')
+        }
+        else {
+          this.orderUser.nickname = res.data.page.info.nickname
+          this.orderUser.weiXin = res.data.page.info.weiXin
+          this.orderUser.studNo = res.data.page.info.studNo
+          this.orderUser.score = res.data.page.info.score / 2
+          this.orderUser.email = res.data.page.info.email
+        }
+      })
+    },
+    async cancelOrder () {
+      this.$q.dialog({
+        title: '撤销接单',
+        message: '确定要撤销接单吗?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$axios.post('/tutoring/delOrder', { id: this.coach.id }).then(res => {
+          if (res.data.code === 100) {
+            this.orderUser.isShow = false
+            this.coach.orderUser = null
+          }
+          this.$q.notify(res.data.msgs.msg)
+        })
+      })
+    },
+    async receipt () {
       this.$q.dialog({
         title: '请输入接单码',
         message: '如果没有，请联系发布者获取!',
@@ -192,7 +278,18 @@ export default {
           id: 'delete'
         }
       ]
-
+      console.log(this.coach.orderUser)
+      if (this.coach.orderUser) {
+        seller.push(
+          {
+            show: this.orderUser,
+            label: '接单人信息',
+            icon: 'person',
+            color: 'primary',
+            id: 'orderUserMsg'
+          }
+        )
+      }
       const action = []
       if (this.flag) {
         seller.forEach(item => {
@@ -223,13 +320,12 @@ export default {
           case 'gift':
             this.receipt()
             break
+          case 'orderUserMsg':
+            this.orderUserMsg()
+            break
           default:
             break
         }
-      }).onCancel(() => {
-        // console.log('Dismissed')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
       })
     },
     editCoach () {
@@ -241,7 +337,7 @@ export default {
       }
       this.$router.push(item)
     },
-    deleteCoach () {
+    async deleteCoach () {
       this.$q.dialog({
         title: '确认下架？',
         message: '下架后可在我的界面重新发布!',
@@ -266,6 +362,9 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
+    orderUserMsg () {
+      this.orderUser.isShow = true
+    },
     reportOrder () {
       this.$q.notify('点击年举报')
       this.showReport = true
@@ -284,12 +383,5 @@ export default {
 </script>
 
 <style lang="stylus">
-  .docs-carousel
-    p.caption:not(:first-of-type)
-      margin-top 38px
-    .custom-caption
-      text-align center
-      padding 12px
-      color $grey-4
-      background rgba(0, 0, 0, .5)
+
 </style>

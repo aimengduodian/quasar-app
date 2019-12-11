@@ -65,11 +65,7 @@
         </div>
       </q-tab-panel>
     </q-tab-panels>
-    <!--举报-->
-    <report :show-dialog="showReport"
-            :product="reportMsg"
-            @closeDialog="showReport = false"/>
-
+    <!--接单人信息-->
     <q-dialog v-model="orderUser.isShow">
       <q-card>
         <img src="~assets/donuts.png" alt="" >
@@ -83,26 +79,54 @@
           />
 
           <div class="row no-wrap items-center">
-            <div class="col text-h6 ellipsis">{{ this.orderUser.nickname }}</div>
+            <div class="col text-h6 ellipsis">{{ orderUser.nickname }}</div>
             <div class="col-auto text-grey q-pt-md">
               <q-icon name="place" /> 250 ft
             </div>
           </div>
 
-          <q-rating v-model="this.orderUser.score" :max="5" size="32px" />
+          <q-rating v-model="orderUser.score" :max="5" size="32px" readonly />
         </q-card-section>
 
         <q-card-section>
-          <div class="text-subtitle1"> 学号: {{ this.orderUser.studNo }}</div>
-          <div class="text-subtitle2 text-grey"> 邮箱: {{ this.orderUser.email }} </div>
-          <div class="text-subtitle2 text-grey"> 微信: {{ this.orderUser.weiXin }} </div>
+          <div class="text-subtitle1"> 学号: {{ orderUser.studNo }}</div>
+          <div class="text-subtitle2 text-grey"> 邮箱: {{ orderUser.email }} </div>
+          <div class="text-subtitle2 text-grey"> 微信: {{ orderUser.weiXin }} </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions>
-          <q-btn flat icon="book" v-close-popup />
+          <q-btn flat icon="book" @click="reportEvaluationUser">举报用户</q-btn>
           <q-btn flat color="primary" @click="cancelOrder">撤销接单</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <!--评价用户-->
+    <q-dialog v-model="evaluationUser.isShow">
+      <q-card>
+        <img src="~assets/donuts.png" alt="" >
+        <q-card-section>
+          <div class="row no-wrap items-center">
+            <div class="col text-h6 ellipsis">{{ orderUser.nickname }}</div>
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div class="text-subtitle1"> 学号: {{ orderUser.studNo }}</div>
+          <div class="text-subtitle2 text-grey"> 邮箱: {{ orderUser.email }} </div>
+          <div class="text-subtitle2 text-grey"> 微信: {{ orderUser.weiXin }} </div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-rating v-model="evaluationUser.score" :max="5" size="32px" />
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-icon name="book" />
+          <q-btn flat color="primary" @click="reportUser">submit</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -113,12 +137,10 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
-import Report from 'components/report'
 
 export default {
   components: {
-    NeedVerify,
-    Report
+    NeedVerify
   },
   data () {
     return {
@@ -153,6 +175,11 @@ export default {
         score: null,
         studNo: null,
         email: null
+      },
+      // 接单人
+      evaluationUser: {
+        isShow: false,
+        score: 0 // 评分
       }
     }
   },
@@ -247,6 +274,38 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
+    async reportEvaluationUser () {
+      this.$q.dialog({
+        title: '举报接单人',
+        message: '请输入举报原因!',
+        prompt: {
+          model: '',
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        if (date === '') {
+          this.$q.notify('请填写举报原因')
+          return
+        }
+        const props = {
+          orderUser: this.coach.orderUser,
+          id: this.coach.id,
+          score: 1,
+          flag: 1,
+          des: data
+        }
+        this.$axios.post('/tutoring/updateScore', props).then(res => {
+          if (Number(res.data.code) === 200) {
+            this.$q.notify(res.data.msgs.msg)
+          }
+          else {
+            this.$q.notify(res.data.msgs.msg)
+          }
+        })
+      })
+    },
     moreMsgShow () {
       const report = [
         {
@@ -278,17 +337,30 @@ export default {
           id: 'delete'
         }
       ]
-      console.log(this.coach.orderUser)
       if (this.coach.orderUser) {
-        seller.push(
-          {
-            show: this.orderUser,
-            label: '接单人信息',
-            icon: 'person',
-            color: 'primary',
-            id: 'orderUserMsg'
-          }
-        )
+        const nowDate = Date.now()
+        if (nowDate > this.coach.endTime) {
+          seller.push(
+            {
+              show: this.orderUser,
+              label: '评价',
+              icon: 'person',
+              color: 'primary',
+              id: 'chargeOrderUser'
+            }
+          )
+        }
+        else {
+          seller.push(
+            {
+              show: this.orderUser,
+              label: '接单人信息',
+              icon: 'person',
+              color: 'primary',
+              id: 'orderUserMsg'
+            }
+          )
+        }
       }
       const action = []
       if (this.flag) {
@@ -321,7 +393,10 @@ export default {
             this.receipt()
             break
           case 'orderUserMsg':
-            this.orderUserMsg()
+            this.orderUser.isShow = true
+            break
+          case 'chargeOrderUser':
+            this.evaluationUser.isShow = true
             break
           default:
             break
@@ -362,18 +437,35 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
-    orderUserMsg () {
-      this.orderUser.isShow = true
-    },
+    // 举报产品
     reportOrder () {
-      this.$q.notify('点击年举报')
+      this.$q.notify('点击举报')
       this.showReport = true
       this.reportMsg = {
         productId: this.coach.id, // 产品id
         productName: this.coach.name, // 产品name
-        // 产品类型 {1：图书，2：电子，3：其他}
-        productType: 1
+        // 产品类型 {1：图书，2：电子，3：其他, 4: coach}
+        productType: 4
       }
+    },
+    // 举报接单人
+    async reportUser () {
+      const props = {
+        orderUser: this.coach.orderUser,
+        id: this.coach.id,
+        score: this.evaluationUser.score,
+        flag: 0,
+        des: ''
+      }
+      await this.$axios.post('/tutoring/updateScore', props).then(res => {
+        if (Number(res.data.code) === 200) {
+          this.$q.notify(res.data.msgs.msg)
+        }
+        else {
+          this.$q.notify(res.data.msgs.msg)
+        }
+        this.evaluationUser.isShow = false
+      })
     },
     formatCoachDate (val) {
       return date.formatDate(val, 'YYYY-MM-DD hh:mm')

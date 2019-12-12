@@ -3,20 +3,17 @@
     <q-infinite-scroll @load="onLoad" :offset="250">
       <div v-for="(item, index) in items" :key="index"
            @click="switch_go(item.id)">
-        <q-card
-          class="text-white"
-          style="background: radial-gradient(circle, rgba(53,162,255,0.65) 0%, rgba(1,106,173,0.64) 100%)"
-        >
-          <q-card-section>
+        <q-item>
+          <q-item-section>
             <div class="text-h6">{{ item.name }}</div>
             <div class="text-subtitle2">薪酬：￥ {{ item.price }}</div>
-          </q-card-section>
-
-          <q-card-section>
-            <q-icon slot="right" :name = type[item.type] />
-          </q-card-section>
-        </q-card>
-        <br>
+            <div class="text-subtitle2">类型：{{ type[item.type] }}</div>
+          </q-item-section>
+          <q-item-section top thumbnail class="q-ml-none">
+            <img style="object-fit: cover; border-radius: 10px" src="statics/bg.jpg" alt="" >
+          </q-item-section>
+        </q-item>
+        <hr>
       </div>
       <!--添加消息-->
       <template v-slot:loading>
@@ -41,7 +38,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      type: ['alarm', 'mail'],
+      type: ['辅导', '讲座'],
       // cardColor: ['white', 'white'],
       pageSize: 5,
       pageNumber: 1,

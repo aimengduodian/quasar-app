@@ -94,6 +94,7 @@ export default {
   },
   methods: {
     ...mapActions('staticData', ['updateStaticCache']),
+    ...mapActions('auth', ['updateUserCache']),
     show () {
       this.layoutModal = true
     },
@@ -120,17 +121,6 @@ export default {
     selected (item) {
       this.$q.notify(`Selected suggestion "${item.label}"`)
     },
-    funDame () {
-      let aArr = []
-      let item = {
-        label: '123',
-        sublabel: 'abc',
-        icon: 'search',
-        value: 'search'
-      }
-      aArr.push(item)
-      return aArr
-    },
     async init () {
       const bookType = await this.$axios.get('/booktype/booktypes').then(res => {
         return res.data.page.booktypes
@@ -140,6 +130,14 @@ export default {
         return res.data.page.electronicsType
       })
       await this.updateStaticCache({bookType, electronicsType})
+
+      const userDetail = await this.$axios.post('/book/books?flag=0', {
+        pageSize: 1,
+        pageNumber: 1
+      }).then(res => {
+        return res.data.page.userInfo
+      })
+      await this.updateUserCache({userDetail})
     }
   },
   created () {

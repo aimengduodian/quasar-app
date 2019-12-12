@@ -3,20 +3,20 @@
     <div v-if="power">
       <div class="q-pa-md row justify-around head-div">
         <div class="col-3">
-          <img style="border-radius: 10px; width: 80%"
+          <img style="border-radius: 50%; width: 80%"
                src="statics/boy-avatar.png"
                alt=""
           >
         </div>
         <div class="col-5">
           <div class="q-title">
-            <strong> 用户名称 </strong>
+            <strong> {{ userMsg.nickname }} </strong>
           </div>
           <div class="q-body-2">
-            星级: 123
+            星级: {{ userMsg.score || '暂无' }}
           </div>
-          <div class="q-caption">
-            <q-btn flat icon="money" label="详细信息" />
+          <div class="q-body-2">
+            <q-btn style="padding-left:0" flat icon="thumb_up" label="详细信息" />
           </div>
         </div>
       </div>
@@ -32,6 +32,7 @@
           </div>
           <div class="col">
             <div style="font-size: small">
+              我的辅导 0
             </div>
           </div>
         </div>
@@ -164,14 +165,37 @@ export default {
   },
   data () {
     return {
-
+      userMsg: {
+        buildingNum: null,
+        buildingNumber: null,
+        createTime: null,
+        dataStatus: null,
+        email: null,
+        flag: null,
+        id: null,
+        nickname: null,
+        openId: null,
+        password: null,
+        phone: null,
+        score: null,
+        scoreNumber: null,
+        studNo: null,
+        superMarketName: null,
+        updateTime: null,
+        url: null,
+        validCode: null,
+        weiXin: null
+      }
     }
+  },
+  created () {
+    this.userMsg = this.getUserDetailMsg
   },
   methods: {
 
   },
   computed: {
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag', 'getUserDetailMsg'])
   }
 }
 </script>

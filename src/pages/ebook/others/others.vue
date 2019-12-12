@@ -50,6 +50,9 @@ export default {
       items: []
     }
   },
+  created () {
+    this.subAdvice()
+  },
   methods: {
     addOthers () {
       // goto 发布界面
@@ -66,8 +69,8 @@ export default {
       const strs = str.split(',')
       return strs[0]
     },
-    subAdvice () {
-      this.$axios.post('/other/others', {
+    async subAdvice () {
+      await this.$axios.post('/other/others', {
         pageSize: this.pageSize,
         pageNumber: this.pageNumber
       }).then((res) => {
@@ -85,7 +88,7 @@ export default {
       setTimeout(() => {
         this.subAdvice()
         done()
-      }, 1000)
+      }, 2500)
     }
   },
   computed: {

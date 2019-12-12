@@ -39,7 +39,7 @@
             <strong>{{ other.otherName }}</strong>
           </div>
           <div class="q-body-2">
-            售价: {{ other.presentPrice }}￥
+            售价: ￥ {{ other.presentPrice }}
           </div>
         </div>
         <div class="col-2">
@@ -66,7 +66,7 @@
         <q-tab-panel name="mails">
           <div> 购买日期: {{ formatOtherDate(other.buyDate) }}</div>
           <div> 发票: {{ other.hasInvoice ? '有' : '没有' }} </div>
-          <div> 购入价格: {{ other.originalPrice }} ￥</div>
+          <div> 购入价格: ￥{{ other.originalPrice }}</div>
         </q-tab-panel>
         <q-tab-panel name="alarms">
           <p class="caption q-body-2" v-html="other.des" />

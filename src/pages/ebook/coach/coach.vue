@@ -49,6 +49,9 @@ export default {
       items: []
     }
   },
+  created () {
+    this.subAdvice()
+  },
   methods: {
     addCoach () {
       // goto 发布界面
@@ -65,10 +68,10 @@ export default {
       const strs = str.split(',')
       return strs[0]
     },
-    subAdvice () {
+    async subAdvice () {
       const _that = this
 
-      this.$axios.post('/tutoring/tutorings', {
+      await this.$axios.post('/tutoring/tutorings', {
         pageSize: _that.pageSize,
         pageNumber: _that.pageNumber
       }).then((res) => {
@@ -85,7 +88,7 @@ export default {
       setTimeout(() => {
         this.subAdvice()
         done()
-      }, 1000)
+      }, 2500)
     }
   },
   computed: {

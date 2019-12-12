@@ -46,6 +46,9 @@ export default {
       items: []
     }
   },
+  created () {
+    this.subAdvice()
+  },
   methods: {
     addBooks () {
       // goto 发布界面
@@ -62,8 +65,8 @@ export default {
       const strs = str.split(',')
       return strs[0]
     },
-    subAdvice () {
-      this.$axios.post('/book/books?flag=' + this.flag, {
+    async subAdvice () {
+      await this.$axios.post('/book/books?flag=' + this.flag, {
         pageSize: this.pageSize,
         pageNumber: this.pageNumber
       }).then((res) => {
@@ -83,7 +86,7 @@ export default {
           this.subAdvice()
           done()
         }
-      }, 1000)
+      }, 2500)
     }
   },
   computed: {

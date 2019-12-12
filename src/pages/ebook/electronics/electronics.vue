@@ -47,6 +47,9 @@ export default {
       items: []
     }
   },
+  created () {
+    this.subAdvice()
+  },
   methods: {
     addElectronics () {
       // goto 发布界面
@@ -63,8 +66,8 @@ export default {
       const strs = str.split(',')
       return strs[0]
     },
-    subAdvice () {
-      this.$axios.post('/electronics/electronics', {
+    async subAdvice () {
+      await this.$axios.post('/electronics/electronics', {
         pageSize: this.pageSize,
         pageNumber: this.pageNumber
       }).then((res) => {
@@ -81,11 +84,10 @@ export default {
     onLoad (index, done) {
       setTimeout(() => {
         if (this.items) {
-          // this.items.splice(0, 0, {}, {}, {}, {}, {}, {}, {})
           this.subAdvice()
           done()
         }
-      }, 1000)
+      }, 2500)
     },
     formatElectronicsDate (val) {
       return date.formatDate(val, 'YYYY-MM-DD')

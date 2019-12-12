@@ -14,3 +14,8 @@ export const getFlag = state => {
 export const getPageMsg = state => {
   return state.pageMsg
 }
+
+// 获取用户详细信息
+export const getUserDetailMsg = (state) => {
+  return state.userDetailMsg
+}

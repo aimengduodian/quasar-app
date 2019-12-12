@@ -15,3 +15,14 @@ export const updatePageMsg = ({commit}, val) => {
   const pageMsg = JSON.stringify(val)
   commit('setPageMsg', pageMsg)
 }
+
+// 更新用户缓存
+export const updateUserCache = async ({commit}, rPayload) => {
+  const {
+    userDetail = {}
+  } = (rPayload || {})
+
+  commit('userDetailCacheSet', {
+    userDetail
+  })
+}

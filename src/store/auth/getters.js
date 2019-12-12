@@ -17,5 +17,5 @@ export const getPageMsg = state => {
 
 // 获取用户详细信息
 export const getUserDetailMsg = (state) => {
-  return state.userDetailMsg
+  return sessionStorage.getItem('userDetail')
 }

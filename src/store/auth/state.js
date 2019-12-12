@@ -7,7 +7,5 @@ export default {
   },
   // 图书电子辅导其他的页面信息
   // 用于从详情页到编辑页面
-  pageMsg: '',
-  // 用户详细信息，放入缓存中
-  userDetailMsg: JSON.parse(sessionStorage.getItem('userDetail')) || {}
+  pageMsg: ''
 }

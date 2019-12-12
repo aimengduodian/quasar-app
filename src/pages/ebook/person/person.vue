@@ -189,7 +189,12 @@ export default {
     }
   },
   created () {
-    this.userMsg = this.getUserDetailMsg
+    try {
+      this.userMsg = JSON.parse(this.getUserDetailMsg)
+    }
+    catch (e) {
+      console.log(e)
+    }
   },
   methods: {
 
@@ -214,7 +219,7 @@ export default {
     text-align center
 
   .person
-    background-color: #f1f3ec
+    background-color: #fdfff8
     border-radius 20px
     margin 10px
     padding 10px 0

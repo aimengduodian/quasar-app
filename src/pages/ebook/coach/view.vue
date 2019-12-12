@@ -6,16 +6,7 @@
              src="statics/boy-avatar.png"
              alt="head picture">
       </div>
-      <div class="col-5" v-if="coach.orderUser"
-           style="background: url('statics/bg.jpg') center no-repeat">
-        <div class="q-title">
-          <strong>{{ coach.name }}</strong>
-        </div>
-        <div class="q-body-2">
-          类型: {{ typeOptions[coach.type] }}
-        </div>
-      </div>
-      <div class="col-5" v-else>
+      <div class="col-5">
         <div class="q-title">
           <strong>{{ coach.name }}</strong>
         </div>
@@ -130,6 +121,11 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <!--举报-->
+    <report :show-dialog="showReport"
+            :product="reportMsg"
+            @closeDialog="showReport = false"
+    />
   </div>
 </template>
 
@@ -137,9 +133,11 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
+import Report from 'components/report'
 
 export default {
   components: {
+    Report,
     NeedVerify
   },
   data () {

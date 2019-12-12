@@ -69,18 +69,16 @@ export default {
       return strs[0]
     },
     async subAdvice () {
-      const _that = this
-
       await this.$axios.post('/tutoring/tutorings', {
-        pageSize: _that.pageSize,
-        pageNumber: _that.pageNumber
+        pageSize: this.pageSize,
+        pageNumber: this.pageNumber
       }).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {
-          _that.pageNumber++
+          this.pageNumber++
         }
       })
     },

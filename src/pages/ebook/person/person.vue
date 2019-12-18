@@ -189,15 +189,24 @@ export default {
     }
   },
   created () {
-    try {
-      this.userMsg = JSON.parse(this.getUserDetailMsg)
-    }
-    catch (e) {
-      console.log(e)
-    }
+    this.getUserMsg()
   },
   methods: {
-
+    async getUserMsg () {
+      try {
+        // this.userMsg = JSON.parse(this.getUserDetailMsg)
+        const userDetail = await this.$axios.get('/user/getUser')
+        if (userDetail.data.code === 100) {
+          this.userMsg = userDetail.data.page.userInfo
+        }
+        else {
+          this.$q.notify('角色信息获取失败')
+        }
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
   },
   computed: {
     ...mapGetters('auth', ['power', 'powerFlag', 'getUserDetailMsg'])

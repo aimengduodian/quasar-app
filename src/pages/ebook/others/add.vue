@@ -87,8 +87,8 @@ export default {
         presentPrice: null,
         hasInvoice: null,
         otherPic: null,
-        weiXin: null,
-        phone: null,
+        phone: '14787461136',
+        weiXin: '1111',
         des: '',
         files: [] // 上传图片
       },

@@ -131,13 +131,13 @@ export default {
       })
       await this.updateStaticCache({bookType, electronicsType})
 
-      const userDetail = await this.$axios.post('/book/books?flag=0', {
-        pageSize: 1,
-        pageNumber: 1
-      }).then(res => {
-        return res.data.page.userInfo
-      })
-      await this.updateUserCache({userDetail})
+      // const userDetail = await this.$axios.post('/book/books?flag=0', {
+      //   pageSize: 1,
+      //   pageNumber: 1
+      // }).then(res => {
+      //   return res.data.page.userInfo
+      // })
+      // await this.updateUserCache({userDetail})
     }
   },
   created () {

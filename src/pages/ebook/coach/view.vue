@@ -132,6 +132,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
+import common from 'src/common/common'
 import NeedVerify from 'components/needVerify'
 import Report from 'components/report'
 
@@ -466,7 +467,8 @@ export default {
       })
     },
     formatCoachDate (val) {
-      return date.formatDate(val, 'YYYY-MM-DD hh:mm')
+      return common.toDate(val, 'yyyy-MM-dd HH:mm')
+      // return date.formatDate(val, 'YYYY-MM-DD hh:mm')
     }
   }
 }

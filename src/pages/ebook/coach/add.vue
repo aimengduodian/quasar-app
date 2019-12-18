@@ -19,6 +19,22 @@
         </template>
       </q-input>
 
+      <q-input :rules="[val => val && val.length > 0 || 'phone不能为空']"
+               ref="phone" type="number" prefix="phone:" value=""
+               v-model="coach.phone">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
+
+      <q-input :rules="[val => val && val.length > 0 || 'weixin不能为空']"
+               ref="weiXin" type="text" prefix="weiXin:" value=""
+               v-model="coach.weiXin">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
+
       <q-select :rules="[val => val && val.length > 0 || '选择类型不能为空']"
                 v-model="optionsValue" ref="type" value=""
                 :options="options" prefix="分类:"
@@ -97,8 +113,8 @@ export default {
         startTime: null, // 开始时间
         endTime: null, // 结束时间
         place: null, // 讲座地点
-        weiXin: null, // 微信
-        phone: null, // 手机号
+        phone: '14787461136',
+        weiXin: '1111',
         des: '' // 描述
       },
       optionsValue: '',

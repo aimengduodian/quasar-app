@@ -2,13 +2,13 @@
   <div>
     <div v-if="power">
       <div class="q-pa-md row justify-around head-div">
-        <div class="col-3">
+        <div class="col-3" style="margin-left: 20px">
           <img style="border-radius: 50%; width: 80%"
                src="statics/boy-avatar.png"
                alt=""
           >
         </div>
-        <div class="col-5">
+        <div class="col-6">
           <div class="q-title">
             <strong> {{ userMsg.nickname }} </strong>
           </div>
@@ -16,8 +16,11 @@
             星级: {{ userMsg.score || '暂无' }}
           </div>
           <div class="q-body-2">
-            <q-btn style="padding-left:0" flat icon="thumb_up" label="详细信息" />
+            楼栋: {{ userMsg.buildingNum || '暂无' }}
           </div>
+        </div>
+        <div class="col-1">
+          <q-icon size="32px" @click="dialog = true" name="home" />
         </div>
       </div>
       <div class="col first-person">
@@ -152,11 +155,67 @@
       <br>
       <need-verify/>
     </div>
+
+    <div id="q-app">
+      <div class="q-pa-md q-gutter-sm">
+        <q-dialog
+          v-model="dialog"
+          persistent
+          :maximized="maximizedToggle"
+          transition-show="slide-left"
+          transition-hide="slide-right"
+        >
+          <q-card>
+            <q-btn dense flat icon="close" v-close-popup/>
+
+            <q-card-section>
+              <q-list style="width: 100%;">
+                <q-item>
+                  <q-item-section avatar>
+                    <q-avatar>
+                      <img src="https://cdn.quasar.dev/img/avatar6.jpg">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>手机号:</q-item-section>
+                  <q-input
+                    v-model="userMsg.phone"
+                    mask="### #### ####"
+                  />
+                </q-item>
+
+                <q-item>
+                  <q-item-section avatar>
+                    <q-avatar>
+                      <img src="https://cdn.quasar.dev/img/avatar3.jpg">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>邮箱:</q-item-section>
+                  <q-input v-model="userMsg.email"/>
+                </q-item>
+
+                <q-item>
+                  <q-item-section avatar>
+                    <q-avatar>
+                      <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>寝楼:</q-item-section>
+                  <q-input v-model="userMsg.buildingNum"/>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-btn color="primary" style="width: 80%; margin-left: 10%"
+                   @click="onClickUpdateUserMsg" label="提交" />
+          </q-card>
+        </q-dialog>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import NeedVerify from 'components/needVerify'
 
 export default {
@@ -165,6 +224,8 @@ export default {
   },
   data () {
     return {
+      dialog: false,
+      maximizedToggle: true,
       userMsg: {
         buildingNum: null,
         buildingNumber: null,
@@ -192,12 +253,16 @@ export default {
     this.getUserMsg()
   },
   methods: {
+    ...mapActions('auth', ['updateUserCache']),
     async getUserMsg () {
       try {
+        // 获取用户的信息
         // this.userMsg = JSON.parse(this.getUserDetailMsg)
-        const userDetail = await this.$axios.get('/user/getUser')
-        if (userDetail.data.code === 100) {
-          this.userMsg = userDetail.data.page.userInfo
+        const userMsg = await this.$axios.get('/user/getUser')
+        if (userMsg.data.code === 100) {
+          this.userMsg = userMsg.data.page.userInfo
+          const userDetail = this.userMsg
+          this.updateUserCache({userDetail})
         }
         else {
           this.$q.notify('角色信息获取失败')
@@ -205,6 +270,29 @@ export default {
       }
       catch (e) {
         console.log(e)
+      }
+    },
+    async onClickUpdateUserMsg () {
+      try {
+        const userMsg = await this.$axios.post('/user/update', {
+          id: this.userMsg.id, // 用户id
+          phone: this.userMsg.phone, // 用户联系电话
+          email: this.userMsg.email, // 用户邮箱
+          buildingNum: this.userMsg.buildingNum // 用户楼栋
+        })
+        if (userMsg.data.code === 100) {
+          this.userMsg = userMsg.data.page.userInfo
+          this.$q.notify('信息更新成功')
+        }
+        else {
+          this.$q.notify('角色信息获取失败')
+        }
+      }
+      catch (e) {
+        console.log(e)
+      }
+      finally {
+        this.dialog = false
       }
     }
   },

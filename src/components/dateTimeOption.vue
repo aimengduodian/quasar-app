@@ -5,9 +5,12 @@
     v-model="dateSelect"
     :mask="dateTimeMask"
     :options="setDateRange"
-    first-day-of-week="1"
+    today-btn
     value=""
-  />
+  >
+    <q-btn label="设置时间" color="primary" v-if="isTime" flat
+           @click="firstStep = !firstStep" />
+  </q-date>
 
   <q-time
     v-else
@@ -89,7 +92,6 @@ export default {
     'dateSelect' (val) {
       if (this.isTime) {
         this.dateTimeSelect = val
-        this.firstStep = false
       }
       else {
         this.$emit('input', this.dateSelect)

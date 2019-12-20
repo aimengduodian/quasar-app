@@ -19,23 +19,21 @@
             楼栋: {{ userMsg.buildingNum || '暂无' }}
           </div>
         </div>
-        <div class="col-1">
-          <q-icon size="32px" @click="dialog = true" name="home" />
+        <div class="col-2">
+          <q-icon size="32px" @click="dialog = true"
+                  name="build" />
         </div>
       </div>
       <div class="col first-person">
         <div class="row justify-around ">
           <div class="col">
-            <div style="font-size: small"> 我买到的 0</div>
-          </div>
-          <div class="col">
             <div style="font-size: small">
-              我的辅导 0
+              学号:{{ userMsg.studNo || '暂无' }}
             </div>
           </div>
           <div class="col">
             <div style="font-size: small">
-              我的辅导 0
+              手机号:{{ userMsg.studNo || '暂无' }}
             </div>
           </div>
         </div>
@@ -50,38 +48,6 @@
                  src="statics/boy-avatar.png"
                  alt="head picture"
             >
-            <div style="font-size: small"> 我买到的 0</div>
-          </div>
-          <div class="col">
-            <img style="border-radius: 10px; width: 50%"
-                 src="statics/boy-avatar.png"
-                 alt="head picture"
-            >
-            <div style="font-size: small">
-              我的辅导
-            </div>
-          </div>
-          <div class="col">
-            <img style="border-radius: 10px; width: 50%"
-                 src="statics/boy-avatar.png"
-                 alt="head picture"
-            >
-            <div style="font-size: small">
-              我的辅导
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col person">
-        <div style="text-align: left; margin: 5px 20px; font-size: large">
-          <b>我的发布</b>
-        </div>
-        <div class="row justify-around">
-          <div class="col">
-            <img style="border-radius: 10px; width: 50%"
-                 src="statics/boy-avatar.png"
-                 alt="head picture"
-            >
             <div style="font-size: small"> 图书 0</div>
           </div>
           <div class="col">
@@ -89,22 +55,24 @@
                  src="statics/boy-avatar.png"
                  alt="head picture"
             >
-            <div style="font-size: small"> 电子 0 </div>
+            <div style="font-size: small">
+              电子 0
+            </div>
           </div>
           <div class="col">
             <img style="border-radius: 10px; width: 50%"
                  src="statics/boy-avatar.png"
                  alt="head picture"
             >
-            <div style="font-size: small"> 辅导 0 </div>
+            <div style="font-size: small">
+              其他 0
+            </div>
           </div>
-          <div class="col">
-            <img style="border-radius: 10px; width: 50%"
-                 src="statics/boy-avatar.png"
-                 alt="head picture"
-            >
-            <div style="font-size: small"> 其他 0 </div>
-          </div>
+        </div>
+      </div>
+      <div class="col person">
+        <div style="text-align: left; margin: 5px 20px; font-size: large">
+          <b>我的发布</b>
         </div>
         <br>
         <div class="row justify-around">
@@ -139,6 +107,7 @@
         </div>
       </div>
     </div>
+
     <div v-else>
       <div class="justify-around">
         <div style="text-align: center">
@@ -170,38 +139,24 @@
 
             <q-card-section>
               <q-list style="width: 100%;">
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar6.jpg">
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>手机号:</q-item-section>
-                  <q-input
-                    v-model="userMsg.phone"
-                    mask="### #### ####"
-                  />
-                </q-item>
+                <q-input label="手机号:" v-model="userMsg.phone"
+                         mask="### #### ####" type="number">
+                  <template v-slot:prepend>
+                    <q-icon name="phone" />
+                  </template>
+                </q-input>
 
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar3.jpg">
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>邮箱:</q-item-section>
-                  <q-input v-model="userMsg.email"/>
-                </q-item>
+                <q-input label="邮箱:" v-model="userMsg.email" type="email" >
+                  <template v-slot:prepend>
+                    <q-icon name="email" />
+                  </template>
+                </q-input>
 
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar>
-                      <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>寝楼:</q-item-section>
-                  <q-input v-model="userMsg.buildingNum"/>
-                </q-item>
+                <q-input label="寝室:" v-model="userMsg.buildingNum" >
+                  <template v-slot:prepend>
+                    <q-icon name="home" />
+                  </template>
+                </q-input>
               </q-list>
             </q-card-section>
 

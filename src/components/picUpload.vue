@@ -4,19 +4,11 @@
            multiple='multiple' @change='showImg' style='display:none' >
     <div class="row wrap">
       <div class="col-3" v-for="(item, index) in curls" :key="index" >
-        <q-img
-          :src="item.url"
-          :ratio="1"
-          class="imgStyle"
-          spinner-color="primary"
-        >
-          <q-btn flat round size="xs" @click="delImg(item)">
-            <q-icon color="blue" size="xs" name="delete" />
-          </q-btn>
-          <div class="absolute-bottom" @click="setImgFirstPage(item)">
-            <q-badge v-if="index === firstImg" floating color="teal">首页</q-badge>
-          </div>
-        </q-img>
+        <q-icon class="btnStyle" color="blue" size="xs" name="delete" @click="delImg(item)" />
+        <img v-gallery :src="item.url" class="imgStyle" alt="">
+        <!--<div class="absolute-bottom" @click="setImgFirstPage(item)">
+          <q-badge v-if="index === firstImg" floating color="teal">首页</q-badge>
+        </div>-->
       </div>
       <div class="col-3" v-if="curls.length < 8">
         <img class="imgStyle" src="statics/upload.png"
@@ -136,8 +128,13 @@ export default {
 <style lang="stylus">
   .imgStyle
     border 1px solid lightgray
-    object-fit: cover
+    object-fit cover
+    border-radius 10px
+    width 21vw
+    height 21vw
+
+  .btnStyle
     margin 5px
-    border-radius: 10px
-    width: 90%
+    position absolute
+
 </style>

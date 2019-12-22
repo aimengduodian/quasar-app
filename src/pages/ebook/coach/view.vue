@@ -13,7 +13,7 @@
         <div class="q-body-2">
           类型: {{ typeOptions[coach.type] }}
         </div>
-        <div v-if="flag" class="q-body-2">
+        <div v-if="this.coach.orderUser === null" class="q-body-2">
           接单码: {{ coach.checkCode }}
         </div>
       </div>

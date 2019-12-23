@@ -33,7 +33,7 @@
           </div>
           <div class="col">
             <div style="font-size: small">
-              手机号:{{ userMsg.studNo || '暂无' }}
+              手机号:{{ userMsg.phone || '暂无' }}
             </div>
           </div>
         </div>
@@ -236,8 +236,7 @@ export default {
           buildingNum: this.userMsg.buildingNum // 用户楼栋
         })
         if (userMsg.data.code === 100) {
-          this.userMsg = userMsg.data.page.userInfo
-          this.$q.notify('信息更新成功')
+          this.getUserMsg()
         }
         else {
           this.$q.notify('角色信息获取失败')

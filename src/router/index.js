@@ -17,13 +17,13 @@ export default function ({ store }) {
 
   // 前置路由守卫
   Router.beforeEach((to, from, next) => {
-    if (to.meta) {
-      switch (to.meta.hash) {
-        case '/ebook':
-          store.commit('ebook/updatePageMeta', to.meta)
-          break
-      }
-    }
+    // if (to.meta) {
+    //   switch (to.meta.hash) {
+    //     case '/ebook':
+    //       store.commit('ebook/updatePageMeta', to.meta)
+    //       break
+    //   }
+    // }
 
     next()
   })

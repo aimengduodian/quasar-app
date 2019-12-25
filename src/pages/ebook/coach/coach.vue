@@ -10,7 +10,7 @@
             <div class="text-subtitle2">类型：{{ type[item.type] }}</div>
           </q-item-section>
           <q-item-section top thumbnail class="q-ml-none">
-            <img style="object-fit: cover; border-radius: 10px; height: 100%"
+            <img style="object-fit: cover; height: 100%"
                  :src="picShow(item)" alt="" >
           </q-item-section>
         </q-item>
@@ -95,8 +95,9 @@ export default {
         const nowDate = Date.now()
         const isFresh = nowDate < item.startTime
         const isOrdered = item.orderUser !== null
-        let picPath = 'statics/waiting.png'
+        let picPath = ''
         if (this.flag === 1) {
+          picPath = 'statics/waiting.png'
           if (isOrdered && isFresh) {
             picPath = 'statics/doing.png'
           }

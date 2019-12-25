@@ -13,7 +13,7 @@
         <div class="q-body-2">
           类型: {{ typeOptions[coach.type] }}
         </div>
-        <div v-if="this.coach.orderUser === null" class="q-body-2">
+        <div v-if="orderCodeShow" class="q-body-2">
           接单码: {{ coach.checkCode }}
         </div>
       </div>
@@ -88,36 +88,46 @@
         <q-separator />
 
         <q-card-actions>
-          <q-btn flat icon="book" @click="reportEvaluationUser">举报用户</q-btn>
-          <q-btn flat color="primary" @click="cancelOrder">撤销接单</q-btn>
+          <q-btn flat icon="book" @click="reportOrderUser">举报用户</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
     <!--评价用户-->
     <q-dialog v-model="evaluationUser.isShow">
-      <q-card>
-        <img src="~assets/donuts.png" alt="" >
+      <q-card style="width: 90%">
         <q-card-section>
           <div class="row no-wrap items-center">
             <div class="col text-h6 ellipsis">{{ orderUser.nickname }}</div>
           </div>
         </q-card-section>
-
+        <q-separator/>
         <q-card-section>
           <div class="text-subtitle1"> 学号: {{ orderUser.studNo }}</div>
-          <div class="text-subtitle2 text-grey"> 邮箱: {{ orderUser.email }} </div>
-          <div class="text-subtitle2 text-grey"> 微信: {{ orderUser.weiXin }} </div>
+          <div class="text-subtitle2 text-grey"> 邮箱: {{ orderUser.email }}</div>
+          <div class="text-subtitle2 text-grey"> 微信: {{ orderUser.weiXin }}</div>
         </q-card-section>
-
+        <q-separator/>
         <q-card-section>
-          <q-rating v-model="evaluationUser.score" :max="5" size="32px" />
+          <div>
+            <span class="text-subtitle1"> 评分: </span>
+            <q-rating v-model="evaluationUser.score" :max="5" size="32px"/>
+          </div>
+          <div>
+            <span class="text-subtitle1"> 举报: </span>
+            <q-checkbox v-model="evaluationUser.reportUserFlag"/>
+          </div>
+          <q-input type="textarea"
+                   v-if="evaluationUser.reportUserFlag"
+                   float-label="在此输入建议"
+                   v-model="evaluationUser.reportOrderUserMsg"
+                   autogrow value=""/>
+          <br>
         </q-card-section>
-
         <q-separator />
-
         <q-card-actions>
-          <q-icon name="book" />
-          <q-btn flat color="primary" @click="reportUser">submit</q-btn>
+          <q-btn :disable="evaluationUser.reportUserFlag && !evaluationUser.reportOrderUserMsg"
+                 label="提交" color="primary" @click="reportOrderUser()"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -131,7 +141,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { date } from 'quasar'
+// import { date } from 'quasar'
 import common from 'src/common/common'
 import NeedVerify from 'components/needVerify'
 import Report from 'components/report'
@@ -166,7 +176,7 @@ export default {
         checkCode: null // 接单码
       },
       typeOptions: ['辅导', '讲座'],
-      // 接单人
+      // 接单人信息
       orderUser: {
         isShow: false,
         nickname: null,
@@ -175,10 +185,12 @@ export default {
         studNo: null,
         email: null
       },
-      // 接单人
+      // 评价接单人
       evaluationUser: {
         isShow: false,
-        score: 0 // 评分
+        score: 1, // 评分
+        reportUserFlag: false,
+        reportOrderUserMsg: null
       }
     }
   },
@@ -193,7 +205,85 @@ export default {
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag']),
+    orderCodeShow: function () {
+      const nowDate = Date.now()
+      return this.flag === 1 && this.coach.orderUser === null && nowDate < this.coach.startTime
+    },
+    setReceiverModel: function () {
+      return [
+        {
+          label: '接单',
+          icon: 'money',
+          id: 'gift'
+        },
+        {
+          show: !this.flag,
+          label: '举报',
+          icon: 'report',
+          id: 'report'
+        }
+      ]
+    },
+    setPublisherModel: function () {
+      const edit = {
+        show: this.flag,
+        label: '编辑',
+        icon: 'edit',
+        color: 'primary',
+        id: 'edit'
+      }
+
+      const del = {
+        show: this.flag,
+        label: '下架',
+        icon: 'delete',
+        color: 'primary',
+        id: 'delete'
+      }
+
+      const evaluate = {
+        show: this.orderUser,
+        label: '评价',
+        icon: 'person',
+        color: 'primary',
+        id: 'chargeOrderUser'
+      }
+
+      const orderUser = {
+        show: this.orderUser,
+        label: '接单人信息',
+        icon: 'person',
+        color: 'primary',
+        id: 'orderUserMsg'
+      }
+
+      const cancelOrder = {
+        show: this.orderUser,
+        label: '撤销接单',
+        icon: 'delete',
+        color: 'primary',
+        id: 'cancelOrder'
+      }
+
+      const result = []
+      if (this.coach.orderUser) {
+        const nowDate = Date.now()
+        if (nowDate < this.coach.endTime) {
+          result.push(orderUser)
+          result.push(cancelOrder)
+        }
+        else {
+          result.push(evaluate)
+        }
+      }
+      else {
+        // 没有被接单
+        result.push(edit)
+        result.push(del)
+      }
+      return result
+    }
   },
   methods: {
     ...mapActions('auth', ['updatePageMsg']),
@@ -273,106 +363,31 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
-    async reportEvaluationUser () {
-      this.$q.dialog({
-        title: '举报接单人',
-        message: '请输入举报原因!',
-        prompt: {
-          model: '',
-          type: 'text' // optional
-        },
-        cancel: true,
-        persistent: true
-      }).onOk(data => {
-        if (date === '') {
-          this.$q.notify('请填写举报原因')
-          return
+    async reportOrderUser () {
+      const props = {
+        orderUser: this.coach.orderUser,
+        id: this.coach.id,
+        score: this.evaluationUser.score,
+        flag: this.evaluationUser ? 1 : 0,
+        des: this.reportOrderUserMsg
+      }
+      this.$axios.post('/tutoring/updateScore', props).then(res => {
+        if (Number(res.data.code) === 200) {
+          this.$q.notify(res.data.msgs.msg)
         }
-        const props = {
-          orderUser: this.coach.orderUser,
-          id: this.coach.id,
-          score: 1,
-          flag: 1,
-          des: data
+        else {
+          this.$q.notify(res.data.msgs.msg)
         }
-        this.$axios.post('/tutoring/updateScore', props).then(res => {
-          if (Number(res.data.code) === 200) {
-            this.$q.notify(res.data.msgs.msg)
-          }
-          else {
-            this.$q.notify(res.data.msgs.msg)
-          }
-        })
       })
     },
     moreMsgShow () {
-      const report = [
-        {
-          label: '接单',
-          icon: 'money',
-          id: 'gift'
-        },
-        {
-          show: !this.flag,
-          label: '举报',
-          icon: 'report',
-          id: 'report'
-        }
-      ]
-
-      const seller = [
-        {
-          show: this.flag,
-          label: '编辑',
-          icon: 'edit',
-          color: 'primary',
-          id: 'edit'
-        },
-        {
-          show: this.flag,
-          label: '下架',
-          icon: 'delete',
-          color: 'primary',
-          id: 'delete'
-        }
-      ]
-      if (this.coach.orderUser) {
-        const nowDate = Date.now()
-        if (nowDate > this.coach.endTime) {
-          seller.push(
-            {
-              show: this.orderUser,
-              label: '评价',
-              icon: 'person',
-              color: 'primary',
-              id: 'chargeOrderUser'
-            }
-          )
-        }
-        else {
-          seller.push(
-            {
-              show: this.orderUser,
-              label: '接单人信息',
-              icon: 'person',
-              color: 'primary',
-              id: 'orderUserMsg'
-            }
-          )
-        }
-      }
-      const action = []
+      let action = []
       if (this.flag) {
-        seller.forEach(item => {
-          action.unshift(item)
-        })
+        action = this.setPublisherModel
       }
       else {
-        report.forEach(item => {
-          action.push(item)
-        })
+        action = this.setReceiverModel
       }
-
       this.$q.bottomSheet({
         message: '更多',
         grid: false,
@@ -396,6 +411,10 @@ export default {
             break
           case 'chargeOrderUser':
             this.evaluationUser.isShow = true
+            this.reportUserFlag = false
+            break
+          case 'cancelOrder':
+            this.cancelOrder()
             break
           default:
             break
@@ -438,7 +457,6 @@ export default {
     },
     // 举报产品
     reportOrder () {
-      this.$q.notify('点击举报')
       this.showReport = true
       this.reportMsg = {
         productId: this.coach.id, // 产品id
@@ -446,25 +464,6 @@ export default {
         // 产品类型 {1：图书，2：电子，3：其他, 4: coach}
         productType: 4
       }
-    },
-    // 举报接单人
-    async reportUser () {
-      const props = {
-        orderUser: this.coach.orderUser,
-        id: this.coach.id,
-        score: this.evaluationUser.score,
-        flag: 0,
-        des: ''
-      }
-      await this.$axios.post('/tutoring/updateScore', props).then(res => {
-        if (Number(res.data.code) === 200) {
-          this.$q.notify(res.data.msgs.msg)
-        }
-        else {
-          this.$q.notify(res.data.msgs.msg)
-        }
-        this.evaluationUser.isShow = false
-      })
     },
     formatCoachDate (val) {
       return common.toDate(val, 'yyyy-MM-dd HH:mm')

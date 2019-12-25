@@ -19,7 +19,8 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
+          <span v-else> 已经没有更多数据 </span>
         </div>
       </template>
     </q-infinite-scroll>
@@ -40,6 +41,7 @@ import config from 'src/common/config'
 export default {
   data () {
     return {
+      loadAllData: false,
       pageSize: 15,
       pageNumber: 1,
       lastPage: 0,
@@ -77,12 +79,14 @@ export default {
         })
         if (!res.data.page.pageInfo.isLastPage) {
           this.pageNumber++
+        } else {
+          this.loadAllData = true
         }
       })
     },
-    onLoad (index, done) {
+    async onLoad (index, done) {
       setTimeout(() => {
-        if (this.items) {
+        if (!this.loadAllData) {
           this.subAdvice()
           done()
         }

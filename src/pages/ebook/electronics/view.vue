@@ -1,29 +1,19 @@
 <template>
   <div>
+    <img v-gallery ref="bigImg" :src="urls[slide] || ''"
+         style="position: fixed; margin-top: 1000px" alt="" >
     <q-carousel
       swipeable
       animated
       v-model="slide"
       thumbnails
       infinite
-      :fullscreen.sync="fullscreen"
       height="180px"
     >
       <q-carousel-slide v-for="(item, index) in urls"
+                        @click="$refs.bigImg.click()"
                         :key="index" :name="index"
                         :img-src="item"/>
-      <template v-slot:control>
-        <q-carousel-control
-          position="top-right"
-          :offset="[18, 18]"
-        >
-          <q-btn
-            flat round dense color="white" text-color="primary"
-            :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="fullscreen = !fullscreen"
-          />
-        </q-carousel-control>
-      </template>
     </q-carousel>
     <div class="q-pa-md">
       <br>

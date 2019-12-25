@@ -1,11 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-infinite-scroll @load="onLoad" :offset="250">
-      <div v-for="(item, index) in items" :key="index"
-           @click="switch_go(item.id)">
-        <q-card class="my-card" style="border-radius: 10px;
-            width: 48%; float: left; margin: 1%">
-          <img style="object-fit: cover; width: 100%; height: 200px;" :src="item.otherPic" alt="">
+    <q-infinite-scroll @load="onLoad" :offset="350">
+      <div class="row items-start">
+        <q-card class="my-card" v-for="(item, index) in items"
+                :key="index" @click="switch_go(item.id)">
+          <img style="object-fit: cover; width: 100%; height: 200px;"
+               :src="item.otherPic" alt="">
           <q-item>
             <q-item-section avatar>
               <q-avatar>
@@ -23,7 +23,8 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
+          <span v-else> 已经没有更多数据 </span>
         </div>
       </template>
     </q-infinite-scroll>
@@ -44,6 +45,7 @@ import config from 'src/common/config'
 export default {
   data () {
     return {
+      loadAllData: false,
       pageSize: 15,
       pageNumber: 1,
       lastPage: 0,
@@ -81,13 +83,17 @@ export default {
         })
         if (!res.data.page.pageInfo.isLastPage) {
           this.pageNumber++
+        } else {
+          this.loadAllData = true
         }
       })
     },
     onLoad (index, done) {
       setTimeout(() => {
-        this.subAdvice()
-        done()
+        if (!this.loadAllData) {
+          this.subAdvice()
+          done()
+        }
       }, 2500)
     }
   },
@@ -97,3 +103,10 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+  .my-card
+    width: 48%
+    border-radius: 10px
+    margin: 1%
+</style>

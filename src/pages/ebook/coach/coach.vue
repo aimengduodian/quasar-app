@@ -19,7 +19,8 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
+          <span v-else> 已经没有更多数据 </span>
         </div>
       </template>
     </q-infinite-scroll>
@@ -39,6 +40,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      loadAllData: false,
       type: ['辅导', '讲座'],
       // cardColor: ['white', 'white'],
       pageSize: 5,
@@ -77,13 +79,17 @@ export default {
         })
         if (!res.data.page.pageInfo.isLastPage) {
           this.pageNumber++
+        } else {
+          this.loadAllData = true
         }
       })
     },
     onLoad (index, done) {
       setTimeout(() => {
-        this.subAdvice()
-        done()
+        if (!this.loadAllData) {
+          this.subAdvice()
+          done()
+        }
       }, 2500)
     }
   },

@@ -10,7 +10,8 @@
             <div class="text-subtitle2">类型：{{ type[item.type] }}</div>
           </q-item-section>
           <q-item-section top thumbnail class="q-ml-none">
-            <img style="object-fit: cover; border-radius: 10px" src="statics/bg.jpg" alt="" >
+            <img style="object-fit: cover; border-radius: 10px; height: 100%"
+                 :src="picShow(item)" alt="" >
           </q-item-section>
         </q-item>
         <hr>
@@ -88,7 +89,27 @@ export default {
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag']),
+    picShow: function () {
+      return function (item) {
+        const nowDate = Date.now()
+        const isFresh = nowDate < item.startTime
+        const isOrdered = item.orderUser !== null
+        let picPath = 'statics/waiting.png'
+        if (this.flag === 1) {
+          if (isOrdered && isFresh) {
+            picPath = 'statics/doing.png'
+          }
+          if (isOrdered && !isFresh) {
+            picPath = 'statics/slice.png'
+          }
+          if (!isOrdered && !isFresh) {
+            picPath = 'statics/overdue.png'
+          }
+        }
+        return picPath
+      }
+    }
   }
 }
 </script>

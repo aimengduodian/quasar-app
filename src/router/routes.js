@@ -1,19 +1,10 @@
 // 定义路由
 const routes = [
-  {
-    path: '/',
-    component: () => import('pages/landing')
-  },
-  {
-    path: '/about',
-    component: () => import('layouts/ebookweb'),
-    children: [
-      {path: 'index', name: 'about', component: () => import('pages/about/index')},
-      {path: 'version', name: 'version', component: () => import('pages/about/version')},
-      {path: 'advice', name: 'advice', component: () => import('pages/about/advice')},
-      {path: 'verify', name: 'verify', component: () => import('components/stu')}
-    ]
-  },
+  { path: '/', component: () => import('pages/landing') },
+  { path: '/about', name: 'about', component: () => import('pages/about/index') },
+  { path: '/version', name: 'version', component: () => import('pages/about/version') },
+  { path: '/advice', name: 'advice', component: () => import('pages/about/advice') },
+  { path: '/verify', name: 'verify', component: () => import('components/stu') },
   {
     path: '/market',
     component: () => import('layouts/marketLayout'),

@@ -55,7 +55,7 @@ export default {
   },
   data () {
     return {
-      version: '0.1.0' // 软件版本
+      version: '0.2.0' // 软件版本
     }
   },
   methods: {

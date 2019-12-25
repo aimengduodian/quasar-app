@@ -8,7 +8,6 @@ export default ({ app, router, Vue }) => {
   // ...然后，启动我们的Quasar网站/应用程序：
 
   /* eslint-disable-next-line no-new */
-  new Vue(app)
 
   Vue.use(gallery, {
     swipeThreshold: 150, // 滑动阈值，默认值 100

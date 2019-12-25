@@ -28,8 +28,3 @@
     />
   </div>
 </template>
-
-<style lang="stylus">
-q-btn
-  margin 20px
-</style>

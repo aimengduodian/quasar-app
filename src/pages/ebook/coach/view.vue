@@ -141,7 +141,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-// import { date } from 'quasar'
 import common from 'src/common/common'
 import NeedVerify from 'components/needVerify'
 import Report from 'components/report'
@@ -195,6 +194,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.coach.id = this.$route.query.id
     if ((this.coach.id).length > 1) {
       this.initData()
@@ -286,7 +286,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['updatePageMsg']),
+    ...mapActions('auth', ['updatePageMsg', 'updateLayoutMsg']),
     initData () {
       this.$axios.get('/tutoring/getById/' + this.coach.id).then(res => {
         this.coach = res.data.page.info

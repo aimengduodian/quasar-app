@@ -205,10 +205,11 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: true})
     this.getUserMsg()
   },
   methods: {
-    ...mapActions('auth', ['updateUserCache']),
+    ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),
     async getUserMsg () {
       try {
         // 获取用户的信息

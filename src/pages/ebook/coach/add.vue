@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import DateTime from 'components/dateTimeOption'
@@ -122,6 +122,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.coach.id = this.$route.query.id
     if (this.coach.id) {
       this.updateFlag = true
@@ -141,6 +142,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     setCoachStartTime (val) {
       this.coach.startTime = val
       this.$refs.qStartTimeProxy.hide()

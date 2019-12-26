@@ -119,6 +119,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.electronics.id = this.$route.query.id
     if ((this.electronics.id).length > 1) {
       this.initData()
@@ -133,7 +134,7 @@ export default {
     ...mapGetters('staticData', ['getElectronicsTypeNameByNumber'])
   },
   methods: {
-    ...mapActions('auth', ['updatePageMsg']),
+    ...mapActions('auth', ['updatePageMsg', 'updateLayoutMsg']),
     initData () {
       this.$axios.get('/electronics/getById/' + this.electronics.id).then(res => {
         this.electronics = res.data.page.info

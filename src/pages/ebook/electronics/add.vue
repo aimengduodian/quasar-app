@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
@@ -110,6 +110,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.electronics.id = this.$route.query.id
     if (this.electronics.id) {
       this.updateFlag = true
@@ -122,6 +123,7 @@ export default {
     ...mapGetters('staticData', ['getElectronicsTypeNameArr', 'getElectronicsTypeNumberByName'])
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     setElectronicsBuyDate (val) {
       this.electronics.buyDate = val
       this.$refs.qDateProxy.hide()

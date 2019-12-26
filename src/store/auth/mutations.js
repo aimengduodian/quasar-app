@@ -25,3 +25,8 @@ export const userDetailCacheSet = (state, rPayload) => {
   // change
   state.userDetail = userDetail
 }
+
+// 设置页眉页脚是否显示
+export const setLayoutMsg = (state, val) => {
+  state.layout = val
+}

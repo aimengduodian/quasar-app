@@ -1,7 +1,8 @@
 <template>
   <q-layout view="lHh lpr lFf">
     <!--header-->
-    <q-header bordered class="bg-white text-primary">
+    <q-header bordered v-model="layout.header"
+              class="bg-white text-primary">
       <q-toolbar>
         <q-toolbar-title class="text-center">
           <q-avatar>
@@ -12,7 +13,8 @@
       </q-toolbar>
     </q-header>
     <!--footer-->
-    <q-footer bordered class="bg-white text-primary">
+    <q-footer bordered v-model="layout.footer"
+              class="bg-white text-primary">
       <footer-tabs/>
     </q-footer>
 
@@ -49,37 +51,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { uid } from 'quasar'
+import { mapState, mapActions } from 'vuex'
 import FooterTabs from 'components/market-tabs'
-import countries from 'assets/autocomplete.json'
-
-const icons = ['alarm', 'email', 'search']
-
-function getRandomIcon () {
-  return icons[Math.floor(Math.random() * icons.length)]
-}
-function getRandomStamp () {
-  if (Math.floor(Math.random() * 50) % 3 === 0) {
-    return `${Math.floor(Math.random() * 10)} min`
-  }
-}
-function getRandomSecondLabel () {
-  if (Math.floor(Math.random() * 50) % 4 === 0) {
-    return `UID: ${uid().substring(0, 8)}`
-  }
-}
-function parseCountries () {
-  return countries.map(country => {
-    return {
-      label: country,
-      sublabel: getRandomSecondLabel(),
-      icon: getRandomIcon(),
-      stamp: getRandomStamp(),
-      value: country
-    }
-  })
-}
 
 export default {
   components: {
@@ -88,9 +61,11 @@ export default {
   data () {
     return {
       terms: '',
-      layoutModal: false,
-      countries: parseCountries()
+      layoutModal: false
     }
+  },
+  computed: {
+    ...mapState('auth', ['layout'])
   },
   methods: {
     ...mapActions('staticData', ['updateStaticCache']),

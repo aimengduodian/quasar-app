@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 import config from 'src/common/config'
 
@@ -50,9 +50,11 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: true, footer: true})
     this.subAdvice()
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     addElectronics () {
       // goto 发布界面
       this.$router.push({ name: 'electronics_add' })

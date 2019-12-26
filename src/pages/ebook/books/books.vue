@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import config from 'src/common/config'
 
 export default {
@@ -49,9 +49,11 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: true, footer: true})
     this.subAdvice()
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     addBooks () {
       // goto 发布界面
       this.$router.push({ name: 'books_add' })

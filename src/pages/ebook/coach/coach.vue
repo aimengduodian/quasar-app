@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -50,9 +50,11 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: true, footer: true})
     this.subAdvice()
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     addCoach () {
       // goto 发布界面
       this.$router.push({ name: 'coach_add' })

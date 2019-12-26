@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
@@ -98,6 +98,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.others.id = this.$route.query.id
     if (this.others.id) {
       this.updateFlag = true
@@ -109,6 +110,7 @@ export default {
     ...mapGetters('auth', ['getPageMsg'])
   },
   methods: {
+    ...mapActions('auth', ['updateLayoutMsg']),
     setOthersPubDate (val) {
       this.others.buyDate = val
       this.$refs.qDateProxy.hide()

@@ -26,3 +26,8 @@ export const updateUserCache = async ({commit}, rPayload) => {
     userDetail
   })
 }
+
+// 更新布局是否显示页眉页脚
+export const updateLayoutMsg = async ({commit}, val) => {
+  commit('setLayoutMsg', val)
+}

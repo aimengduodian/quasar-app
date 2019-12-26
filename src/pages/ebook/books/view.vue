@@ -118,6 +118,7 @@ export default {
     }
   },
   created () {
+    this.updateLayoutMsg({header: false, footer: false})
     this.book.id = this.$route.query.id
     if ((this.book.id).length > 1) {
       this.initData()
@@ -132,7 +133,7 @@ export default {
     ...mapGetters('staticData', ['getBookTypeNameByNumber'])
   },
   methods: {
-    ...mapActions('auth', ['updatePageMsg']),
+    ...mapActions('auth', ['updatePageMsg', 'updateLayoutMsg']),
     initData () {
       this.$axios.get('/book/getById/' + this.book.id).then(res => {
         this.book = res.data.page.info

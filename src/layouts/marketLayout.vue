@@ -1,49 +1,45 @@
 <template>
   <q-layout view="lHh lpr lFf">
     <!--header-->
-    <q-header bordered v-model="layout.header"
-              class="bg-white text-primary">
-      <q-toolbar>
-        <q-toolbar-title class="text-center">
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" alt="">
-          </q-avatar>
-          西林易市
-        </q-toolbar-title>
+    <q-header v-model="layout.header" class="">
+      <q-toolbar class="text-white">
+        <q-btn round dense flat icon="menu"
+               @click="visible = !visible" class="q-mr-xs" />
+        <q-space />
+        <q-input dark borderless
+          @click.native="show()"
+          v-model="terms"
+          class="full-width q-ml-md"
+          placeholder="点击搜索"
+        >
+          <template v-slot:append>
+            <q-icon v-if="terms === ''" name="search" />
+            <q-icon v-else name="clear" class="cursor-pointer"
+                    @click="terms = ''" />
+          </template>
+        </q-input>
       </q-toolbar>
+      <div class="row">
+        <div class="col">1</div>
+        <q-space />
+        <div class="col">1</div>
+        <q-space />
+        <div class="col">1</div>
+      </div>
+      <q-slide-transition>
+        <div v-show="visible">
+          <img
+            class="responsive"
+            src="https://cdn.quasar.dev/img/quasar.jpg"
+          >
+        </div>
+      </q-slide-transition>
     </q-header>
     <!--footer-->
     <q-footer bordered v-model="layout.footer"
               class="bg-white text-primary">
       <footer-tabs/>
     </q-footer>
-
-    <!--modal-->
-    <!-- <q-layout v-model="layoutModal">
-      <q-toolbar
-        slot="header">
-        <q-btn
-          flat
-          round
-          @click="layoutModal = false"
-          icon="reply"
-        />
-        <q-toolbar-title>
-          <q-search inverted color="white"
-                    @click.native="show()"
-                    v-model="terms"
-                    placeholder="点击搜索">
-            <q-autocomplete
-              @search="search"
-              @selected="selected"
-            />
-          </q-search>
-        </q-toolbar-title>
-      </q-toolbar>
-      <div class="layout-padding">
-      </div>
-    </q-layout>-->
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -61,7 +57,8 @@ export default {
   data () {
     return {
       terms: '',
-      layoutModal: false
+      layoutModal: false,
+      visible: false
     }
   },
   computed: {

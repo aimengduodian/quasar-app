@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="power">
-      <div class="q-pa-md row justify-around head-div">
+      <div class="bg-primary q-pa-md row justify-around head-div">
         <div class="col-3" style="margin-left: 20px">
           <img style="border-radius: 50%; width: 80%"
                src="statics/boy-avatar.png"
@@ -259,9 +259,8 @@ export default {
 
 <style lang="stylus">
   .head-div
-    padding 20px 0;
-    background-color #1381de;
-    border-radius 0 0 20px 20px;
+    padding 20px 0
+    border-radius 0 0 20px 20px
 
   .first-person
     background-color #fdfff8

@@ -8,7 +8,7 @@
         <img alt="pic" src="~assets/quasar-play-logo-full.svg">
         <br>
         <q-btn
-          color="secondary"
+          color="primary"
           :to="{name: 'books'}"
           class="full-width"
           target="_blank"
@@ -19,7 +19,7 @@
         />
         <br>
         <q-btn
-          color="secondary"
+          color="primary"
           :to="{name: 'books'}"
           class="full-width"
           target="_blank"
@@ -30,7 +30,7 @@
         />
         <br>
         <q-btn
-          color="secondary"
+          color="primary"
           :to="{name: 'about'}"
           class="full-width"
           target="_blank"

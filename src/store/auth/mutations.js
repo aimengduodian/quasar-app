@@ -30,3 +30,8 @@ export const userDetailCacheSet = (state, rPayload) => {
 export const setLayoutMsg = (state, val) => {
   state.layout = val
 }
+
+// 设置页眉页脚是否显示
+export const setSearchParams = (state, val) => {
+  state.searchParams = val
+}

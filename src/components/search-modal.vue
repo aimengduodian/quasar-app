@@ -1,68 +1,54 @@
 <template>
   <div>
     <q-toolbar class="text-white">
-      <q-btn round dense flat icon="menu"
-             @click="visible = !visible" class="q-mr-xs" />
-      <q-input rounded borderless v-model="terms"
-               class="full-width q-ml-md"
-               placeholder="点击搜索"
-      >
+      <q-btn round dense flat icon="menu" @click="visible = !visible" class="q-mr-xs" />
+      <q-input rounded borderless v-model="searchName" class="full-width q-ml-md" placeholder="点击搜索">
         <template v-slot:append>
-          <q-icon v-if="terms === ''" name="search" />
-          <q-icon v-else name="clear" class="cursor-pointer"
-                  @click="terms = ''" />
+          <q-icon @click="setParams" name="search" />
         </template>
       </q-input>
     </q-toolbar>
-    <q-separator />
-    <div class="justify-center row" style="text-align: center">
-      <div class="col">
-        <q-btn flat icon="group" label="发布日期" />
-      </div>
-      <div class="col">
-        <q-btn flat icon="money" label="价格" />
-      </div>
-    </div>
     <q-slide-transition>
       <div v-show="visible" class="bg-white">
         <div style="padding: 10px 20px">
-          <q-select borderless v-model="bookType" value=""
-                    :options="getBookTypeNameArr" prefix="分类:">
-          </q-select>
-          <q-separator />
-          <div class="row">
-            <q-input rounded borderless v-model="terms"
-                     class="full-width col" type="number"
-                     placeholder="最低" prefix="价格:" suffix="￥  —">
-            </q-input>
-            <q-input rounded borderless v-model="terms"
-                     class="full-width col" type="number"
-                     placeholder="最高" suffix="￥">
-            </q-input>
+          <div v-if="typeShowFlag">
+            <q-select borderless v-model="typeName" value=""
+                      :options="typeOptions" prefix="分类:">
+            </q-select>
+            <q-separator />
           </div>
-          <q-separator />
-          <div class="row">
-            <q-input v-model="pubDate" value="" borderless
-                     class="full-width col"
-                     readonly prefix="日期:" suffix="—">
-              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <date-time :max-date="maxDate" :is-time=false @input="setBookPubDate"/>
-              </q-popup-proxy>
-            </q-input>
-
-            <q-input v-model="pubDate" value="" borderless
-                     class="full-width col q-ml-md"
-                     readonly>
-              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <date-time :max-date="maxDate" :is-time=false @input="setBookPubDate"/>
-              </q-popup-proxy>
-            </q-input>
+          <div v-if="InvoiceShowFlag">
+            <q-select borderless v-model="optionsValue" value=""
+                      :options="options" prefix="是否有发票:">
+            </q-select>
+            <q-separator />
           </div>
+          <q-input rounded borderless v-model="startPrice"
+                   class="full-width col" type="number"
+                   placeholder="最低" prefix="最低价格:" suffix="￥">
+          </q-input>
+          <q-input rounded borderless v-model="endPrice"
+                   class="full-width col" type="number"
+                   placeholder="最高" prefix="最高价格:" suffix="￥">
+          </q-input>
+          <q-separator />
+          <q-input v-model="startTime" value="" borderless class="full-width col"
+                   readonly prefix="开始日期:">
+            <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+              <date-time :max-date="maxDate" :is-time="timeFlag" @input="setStartTime"/>
+            </q-popup-proxy>
+          </q-input>
+          <q-input v-model="endTime" value="" borderless class="full-width col q-ml-md"
+                   readonly prefix="结束日期:">
+            <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+              <date-time :min-date="minDate" :is-time="timeFlag" @input="setEndTime"/>
+            </q-popup-proxy>
+          </q-input>
         </div>
 
         <div class="row">
-          <q-btn flat class="col bg-grey-2 text-black">重置</q-btn>
-          <q-btn flat class="col bg-primary" >搜索</q-btn>
+          <q-btn flat class="col bg-grey-2 text-black" @click="reset">重置</q-btn>
+          <q-btn flat class="col bg-primary" @click="setParams" >搜索</q-btn>
         </div>
       </div>
     </q-slide-transition>
@@ -81,35 +67,119 @@ export default {
   },
   data() {
     return {
-      terms: '',
+      searchName: '',
+      typeName: '',
+      typeOptions: [],
+
+      startPrice: '',
+      endPrice: '',
+
+      startTime: '',
+      endTime: '',
+
+      options: [],
+      optionsValue: '',
+
+      maxDate: '',
+      minDate: '',
+
+      typeShowFlag: false,
+      InvoiceShowFlag: false,
+
       visible: false,
-      bookType: null,
+      timeFlag: false
     }
   },
   computed: {
-    ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName','getElectronicsTypeNameArr', 'getElectronicsTypeNumberByName'])
+    ...mapGetters('staticData', [
+      'getBookTypeNameArr',
+      'getBookTypeNumberByName',
+      'getElectronicsTypeNameArr',
+      'getElectronicsTypeNumberByName'
+    ])
   },
   methods: {
-    async search (terms, done) {
-      const arr = []
-      const msg = {
-        bookName: terms,
-        pageNumber: 0,
-        pageSize: 10
-      }
-      // ajax
-      await this.$axios.post('/book/books', msg).then((res) => {
-        res.data.page.pageInfo.list.forEach(item => {
-          let aItem = {}
-          aItem.value = item.id
-          aItem.label = item.bookName
-          aItem.sublabel = item.bookPub
-          arr.push(aItem)
-        })
-      })
-      // done(filter(terms, {field: 'value', list: parseCountries()}))
-      done(arr)
+    ...mapActions('auth', ['updateSearchParams']),
+    reset () {
+      this.searchName = ''
+      this.typeName = ''
+      this.startPrice = ''
+      this.endPrice = ''
+      this.startTime = ''
+      this.endTime = ''
+      this.optionsValue = ''
     },
+    setParams() {
+      const params = {
+        startPrice: this.startPrice,
+        endPrice: this.endPrice,
+        startTime: this.startTime,
+        endTime: this.endTime
+      }
+      switch (this.$route.name) {
+        case 'books':
+          params.bookName = this.searchName
+          if(this.typeName !== ''){
+            params.bookType = this.getBookTypeNumberByName(this.typeName)
+          }
+          break
+        case 'coach':
+          params.name = this.searchName
+          if(this.typeName !== '') {
+            params.type = this.typeOptions.indexOf(this.typeName)
+          }
+          break
+        case 'electronics':
+          params.electronicsName = this.searchName
+          if(this.typeName !== '') {
+            params.electronicsType = this.getElectronicsTypeNumberByName(this.typeName)
+          }
+          params.hasInvoice = this.options.indexOf(this.optionsValue) === -1 ? '' : this.options.indexOf(this.optionsValue)
+          break
+        case 'others':
+          params.otherName = this.searchName
+          params.hasInvoice = this.options.indexOf(this.optionsValue) === -1 ? '' : this.options.indexOf(this.optionsValue)
+          break
+      }
+      this.visible = false
+      this.updateSearchParams(params)
+    },
+    setStartTime (val) {
+      this.startTime = val
+      this.$refs.qDateProxy.hide()
+    },
+    setEndTime (val) {
+      this.endTime = val
+      this.$refs.qDateProxy.hide()
+    }
+  },
+  watch: {
+    '$route.name' (val) {
+      this.visible = false
+      this.reset()
+      if (val === 'books') {
+        this.typeShowFlag = true
+        this.InvoiceShowFlag = false
+        this.typeOptions = this.getBookTypeNameArr
+      }
+      if (val === 'electronics') {
+        this.typeShowFlag = true
+        this.InvoiceShowFlag = true
+        this.typeOptions = this.getElectronicsTypeNameArr
+        this.options = ['没有', '有'] // 是否有发票下拉选择框
+      }
+      if (val === 'others') {
+        this.typeShowFlag = false
+        this.InvoiceShowFlag = true
+        this.options = ['没有', '有'] // 是否有发票下拉选择框
+      }
+      if (val === 'coach') {
+        this.typeShowFlag = true
+        this.InvoiceShowFlag = false
+        this.typeOptions = ['辅导', '讲座']
+      }
+      console.log(val)
+    }
   }
 }
 </script>

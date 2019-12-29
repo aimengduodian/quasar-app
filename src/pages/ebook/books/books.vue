@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-infinite-scroll @load="onLoad" :offset="250">
+    <q-infinite-scroll @load="onLoad" :offset="250" >
       <div v-for="(item, index) in items" :key="index"
            @click="switch_go(item.id)">
         <q-item>
@@ -42,10 +42,11 @@ export default {
   data () {
     return {
       loadAllData: false,
-      pageSize: 15,
-      pageNumber: 1,
-      lastPage: 0,
-      items: []
+      items: [],
+      params: {
+        pageSize: 15,
+        pageNumber: 1
+      }
     }
   },
   created () {
@@ -70,17 +71,13 @@ export default {
       return strs[0]
     },
     async subAdvice () {
-      await this.$axios.post('/book/books?flag=' + this.flag, {
-        pageSize: this.pageSize,
-        pageNumber: this.pageNumber
-      }).then((res) => {
-        this.lastPage = res.data.page.pageInfo.lastPage
+      await this.$axios.post('/book/books?flag=' + this.flag, this.params).then((res) => {
         res.data.page.pageInfo.list.forEach(item => {
           item.bookPic = config.picUrl + this.splitMth(item.bookPic)
           this.items.push(item)
         })
         if (!res.data.page.pageInfo.isLastPage) {
-          this.pageNumber++
+          this.params.pageNumber++
         } else {
           this.loadAllData = true
         }
@@ -96,8 +93,22 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['flag']),
+    ...mapState('auth', ['flag', 'searchParams']),
     ...mapGetters('auth', ['power', 'powerFlag'])
+  },
+  watch: {
+    searchParams(val) {
+      this.loadAllData = false
+      this.items = []
+      this.params.pageNumber = 1
+      this.params.pageSize = 15
+
+      const data = JSON.parse(JSON.stringify(val))
+      Object.keys(data).forEach(key => {
+        this.params[key] = data[key]
+      })
+      this.subAdvice()
+    }
   }
 }
 </script>

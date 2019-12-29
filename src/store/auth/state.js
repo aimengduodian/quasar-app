@@ -12,5 +12,8 @@ export default {
   layout: {
     header: true,
     footer: true
-  }
+  },
+
+  //search params
+  searchParams: {}
 }

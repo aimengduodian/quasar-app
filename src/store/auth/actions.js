@@ -31,3 +31,8 @@ export const updateUserCache = async ({commit}, rPayload) => {
 export const updateLayoutMsg = async ({commit}, val) => {
   commit('setLayoutMsg', val)
 }
+
+//
+export const updateSearchParams = async ({commit}, val) => {
+  commit('setSearchParams', val)
+}

@@ -161,28 +161,31 @@ export default {
     }
   },
   watch: {
-    '$route.name' (val) {
+    '$route.name' (newVal, oldVal) {
+      if (newVal.indexOf(oldVal) === -1 && oldVal.indexOf(newVal) === -1) {
+        this.reset()
+      }
       this.visible = false
-      if (val === 'books') {
+      if (newVal === 'books') {
         this.typeShowFlag = true
         this.InvoiceShowFlag = false
         this.dateShowFlag = false
         this.typeOptions = this.getBookTypeNameArr
       }
-      if (val === 'electronics') {
+      if (newVal === 'electronics') {
         this.typeShowFlag = true
         this.InvoiceShowFlag = true
         this.dateShowFlag = false
         this.typeOptions = this.getElectronicsTypeNameArr
         this.options = ['没有', '有'] // 是否有发票下拉选择框
       }
-      if (val === 'others') {
+      if (newVal === 'others') {
         this.typeShowFlag = false
         this.InvoiceShowFlag = true
         this.dateShowFlag = false
         this.options = ['没有', '有'] // 是否有发票下拉选择框
       }
-      if (val === 'coach') {
+      if (newVal === 'coach') {
         this.typeShowFlag = true
         this.InvoiceShowFlag = false
         this.dateShowFlag = true

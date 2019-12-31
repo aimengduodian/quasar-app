@@ -19,7 +19,7 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
         </div>
       </template>
       <span v-if="loadAllData" class="row justify-center q-my-md" > 已经没有更多数据 </span>
@@ -53,6 +53,7 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: true, footer: true})
+    this.params = this.getSearchParamsMsg
     this.subAdvice()
   },
   methods: {
@@ -82,7 +83,8 @@ export default {
           this.params.pageNumber++
         } else {
           this.loadAllData = true
-          this.scrollOffset = - this.scrollOffset
+          if (this.scrollOffset > 0)
+            this.scrollOffset = - this.scrollOffset
         }
       })
     },
@@ -99,7 +101,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['flag', 'searchParams']),
+    ...mapState('auth', ['flag']),
     ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
   },
   watch: {
@@ -107,7 +109,8 @@ export default {
       this.loadAllData = false
       this.items = []
       this.params = []
-      this.scrollOffset = 250
+      if (this.scrollOffset < 0)
+        this.scrollOffset = - this.scrollOffset
       const data = JSON.parse(JSON.stringify(val))
       Object.keys(data).forEach(key => {
         this.params[key] = data[key]

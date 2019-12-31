@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-infinite-scroll @load="onLoad" :offset="350">
+    <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
       <div class="row items-start">
         <q-card class="my-card" v-for="(item, index) in items"
                 :key="index" @click="switch_go(item.id)">
@@ -24,9 +24,9 @@
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
           <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
-          <span v-else> 已经没有更多数据 </span>
         </div>
       </template>
+      <span v-if="loadAllData" class="row justify-center q-my-md" > 已经没有更多数据 </span>
     </q-infinite-scroll>
     <!--回到顶部-->
     <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
@@ -46,14 +46,17 @@ export default {
   data () {
     return {
       loadAllData: false,
-      pageSize: 15,
-      pageNumber: 1,
-      lastPage: 0,
-      items: []
+      scrollOffset: 250,
+      items: [],
+      params: {
+        pageSize: 15,
+        pageNumber: 1
+      }
     }
   },
   created () {
     this.updateLayoutMsg({header: true, footer: true})
+    this.params = this.getSearchParamsMsg
     this.subAdvice()
   },
   methods: {
@@ -74,10 +77,7 @@ export default {
       return strs[0]
     },
     async subAdvice () {
-      await this.$axios.post('/other/others', {
-        pageSize: this.pageSize,
-        pageNumber: this.pageNumber
-      }).then((res) => {
+      await this.$axios.post('/other/others', this.params).then((res) => {
         this.lastPage = res.data.page.pageInfo.lastPage
         res.data.page.pageInfo.list.forEach(item => {
           item.otherPic = config.picUrl + this.splitMth(item.otherPic)
@@ -87,6 +87,8 @@ export default {
           this.pageNumber++
         } else {
           this.loadAllData = true
+          if (this.scrollOffset > 0)
+            this.scrollOffset = - this.scrollOffset
         }
       })
     },
@@ -94,14 +96,28 @@ export default {
       setTimeout(() => {
         if (!this.loadAllData) {
           this.subAdvice()
-          done()
         }
+        done()
       }, 2500)
     }
   },
   computed: {
     ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
+  },
+  watch: {
+    getSearchParamsMsg(val) {
+      this.loadAllData = false
+      this.items = []
+      this.params = []
+      if (this.scrollOffset < 0)
+        this.scrollOffset = - this.scrollOffset
+      const data = JSON.parse(JSON.stringify(val))
+      Object.keys(data).forEach(key => {
+        this.params[key] = data[key]
+      })
+      this.subAdvice()
+    }
   }
 }
 </script>

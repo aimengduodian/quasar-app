@@ -1,3 +1,4 @@
+import config from 'src/common/config'
 
 export const powerFlag = state => {
   return !(parseInt(state.user.flag) === 0)
@@ -18,4 +19,13 @@ export const getPageMsg = state => {
 // 获取用户详细信息
 export const getUserDetailMsg = (state) => {
   return sessionStorage.getItem('userDetail')
+}
+
+// 获取用户详细信息
+export const getSearchParamsMsg = (state) => {
+  const searchParams = JSON.parse(JSON.stringify(state.searchParams))
+  searchParams.pageNumber = 1
+  searchParams.pageSize = config.pageSize
+
+  return searchParams
 }

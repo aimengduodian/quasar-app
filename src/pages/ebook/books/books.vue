@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-infinite-scroll @load="onLoad" :offset="250" >
+    <q-infinite-scroll @load="onLoad" :offset="scrollOffset" >
       <div v-for="(item, index) in items" :key="index"
            @click="switch_go(item.id)">
         <q-item>
@@ -11,7 +11,7 @@
           <q-item-section>
             <q-item-label>{{ item.bookName }}</q-item-label>
             <q-item-label caption>出版社:{{ item.bookPub }}</q-item-label>
-            <q-item-label caption>价格：￥{{ item.bookPrice }}</q-item-label>
+            <q-item-label caption>发布日期：{{ formatBookDate(item.createTime) }}</q-item-label>
           </q-item-section>
         </q-item>
         <hr>
@@ -19,10 +19,10 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
-          <span v-else> 已经没有更多数据 </span>
+          <q-spinner-dots color="primary" size="40px" />
         </div>
       </template>
+      <span v-if="loadAllData" class="row justify-center q-my-md" > 已经没有更多数据 </span>
     </q-infinite-scroll>
     <!--回到顶部-->
     <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
@@ -37,11 +37,13 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import config from 'src/common/config'
+import { date } from 'quasar'
 
 export default {
   data () {
     return {
       loadAllData: false,
+      scrollOffset: 250,
       items: [],
       params: {
         pageSize: 15,
@@ -80,6 +82,7 @@ export default {
           this.params.pageNumber++
         } else {
           this.loadAllData = true
+          this.scrollOffset = - this.scrollOffset
         }
       })
     },
@@ -87,22 +90,24 @@ export default {
       setTimeout(() => {
         if (!this.loadAllData) {
           this.subAdvice()
-          done()
         }
+        done()
       }, 2500)
+    },
+    formatBookDate (val) {
+      return date.formatDate(val, 'YYYY-MM-DD')
     }
   },
   computed: {
     ...mapState('auth', ['flag', 'searchParams']),
-    ...mapGetters('auth', ['power', 'powerFlag'])
+    ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
   },
   watch: {
-    searchParams(val) {
+    getSearchParamsMsg(val) {
       this.loadAllData = false
       this.items = []
-      this.params.pageNumber = 1
-      this.params.pageSize = 15
-
+      this.params = []
+      this.scrollOffset = 250
       const data = JSON.parse(JSON.stringify(val))
       Object.keys(data).forEach(key => {
         this.params[key] = data[key]

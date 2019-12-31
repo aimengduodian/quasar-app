@@ -105,7 +105,6 @@ export default {
     async initData () {
       await this.updateStaticCache()
       this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
-      console.log(this.getBookTypeNameArr)
       this.typeOptions = this.getBookTypeNameArr
     },
     reset () {

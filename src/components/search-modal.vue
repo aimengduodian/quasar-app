@@ -85,7 +85,7 @@ export default {
       dateShowFlag: false, // 日期是否显示
 
       visible: false,
-      timeFlag: false
+      timeFlag: true
     }
   },
   computed: {
@@ -115,6 +115,8 @@ export default {
       this.startTime = ''
       this.endTime = ''
       this.optionsValue = ''
+
+      this.setParams()
     },
     setParams () {
       const params = {

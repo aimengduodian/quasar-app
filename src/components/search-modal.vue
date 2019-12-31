@@ -32,13 +32,13 @@
             <q-input v-model="startTime" value="" borderless class="full-width col q-ml-md"
                      readonly prefix="开始日期:">
               <q-popup-proxy ref="qDateStartProxy" transition-show="scale" transition-hide="scale">
-                <date-time :max-date="maxDate" :is-time="timeFlag" @input="setStartTime"/>
+                <date-time :max-date="maxDate" :min-date="minDate" :is-time="timeFlag" @input="setStartTime"/>
               </q-popup-proxy>
             </q-input>
             <q-input v-model="endTime" value="" borderless class="full-width col q-ml-md"
                      readonly prefix="结束日期:">
               <q-popup-proxy ref="qDateEndProxy" transition-show="scale" transition-hide="scale">
-                <date-time :max-date="maxDate" :is-time="timeFlag" @input="setEndTime"/>
+                <date-time :max-date="maxDate" :min-date="minDate" :is-time="timeFlag" @input="setEndTime"/>
               </q-popup-proxy>
             </q-input>
           </div>
@@ -104,7 +104,6 @@ export default {
     ...mapActions('auth', ['updateSearchParams']),
     async initData () {
       await this.updateStaticCache()
-      this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
       this.typeOptions = this.getBookTypeNameArr
     },
     reset () {
@@ -119,6 +118,20 @@ export default {
       this.setParams()
     },
     setParams () {
+      // 设置价格
+      if (this.startPrice !== '' && this.endPrice !== '') {
+        if (this.startPrice > this.endPrice) {
+          [this.startPrice, this.endPrice] = [this.endPrice, this.startPrice]
+        }
+      }
+      // 设置日期
+      if (this.startTime !== '' && this.endTime !== '') {
+        let startT = new Date(this.startTime).getTime();
+        let startE = new Date(this.endTime).getTime();
+        if (startT > startE) {
+          [this.startTime, this.endTime] = [this.endTime, this.startTime]
+        }
+      }
       const params = {
         startPrice: this.startPrice,
         endPrice: this.endPrice,
@@ -172,12 +185,14 @@ export default {
         this.typeShowFlag = true
         this.InvoiceShowFlag = false
         this.dateShowFlag = false
+        this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
         this.typeOptions = this.getBookTypeNameArr
       }
       if (newVal === 'electronics') {
         this.typeShowFlag = true
         this.InvoiceShowFlag = true
         this.dateShowFlag = false
+        this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
         this.typeOptions = this.getElectronicsTypeNameArr
         this.options = ['没有', '有'] // 是否有发票下拉选择框
       }
@@ -185,12 +200,15 @@ export default {
         this.typeShowFlag = false
         this.InvoiceShowFlag = true
         this.dateShowFlag = false
+        this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
         this.options = ['没有', '有'] // 是否有发票下拉选择框
       }
       if (newVal === 'coach') {
         this.typeShowFlag = true
         this.InvoiceShowFlag = false
         this.dateShowFlag = true
+        this.maxDate = null
+        this.minDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
         this.typeOptions = ['辅导', '讲座']
       }
     }

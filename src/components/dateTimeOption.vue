@@ -75,7 +75,7 @@ export default {
         else if (this.minDate) {
           return date >= this.minDate
         }
-        else {
+        else if (this.maxDate) {
           return date <= this.maxDate
         }
       }

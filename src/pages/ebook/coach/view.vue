@@ -368,8 +368,8 @@ export default {
         orderUser: this.coach.orderUser,
         id: this.coach.id,
         score: this.evaluationUser.score,
-        flag: this.evaluationUser ? 1 : 0,
-        des: this.reportOrderUserMsg
+        flag: this.evaluationUser.reportUserFlag ? 1 : 0,
+        des: this.evaluationUser.reportOrderUserMsg
       }
       this.$axios.post('/tutoring/updateScore', props).then(res => {
         if (Number(res.data.code) === 200) {
@@ -411,7 +411,7 @@ export default {
             break
           case 'chargeOrderUser':
             this.evaluationUser.isShow = true
-            this.reportUserFlag = false
+            this.evaluationUser.reportUserFlag = false
             break
           case 'cancelOrder':
             this.cancelOrder()

@@ -116,7 +116,7 @@
             <span class="text-subtitle1"> 举报: </span>
             <q-checkbox v-model="evaluationUser.reportUserFlag"/>
           </div>
-          <q-input type="textarea"
+          <q-input bordered type="textarea"
                    v-if="evaluationUser.reportUserFlag"
                    float-label="在此输入建议"
                    v-model="evaluationUser.reportOrderUserMsg"
@@ -368,12 +368,13 @@ export default {
         orderUser: this.coach.orderUser,
         id: this.coach.id,
         score: this.evaluationUser.score,
-        flag: this.evaluationUser.reportUserFlag ? 1 : 0,
+        isReport: this.evaluationUser.reportUserFlag ? 1 : 0,
         des: this.evaluationUser.reportOrderUserMsg
       }
       this.$axios.post('/tutoring/updateScore', props).then(res => {
-        if (Number(res.data.code) === 200) {
+        if (Number(res.data.code) === 100) {
           this.$q.notify(res.data.msgs.msg)
+          this.evaluationUser.isShow = false
         }
         else {
           this.$q.notify(res.data.msgs.msg)

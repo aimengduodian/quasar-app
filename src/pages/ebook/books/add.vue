@@ -65,6 +65,23 @@
           <q-icon name="money" />
         </template>
       </q-input>
+
+      <q-input :rules="[val => val && val.length > 0 || '手机号不能为空',
+               val => val.length === 11 || '手机号位数不全']"
+               ref="phone" type="text" prefix="手机号:" value=""
+               v-model="book.phone" mask="###########">
+        <template v-slot:prepend>
+          <q-icon name="phone" />
+        </template>
+      </q-input>
+
+      <q-input :rules="[val => val && val.length > 0 || '微信号不能为空']"
+               ref="weiXin" type="text" prefix="微信号:" value=""
+               v-model="book.weiXin">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
       <br>
       <q-editor v-model="book.des" value=""/>
     </form>
@@ -97,8 +114,8 @@ export default {
         pubDate: null,
         bookPub: null,
         bookPic: null,
-        phone: '14787461136',
-        weiXin: '1111',
+        phone: null,
+        weiXin: null,
         des: '',
         files: [] // 上传图片
       },
@@ -149,12 +166,16 @@ export default {
       this.$refs.bookType.validate()
       this.$refs.pubDate.validate()
       this.$refs.bookPrice.validate()
+      this.$refs.phone.validate()
+      this.$refs.weiXin.validate()
       // 校验
       if (this.$refs.bookName.hasError ||
         this.$refs.author.hasError ||
         this.$refs.bookPub.hasError ||
         this.$refs.bookType.hasError ||
         this.$refs.pubDate.hasError ||
+        this.$refs.phone.hasError ||
+        this.$refs.weiXin.hasError ||
         this.$refs.bookPrice.hasError) {
         return
       }

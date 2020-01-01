@@ -42,7 +42,7 @@
       </q-input>
 
       <q-select :rules="[val => val && val.length > 0 || '不能为空']"
-                v-model="invoiceOptions[electronics.hasInvoice]" ref="hasInvoice" value=""
+                v-model="electronics.hasInvoice" ref="hasInvoice" value=""
                 :options="invoiceOptions" prefix="是否有发票:">
         <template v-slot:prepend>
           <q-icon name="event" />
@@ -66,6 +66,22 @@
           <q-icon name="money" />
         </template>
       </q-input>
+      <q-input :rules="[val => val && val.length > 0 || '手机号不能为空',
+               val => val.length === 11 || '手机号位数不全']"
+               ref="phone" type="text" prefix="手机号:" value=""
+               v-model="electronics.phone" mask="###########">
+        <template v-slot:prepend>
+          <q-icon name="phone" />
+        </template>
+      </q-input>
+
+      <q-input :rules="[val => val && val.length > 0 || '微信号不能为空']"
+               ref="weiXin" type="text" prefix="微信号:" value=""
+               v-model="electronics.weiXin">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
 
       <q-editor v-model="electronics.des" value=""/>
     </form>
@@ -78,6 +94,7 @@ import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
 import DateTime from 'components/dateTimeOption'
+import electronics from './electronics'
 
 export default {
   components: {
@@ -98,8 +115,8 @@ export default {
         hasInvoice: null,
         originalPrice: null,
         presentPrice: null,
-        phone: '14787461136',
-        weiXin: '1111',
+        phone: null,
+        weiXin: null,
         des: '',
         files: [] // 上传图片
       },
@@ -151,14 +168,16 @@ export default {
       this.$refs.buyDate.validate()
       this.$refs.hasInvoice.validate()
       this.$refs.originalPrice.validate()
-      this.$refs.originalPrice.validate()
+      this.$refs.phone.validate()
+      this.$refs.weiXin.validate()
       // 校验
       if (this.$refs.electronicsName.hasError ||
         this.$refs.electronicsType.hasError ||
         this.$refs.buyDate.hasError ||
         this.$refs.hasInvoice.hasError ||
         this.$refs.originalPrice.hasError ||
-        this.$refs.originalPrice.hasError) {
+        this.$refs.phone.hasError ||
+        this.$refs.weiXin.hasError) {
         return
       }
 
@@ -193,7 +212,18 @@ export default {
       Object.keys(this.electronics).forEach(key => {
         this.electronics[key] = electronicsMsg[key]
       })
+
+      let aIndex = Number(this.electronics.hasInvoice)
+      if (aIndex !== 0 || aIndex !== 1) {
+        aIndex = 0
+      }
+      this.electronics.hasInvoice = this.invoiceOptions[aIndex]
       this.urls = electronicsMsg.url
+    }
+  },
+  watch: {
+    'invoiceOptions'(val) {
+      console.log(val)
     }
   }
 }

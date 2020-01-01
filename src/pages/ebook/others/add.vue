@@ -55,6 +55,22 @@
           <q-icon name="money" />
         </template>
       </q-input>
+      <q-input :rules="[val => val && val.length > 0 || '手机号不能为空',
+               val => val.length === 11 || '手机号位数不全']"
+               ref="phone" type="text" prefix="手机号:" value=""
+               v-model="others.phone" mask="###########">
+        <template v-slot:prepend>
+          <q-icon name="phone" />
+        </template>
+      </q-input>
+
+      <q-input :rules="[val => val && val.length > 0 || '微信号不能为空']"
+               ref="weiXin" type="text" prefix="微信号:" value=""
+               v-model="others.weiXin">
+        <template v-slot:prepend>
+          <q-icon name="book" />
+        </template>
+      </q-input>
 
       <q-editor v-model="others.des" value=""/>
       <br>
@@ -87,8 +103,8 @@ export default {
         presentPrice: null,
         hasInvoice: null,
         otherPic: null,
-        phone: '14787461136',
-        weiXin: '1111',
+        phone: null,
+        weiXin: null,
         des: '',
         files: [] // 上传图片
       },
@@ -138,11 +154,15 @@ export default {
       this.$refs.hasInvoice.validate()
       this.$refs.originalPrice.validate()
       this.$refs.presentPrice.validate()
+      this.$refs.phone.validate()
+      this.$refs.weiXin.validate()
       // 校验
       if (this.$refs.otherName.hasError ||
         this.$refs.buyDate.hasError ||
         this.$refs.hasInvoice.hasError ||
         this.$refs.originalPrice.hasError ||
+        this.$refs.phone.hasError ||
+        this.$refs.weiXin.hasError ||
         this.$refs.presentPrice.hasError) {
         return
       }

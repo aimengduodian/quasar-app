@@ -19,15 +19,16 @@
         </template>
       </q-input>
 
-      <q-input :rules="[val => val && val.length > 0 || 'phone不能为空']"
-               ref="phone" type="number" prefix="phone:" value=""
-               v-model="coach.phone">
+      <q-input :rules="[val => val && val.length > 0 || '手机号不能为空',
+               val => val.length === 11 || '手机号位数不全']"
+               ref="phone" type="text" prefix="phone:" value=""
+               v-model="coach.phone" mask="###########">
         <template v-slot:prepend>
           <q-icon name="book" />
         </template>
       </q-input>
 
-      <q-input :rules="[val => val && val.length > 0 || 'weixin不能为空']"
+      <q-input :rules="[val => val && val.length > 0 || '微信号不能为空']"
                ref="weiXin" type="text" prefix="weiXin:" value=""
                v-model="coach.weiXin">
         <template v-slot:prepend>
@@ -113,8 +114,8 @@ export default {
         startTime: null, // 开始时间
         endTime: null, // 结束时间
         place: null, // 讲座地点
-        phone: '14787461136',
-        weiXin: '1111',
+        phone: null,
+        weiXin: null,
         des: '' // 描述
       },
       optionsValue: '',
@@ -166,11 +167,15 @@ export default {
       this.$refs.startTime.validate()
       this.$refs.endTime.validate()
       this.$refs.place.validate()
+      this.$refs.phone.validate()
+      this.$refs.weiXin.validate()
       // 校验
       if (this.$refs.name.hasError ||
         this.$refs.type.hasError ||
         this.$refs.startTime.hasError ||
         this.$refs.endTime.hasError ||
+        this.$refs.phone.hasError ||
+        this.$refs.weiXin.hasError ||
         this.$refs.place.hasError) {
         return
       }

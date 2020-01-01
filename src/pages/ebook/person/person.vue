@@ -140,7 +140,7 @@
             <q-card-section>
               <q-list style="width: 100%;">
                 <q-input label="手机号:" v-model="userMsg.phone"
-                         mask="### #### ####" type="number">
+                         mask="###########" type="text">
                   <template v-slot:prepend>
                     <q-icon name="phone" />
                   </template>

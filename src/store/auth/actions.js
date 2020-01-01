@@ -1,8 +1,8 @@
 import { fetchGet } from '../../boot/axios.js'
 
 // 获取用户信息
-export const updateStaticCache = async ({commit}) => {
-  const userMsg = await fetchGet('/user/getUser').then(res => {
+export const requestUserMsg = async ({commit}) => {
+  await fetchGet('/user/getUser').then(res => {
     if (res.data.code === 100) {
       const userDetail = res.data.page.userInfo
       // 更新用户缓存

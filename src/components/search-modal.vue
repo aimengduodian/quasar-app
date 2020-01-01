@@ -101,9 +101,10 @@ export default {
   },
   methods: {
     ...mapActions('staticData', ['updateStaticCache']),
-    ...mapActions('auth', ['updateSearchParams']),
+    ...mapActions('auth', ['updateSearchParams', 'requestUserMsg']),
     async initData () {
       await this.updateStaticCache()
+      await this.requestUserMsg()
       this.typeOptions = this.getBookTypeNameArr
     },
     reset () {

@@ -115,15 +115,20 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: false, footer: false})
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.others.id = this.$route.query.id
     if (this.others.id) {
       this.updateFlag = true
       this.getOthersMsg(this.others.id)
     }
-    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+    else {
+      const userMsg = JSON.parse(this.getUserDetailMsg)
+      this.others.phone = userMsg.phone
+      this.others.weiXin = userMsg.weiXin
+    }
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg'])
+    ...mapGetters('auth', ['getPageMsg', 'getUserDetailMsg'])
   },
   methods: {
     ...mapActions('auth', ['updateLayoutMsg']),

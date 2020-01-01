@@ -125,15 +125,20 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: false, footer: false})
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.book.id = this.$route.query.id
     if (this.book.id) {
       this.updateFlag = true
       this.getBookMsg()
     }
-    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+    else {
+      const userMsg = JSON.parse(this.getUserDetailMsg)
+      this.book.phone = userMsg.phone
+      this.book.weiXin = userMsg.weiXin
+    }
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg']),
+    ...mapGetters('auth', ['getPageMsg', 'getUserDetailMsg']),
     ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName'])
   },
   methods: {

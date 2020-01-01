@@ -206,14 +206,14 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: false, footer: true})
-    this.getUserMsg()
+    // this.getUserMsg()
+    this.userMsg = JSON.parse(this.getUserDetailMsg)
   },
   methods: {
     ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),
     async getUserMsg () {
       try {
         // 获取用户的信息
-        // this.userMsg = JSON.parse(this.getUserDetailMsg)
         const userMsg = await this.$axios.get('/user/getUser')
         if (userMsg.data.code === 100) {
           this.userMsg = userMsg.data.page.userInfo

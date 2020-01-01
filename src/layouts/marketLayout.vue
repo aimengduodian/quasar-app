@@ -33,8 +33,11 @@ export default {
   computed: {
     ...mapState('auth', ['layout'])
   },
+  created () {
+    this.updateStaticCache()
+  },
   methods: {
-    ...mapActions('auth', ['updateUserCache']),
+    ...mapActions('auth', ['updateUserCache', 'updateStaticCache']),
     show () {
       this.layoutModal = true
     },

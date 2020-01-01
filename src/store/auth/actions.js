@@ -1,3 +1,17 @@
+import { fetchGet } from '../../boot/axios.js'
+
+// 获取用户信息
+export const updateStaticCache = async ({commit}) => {
+  const userMsg = await fetchGet('/user/getUser').then(res => {
+    if (res.data.code === 100) {
+      const userDetail = res.data.page.userInfo
+      // 更新用户缓存
+      commit('userDetailCacheSet', {
+        userDetail
+      })
+    }
+  })
+}
 
 // 设置当前模式 0.我要购买 1.我要发布
 export const updateFlag = ({commit}, val) => {

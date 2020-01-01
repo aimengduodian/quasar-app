@@ -128,15 +128,20 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: false, footer: false})
+    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.electronics.id = this.$route.query.id
     if (this.electronics.id) {
       this.updateFlag = true
       this.getElectronicsMsg()
     }
-    this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
+    else {
+      const userMsg = JSON.parse(this.getUserDetailMsg)
+      this.electronics.phone = userMsg.phone
+      this.electronics.weiXin = userMsg.weiXin
+    }
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg']),
+    ...mapGetters('auth', ['getPageMsg', 'getUserDetailMsg']),
     ...mapGetters('staticData', ['getElectronicsTypeNameArr', 'getElectronicsTypeNumberByName'])
   },
   methods: {

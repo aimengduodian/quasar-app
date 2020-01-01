@@ -124,15 +124,20 @@ export default {
   },
   created () {
     this.updateLayoutMsg({header: false, footer: false})
+    this.minStartDateTime = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.coach.id = this.$route.query.id
     if (this.coach.id) {
       this.updateFlag = true
       this.getCoachMsg()
     }
-    this.minStartDateTime = date.formatDate(Date.now(), 'YYYY/MM/DD')
+    else {
+      const userMsg = JSON.parse(this.getUserDetailMsg)
+      this.coach.phone = userMsg.phone
+      this.coach.weiXin = userMsg.weiXin
+    }
   },
   computed: {
-    ...mapGetters('auth', ['getPageMsg']),
+    ...mapGetters('auth', ['getPageMsg', 'getUserDetailMsg']),
     minEndDateTime: function () {
       const startTime = this.coach.startTime || Date.now()
       return date.formatDate(startTime, 'YYYY/MM/DD')

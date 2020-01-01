@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -58,25 +60,12 @@ export default {
   },
   created () {
     // 获取举报类型
-    this.getReportType()
+    this.options = this.getReportTypeNameArr
+  },
+  computed: {
+    ...mapGetters('staticData', ['getReportTypeNameArr'])
   },
   methods: {
-    // 获取举报类型
-    getReportType () {
-      if (this.options.length !== 0) {
-        return
-      }
-      this.$axios.post('/reporttype/reporttypeinfo', {
-
-      }).then((res) => {
-        if (Number(res.data.code) === 100) {
-          this.options = res.data.page.pageinfo
-        }
-        else {
-          console.log(res)
-        }
-      })
-    },
     reportMsg (index) {
       this.product['reportType'] = index
       if (parseInt(index) === 1) {

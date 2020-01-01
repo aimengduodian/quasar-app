@@ -1,7 +1,6 @@
-
-// 获取图书类型列表
 import { isNumber } from 'quasar/src/utils/is'
 
+// 获取图书类型列表
 export const getBookTypeNameArr = (state) => {
   const items = []
   try {
@@ -14,6 +13,7 @@ export const getBookTypeNameArr = (state) => {
   }
   return items
 }
+
 // 获取图书类型通过类型id
 export const getBookTypeNameByNumber = (state) => (typeNumber) => {
   let result = 'null'
@@ -23,6 +23,7 @@ export const getBookTypeNameByNumber = (state) => (typeNumber) => {
   }
   return result
 }
+
 // 获取图书id通过图书类型名称
 export const getBookTypeNumberByName = (state) => (typeName) => {
   try {
@@ -46,6 +47,7 @@ export const getElectronicsTypeNameArr = (state) => {
   }
   return items
 }
+
 // 获取电子类型通过类型id
 export const getElectronicsTypeNameByNumber = (state) => (typeNumber) => {
   let result = 'null'
@@ -55,6 +57,7 @@ export const getElectronicsTypeNameByNumber = (state) => (typeNumber) => {
   }
   return result
 }
+
 // 获取电子类型id通过电子类型名称
 export const getElectronicsTypeNumberByName = (state) => (typeName) => {
   try {
@@ -64,4 +67,9 @@ export const getElectronicsTypeNumberByName = (state) => (typeName) => {
   catch (e) {
     console.log(e)
   }
+}
+
+// 获取举报类型
+export const getReportTypeNameArr = (state) => {
+  return state.reportCached
 }

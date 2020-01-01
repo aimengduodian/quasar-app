@@ -1,7 +1,7 @@
 <template>
   <div>
     <img v-gallery ref="bigImg" :src="urls[slide] || ''"
-         style="position: fixed; margin-top: 1000px" alt="" >
+         style="position: fixed; margin-top: -1000px" alt="" >
     <q-carousel
       swipeable
       animated

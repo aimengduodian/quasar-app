@@ -53,6 +53,7 @@ export default {
   created () {
     this.updateLayoutMsg({header: true, footer: true})
     this.params = this.getSearchParamsMsg
+    this.params.pageNumber = 1
     this.subAdvice()
   },
   methods: {

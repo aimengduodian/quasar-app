@@ -1,10 +1,8 @@
 {
-  "name": "quasar",
-  "version": "0.0.1",
-  "description": "Quasar Play for Quasar Framework",
-  "productName": "Quasar Play",
-  "cordovaId": "com.quasarframework.quasarplay",
-  "author": "Razvan Stoenescu <razvan.stoenescu@gmail.com>",
+  "name": "ebook-app",
+  "version": "1.0.1",
+  "description": "ebook-app web project",
+  "productName": "ebook",
   "private": true,
   "scripts": {
     "dev": "quasar dev",

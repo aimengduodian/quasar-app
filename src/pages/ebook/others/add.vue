@@ -33,8 +33,8 @@
       </q-input>
 
       <q-select :rules="[val => val && val.length > 0 || '不能为空']"
-                v-model="options[others.hasInvoice]" ref="hasInvoice" value=""
-                :options="options" prefix="是否有发票:">
+                v-model="others.hasInvoice" ref="hasInvoice" value=""
+                :options="invoiceOptions" prefix="是否有发票:">
         <template v-slot:prepend>
           <q-icon name="event" />
         </template>
@@ -109,7 +109,7 @@ export default {
         files: [] // 上传图片
       },
       urls: [], // 上传图片
-      options: ['没有', '有'],
+      invoiceOptions: ['没有', '有'],
       btnFlag: false // 发布按钮是否能点击
     }
   },
@@ -171,7 +171,7 @@ export default {
       }
 
       const othersMsg = JSON.parse(JSON.stringify(this.others))
-      othersMsg.hasInvoice = this.options.indexOf(this.others.hasInvoice)
+      othersMsg.hasInvoice = this.invoiceOptions.indexOf(this.others.hasInvoice)
       othersMsg.files = this.others.files
       try {
         this.$q.loading.show({
@@ -200,7 +200,18 @@ export default {
       Object.keys(this.others).forEach(key => {
         this.others[key] = othersMsg[key]
       })
+
+      let aIndex = Number(this.others.hasInvoice)
+      if (aIndex !== 0 || aIndex !== 1) {
+        aIndex = 0
+      }
+      this.others.hasInvoice = this.invoiceOptions[aIndex]
       this.urls = othersMsg.url
+    }
+  },
+  watch: {
+    'invoiceOptions'(val) {
+      console.log(val)
     }
   }
 }

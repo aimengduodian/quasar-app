@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
@@ -124,7 +124,6 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: false, footer: false})
     this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.book.id = this.$route.query.id
     if (this.book.id) {
@@ -142,7 +141,6 @@ export default {
     ...mapGetters('staticData', ['getBookTypeNameArr', 'getBookTypeNumberByName'])
   },
   methods: {
-    ...mapActions('auth', ['updateLayoutMsg']),
     setBookPubDate (val) {
       this.book.pubDate = val
       this.$refs.qDateProxy.hide()

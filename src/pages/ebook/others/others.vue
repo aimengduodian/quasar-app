@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import config from 'src/common/config'
 
 export default {
@@ -55,13 +55,11 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: true, footer: true})
     this.params = this.getSearchParamsMsg
     this.params.pageNumber = 1
     this.subAdvice()
   },
   methods: {
-    ...mapActions('auth', ['updateLayoutMsg']),
     addOthers () {
       // goto 发布界面
       this.$router.push({ name: 'others_add' })

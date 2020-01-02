@@ -117,7 +117,6 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: false, footer: false})
     this.other.id = this.$route.query.id
     if ((this.other.id).length > 1) {
       this.initData()
@@ -131,7 +130,7 @@ export default {
     ...mapGetters('auth', ['power', 'powerFlag'])
   },
   methods: {
-    ...mapActions('auth', ['updatePageMsg', 'updateLayoutMsg']),
+    ...mapActions('auth', ['updatePageMsg']),
     initData () {
       this.$axios.get('/other/getById/' + this.other.id).then(res => {
         this.other = res.data.page.info

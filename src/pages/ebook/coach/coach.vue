@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -51,13 +51,11 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: true, footer: true})
     this.params = this.getSearchParamsMsg
     this.params.pageNumber = 1
     this.subAdvice()
   },
   methods: {
-    ...mapActions('auth', ['updateLayoutMsg']),
     addCoach () {
       // goto 发布界面
       this.$router.push({ name: 'coach_add' })

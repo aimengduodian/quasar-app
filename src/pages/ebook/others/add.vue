@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import PicUpload from 'components/picUpload'
@@ -114,7 +114,6 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: false, footer: false})
     this.maxDate = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.others.id = this.$route.query.id
     if (this.others.id) {
@@ -131,7 +130,6 @@ export default {
     ...mapGetters('auth', ['getPageMsg', 'getUserDetailMsg'])
   },
   methods: {
-    ...mapActions('auth', ['updateLayoutMsg']),
     setOthersPubDate (val) {
       this.others.buyDate = val
       this.$refs.qDateProxy.hide()

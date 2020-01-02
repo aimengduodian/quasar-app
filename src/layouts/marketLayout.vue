@@ -10,7 +10,9 @@
       <footer-tabs/>
     </q-footer>
     <q-page-container>
-      <router-view />
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </q-page-container>
   </q-layout>
 </template>
@@ -34,12 +36,28 @@ export default {
     ...mapState('auth', ['layout'])
   },
   methods: {
-    ...mapActions('auth', ['updateUserCache']),
+    ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),
     show () {
       this.layoutModal = true
     },
     selected (item) {
       this.$q.notify(`Selected suggestion "${item.label}"`)
+    }
+  },
+  watch: {
+    '$route.name'(val) {
+      if(val === 'books' || val === 'electronics'|| val === 'coach'|| val === 'others') {
+        this.updateLayoutMsg({header: true, footer: true})
+      }
+      if (val === 'books_view' || val === 'electronics_view'|| val === 'coach_view'|| val === 'others_view') {
+        this.updateLayoutMsg({header: false, footer: false})
+      }
+      if (val === 'books_add' || val === 'electronics_add'|| val === 'coach_add'|| val === 'others_add') {
+        this.updateLayoutMsg({header: false, footer: false})
+      }
+      if (val === 'person') {
+        this.updateLayoutMsg({header: false, footer: true})
+      }
     }
   }
 }

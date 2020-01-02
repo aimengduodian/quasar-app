@@ -205,12 +205,10 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: false, footer: true})
-    // this.getUserMsg()
     this.userMsg = JSON.parse(this.getUserDetailMsg)
   },
   methods: {
-    ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),
+    ...mapActions('auth', ['updateUserCache']),
     async getUserMsg () {
       try {
         // 获取用户的信息

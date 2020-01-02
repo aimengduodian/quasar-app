@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import NeedVerify from 'components/needVerify'
 import DateTime from 'components/dateTimeOption'
@@ -123,7 +123,6 @@ export default {
     }
   },
   created () {
-    this.updateLayoutMsg({header: false, footer: false})
     this.minStartDateTime = date.formatDate(Date.now(), 'YYYY/MM/DD')
     this.coach.id = this.$route.query.id
     if (this.coach.id) {
@@ -148,7 +147,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['updateLayoutMsg']),
     setCoachStartTime (val) {
       this.coach.startTime = val
       this.$refs.qStartTimeProxy.hide()

@@ -40,6 +40,7 @@ import config from 'src/common/config'
 import { date } from 'quasar'
 
 export default {
+  name: 'books',
   data () {
     return {
       loadAllData: false,

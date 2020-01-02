@@ -40,6 +40,7 @@ import { date } from 'quasar'
 import config from 'src/common/config'
 
 export default {
+  name: 'electronics',
   data () {
     return {
       loadAllData: false,

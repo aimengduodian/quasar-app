@@ -43,6 +43,7 @@ import { mapState, mapGetters } from 'vuex'
 import config from 'src/common/config'
 
 export default {
+  name: 'others',
   data () {
     return {
       loadAllData: false,

@@ -38,6 +38,7 @@
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  name: 'coach',
   data () {
     return {
       loadAllData: false,

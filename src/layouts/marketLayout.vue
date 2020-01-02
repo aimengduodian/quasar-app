@@ -10,7 +10,7 @@
       <footer-tabs/>
     </q-footer>
     <q-page-container>
-      <keep-alive>
+      <keep-alive :include="['books', 'electronics', 'coach', 'others']">
         <router-view />
       </keep-alive>
     </q-page-container>
@@ -29,7 +29,8 @@ export default {
   },
   data () {
     return {
-      layoutModal: false
+      layoutModal: false,
+      flag: false
     }
   },
   computed: {
@@ -51,6 +52,7 @@ export default {
       }
       if (val === 'books_view' || val === 'electronics_view'|| val === 'coach_view'|| val === 'others_view') {
         this.updateLayoutMsg({header: false, footer: false})
+        this.flag = !this.flag
       }
       if (val === 'books_add' || val === 'electronics_add'|| val === 'coach_add'|| val === 'others_add') {
         this.updateLayoutMsg({header: false, footer: false})

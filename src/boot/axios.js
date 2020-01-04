@@ -45,7 +45,8 @@ axios.interceptors.request.use(
   },
   error => {
     return Promise.reject(error.response)
-  })
+  }
+)
 
 // http response 拦截器
 axios.interceptors.response.use(
@@ -61,7 +62,8 @@ axios.interceptors.response.use(
   error => {
     // 返回接口返回的错误信息
     return Promise.reject(error.response)
-  })
+  }
+)
 
 // 返回一个Promise(发送post请求)
 export function fetchPost (url, params) {

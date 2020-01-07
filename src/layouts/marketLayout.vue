@@ -10,9 +10,10 @@
       <footer-tabs/>
     </q-footer>
     <q-page-container>
-      <keep-alive :include="['books', 'electronics', 'coach', 'others']">
-        <router-view />
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive" />
       </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive" />
     </q-page-container>
   </q-layout>
 </template>

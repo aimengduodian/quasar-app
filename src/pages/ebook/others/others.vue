@@ -23,103 +23,105 @@
       <!--添加消息-->
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px" />
+          <q-spinner-dots v-if="!loadAllData" color="primary" size="40px"/>
         </div>
       </template>
-      <span v-if="loadAllData" class="row justify-center q-my-md" > 已经没有更多数据 </span>
+      <span v-if="loadAllData" class="row justify-center q-my-md"> 已经没有更多数据 </span>
     </q-infinite-scroll>
     <!--回到顶部-->
     <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
-      <q-btn fab icon="keyboard_arrow_up" color="primary" />
+      <q-btn fab icon="keyboard_arrow_up" color="primary"/>
     </q-page-scroller>
     <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
-      <q-btn fab icon="add" color="primary" @click="addOthers" />
+      <q-btn fab icon="add" color="primary" @click="addOthers"/>
     </q-page-scroller>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import config from 'src/common/config'
+  import { mapState, mapGetters } from 'vuex'
+  import config from 'src/common/config'
 
-export default {
-  name: 'others',
-  data () {
-    return {
-      loadAllData: false,
-      scrollOffset: 250,
-      items: [],
-      params: {
-        pageSize: 15,
-        pageNumber: 1
-      }
-    }
-  },
-  created () {
-    this.params = this.getSearchParamsMsg
-    this.params.pageNumber = 1
-    this.subAdvice()
-  },
-  methods: {
-    addOthers () {
-      // goto 发布界面
-      this.$router.push({ name: 'others_add' })
-    },
-    switch_go (id) {
-      let itemId = 0
-      if (!this.powerFlag) {
-        itemId = id
-      }
-      this.$router.push({ name: 'others_view', query: { id: itemId } })
-    },
-    splitMth (str) {
-      const strs = str.split(',')
-      return strs[0]
-    },
-    async subAdvice () {
-      await this.$axios.post('/other/others', this.params).then((res) => {
-        this.lastPage = res.data.page.pageInfo.lastPage
-        res.data.page.pageInfo.list.forEach(item => {
-          item.otherPic = config.picUrl + this.splitMth(item.otherPic)
-          this.items.push(item)
-        })
-        if (!res.data.page.pageInfo.isLastPage) {
-          this.pageNumber++
-        } else {
-          this.loadAllData = true
-          if (this.scrollOffset > 0)
-            this.scrollOffset = - this.scrollOffset
+  export default {
+    name: 'others',
+    data () {
+      return {
+        loadAllData: false,
+        scrollOffset: 250,
+        items: [],
+        params: {
+          pageSize: 15,
+          pageNumber: 1
         }
-      })
+      }
     },
-    onLoad (index, done) {
-      setTimeout(() => {
-        if (!this.loadAllData) {
+    created () {
+      this.params = this.getSearchParamsMsg
+      this.params.pageNumber = 1
+      this.subAdvice()
+    },
+    methods: {
+      addOthers () {
+        // goto 发布界面
+        this.$router.push({ name: 'others_add' })
+      },
+      switch_go (id) {
+        let itemId = 0
+        if (!this.powerFlag) {
+          itemId = id
+        }
+        this.$router.push({ name: 'others_view', query: { id: itemId } })
+      },
+      splitMth (str) {
+        const strs = str.split(',')
+        return strs[0]
+      },
+      async subAdvice () {
+        await this.$axios.post('/other/others', this.params).then((res) => {
+          this.lastPage = res.data.page.pageInfo.lastPage
+          res.data.page.pageInfo.list.forEach(item => {
+            item.otherPic = config.picUrl + this.splitMth(item.otherPic)
+            this.items.push(item)
+          })
+          if (!res.data.page.pageInfo.isLastPage) {
+            this.pageNumber++
+          } else {
+            this.loadAllData = true
+            if (this.scrollOffset > 0)
+              this.scrollOffset = -this.scrollOffset
+          }
+        })
+      },
+      onLoad (index, done) {
+        setTimeout(() => {
+          if (!this.loadAllData) {
+            this.subAdvice()
+          }
+          done()
+        }, 2500)
+      }
+    },
+    computed: {
+      ...mapState('auth', ['flag']),
+      ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
+    },
+    watch: {
+      getSearchParamsMsg (val) {
+        if (this.$route.name === 'others') {
+          this.loadAllData = false
+          this.items = []
+          this.params = []
+          if (this.scrollOffset < 0)
+            this.scrollOffset = -this.scrollOffset
+          const data = JSON.parse(JSON.stringify(val))
+          Object.keys(data).forEach(key => {
+            this.params[key] = data[key]
+          })
           this.subAdvice()
         }
-        done()
-      }, 2500)
-    }
-  },
-  computed: {
-    ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
-  },
-  watch: {
-    getSearchParamsMsg(val) {
-      this.loadAllData = false
-      this.items = []
-      this.params = []
-      if (this.scrollOffset < 0)
-        this.scrollOffset = - this.scrollOffset
-      const data = JSON.parse(JSON.stringify(val))
-      Object.keys(data).forEach(key => {
-        this.params[key] = data[key]
-      })
-      this.subAdvice()
+      }
     }
   }
-}
 </script>
 
 <style lang="sass" scoped>

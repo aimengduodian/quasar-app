@@ -15,7 +15,7 @@ export const requestUserMsg = async ({commit}) => {
 
 // 设置当前模式 0.我要购买 1.我要发布
 export const updateFlag = ({commit}, val) => {
-  commit('setFlag', val)
+  commit('setFlag', Number(val))
 }
 
 // change user

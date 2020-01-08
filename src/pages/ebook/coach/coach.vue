@@ -104,7 +104,7 @@
           const isFresh = nowDate < item.startTime
           const isOrdered = item.orderUser !== null
           let picPath = ''
-          if (this.flag === 1) {
+          if (Number(this.getFlag) === 1) {
             picPath = 'statics/waiting.png'
             if (isOrdered && isFresh) {
               picPath = 'statics/doing.png'

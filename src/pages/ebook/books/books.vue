@@ -55,15 +55,12 @@
     created () {
       this.params = this.getSearchParamsMsg
       this.params.pageNumber = 1
-      if (this.$route.query.flag) {
+      if (this.$route.query.flag !== undefined) {
         this.updateFlag(this.$route.query.flag)
+      } else {
+        this.updateFlag(0)
       }
       this.subAdvice(true)
-    },
-    activated () {
-      if (typeof (this.$route.query.flag) === 'number') {
-        this.updateFlag(this.$route.query.flag)
-      }
     },
     methods: {
       ...mapActions('auth', ['updateFlag']),
@@ -129,6 +126,11 @@
             this.params[key] = data[key]
           })
           this.subAdvice()
+        }
+      },
+      '$route.query.flag' (val) {
+        if (typeof (val) !== 'undefined' && val !== this.getFlag) {
+          this.updateFlag(val)
         }
       }
     }

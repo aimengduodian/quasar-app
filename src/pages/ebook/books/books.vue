@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapActions, mapGetters } from 'vuex'
   import config from 'src/common/config'
   import { date } from 'quasar'
 
@@ -55,9 +55,13 @@
     created () {
       this.params = this.getSearchParamsMsg
       this.params.pageNumber = 1
-      this.subAdvice()
+      if (this.$route.query.flag) {
+        this.updateFlag(this.$route.query.flag)
+      }
+      this.subAdvice(true)
     },
     methods: {
+      ...mapActions('auth', ['updateFlag']),
       addBooks () {
         // goto 发布界面
         this.$router.push({ name: 'books_add' })
@@ -73,8 +77,12 @@
         const strs = str.split(',')
         return strs[0]
       },
-      async subAdvice () {
-        await this.$axios.post('/book/books?flag=' + this.flag, this.params).then((res) => {
+      async subAdvice (isFirstRequest = false) {
+        let url = '/book/books'
+        if (isFirstRequest) {
+          url = '/book/books?flag=' + this.$route.query.flag
+        }
+        await this.$axios.post(url, this.params).then((res) => {
           res.data.page.pageInfo.list.forEach(item => {
             item.bookPic = config.picUrl + this.splitMth(item.bookPic)
             this.items.push(item)

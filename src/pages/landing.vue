@@ -9,23 +9,21 @@
         <br>
         <q-btn
           color="primary"
-          :to="{name: 'books'}"
+          :to="{name: 'books', query: {flag: 0}}"
           class="full-width"
           target="_blank"
           icon="launch"
           no-ripple
-          @click="onclickBuy"
           label="我要购买"
         />
         <br>
         <q-btn
           color="primary"
-          :to="{name: 'books'}"
+          :to="{name: 'books', query: {flag: 1}}"
           class="full-width"
           target="_blank"
           icon="launch"
           no-ripple
-          @click="onclickSell"
           label="我要发布"
         />
         <br>
@@ -47,7 +45,6 @@
 
 <script>
 import PrivacyPolicy from 'components/privacy-policy'
-import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -56,15 +53,6 @@ export default {
   data () {
     return {
       version: '1.0.0' // 软件版本
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['updateFlag']),
-    onclickBuy () {
-      this.updateFlag(0)
-    },
-    onclickSell () {
-      this.updateFlag(1)
     }
   }
 }

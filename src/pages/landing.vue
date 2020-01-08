@@ -36,6 +36,16 @@
           no-ripple
           label="其他页面"
         />
+        <br>
+        <q-btn
+          color="primary"
+          :to="{name: 'shop'}"
+          class="full-width"
+          target="_blank"
+          icon="launch"
+          no-ripple
+          label="小卖部"
+        />
         <privacy-policy ref="privacy" />
       </div>
     </div>

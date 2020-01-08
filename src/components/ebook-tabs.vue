@@ -20,11 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
-export default {
-  computed: mapState('ebook', [
-    'pageMeta'
-  ])
-}
+  export default {
+    name: 'marketTabs'
+  }
 </script>

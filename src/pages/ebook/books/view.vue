@@ -51,7 +51,7 @@
       >
         <q-tab name="mails" label="简要信息" />
         <q-tab name="alarms" label="商品描述" />
-        <q-tab name="movies" v-if="!flag" label="卖家信息" />
+        <q-tab name="movies" v-if="!getFlag" label="卖家信息" />
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tab" animated>
@@ -63,7 +63,7 @@
         <q-tab-panel name="alarms">
           <p class="caption q-body-2" v-html="book.des" />
         </q-tab-panel>
-        <q-tab-panel v-if="!flag" name="movies">
+        <q-tab-panel v-if="!powerFlag" name="movies">
           <need-verify />
           <div v-if="false">
             <div>电话: {{ book.phone }}</div>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 import config from 'src/common/config'
 import NeedVerify from 'components/needVerify'
@@ -127,8 +127,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
     ...mapGetters('staticData', ['getBookTypeNameByNumber'])
   },
   methods: {

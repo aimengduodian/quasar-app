@@ -12,6 +12,12 @@ export const getFlag = state => {
   return state.flag
 }
 
+// 获取页面header和footer的布局信息
+export const getLayout = state => {
+  return state.layout
+}
+
+// 获取图书电子辅导其他的页面信息，用于从详情页到编辑页面
 export const getPageMsg = state => {
   return state.pageMsg
 }

@@ -29,7 +29,7 @@
       <span v-if="loadAllData" class="row justify-center q-my-md"> 已经没有更多数据 </span>
     </q-infinite-scroll>
     <!--回到顶部-->
-    <q-page-scroller v-if="!flag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+    <q-page-scroller v-if="!getFlag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
       <q-btn fab icon="keyboard_arrow_up" color="primary"/>
     </q-page-scroller>
     <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapGetters } from 'vuex'
   import config from 'src/common/config'
 
   export default {
@@ -102,8 +102,7 @@
       }
     },
     computed: {
-      ...mapState('auth', ['flag']),
-      ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
+      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag', 'getSearchParamsMsg'])
     },
     watch: {
       getSearchParamsMsg (val) {

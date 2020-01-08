@@ -35,7 +35,7 @@
     >
       <q-tab name="mails" label="简要信息" />
       <q-tab name="alarms" label="商品描述" />
-      <q-tab name="movies" v-if="!flag" label="卖家信息" />
+      <q-tab name="movies" v-if="!getFlag" label="卖家信息" />
     </q-tabs>
     <q-separator />
     <q-tab-panels v-model="tab" animated>
@@ -48,7 +48,7 @@
       <q-tab-panel name="alarms">
         <p class="caption q-body-2" v-html='coach.des'/>
       </q-tab-panel>
-      <q-tab-panel v-if="!flag" name="movies">
+      <q-tab-panel v-if="!powerFlag" name="movies">
         <need-verify />
         <div v-if="false">
           <div>电话: {{ coach.phone }}</div>
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import common from 'src/common/common'
 import NeedVerify from 'components/needVerify'
 import Report from 'components/report'
@@ -203,8 +203,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['flag']),
-    ...mapGetters('auth', ['power', 'powerFlag']),
+    ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
     orderCodeShow: function () {
       const nowDate = Date.now()
       return this.flag === 1 && this.coach.orderUser === null && nowDate < this.coach.startTime

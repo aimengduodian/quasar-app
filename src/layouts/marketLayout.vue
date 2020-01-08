@@ -1,11 +1,11 @@
 <template>
   <q-layout view="lHh lpr lFf">
     <!--header-->
-    <q-header v-model="layout.header" >
+    <q-header v-model="getLayout.header" >
       <header-model />
     </q-header>
     <!--footer-->
-    <q-footer bordered v-model="layout.footer"
+    <q-footer bordered v-model="getLayout.footer"
               class="bg-white text-primary">
       <footer-tabs/>
     </q-footer>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import HeaderModel from 'components/search-modal'
 import FooterTabs from 'components/market-tabs'
 
@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['layout'])
+    ...mapGetters('auth', ['getLayout'])
   },
   methods: {
     ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),

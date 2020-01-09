@@ -39,7 +39,7 @@
         <br>
         <q-btn
           color="primary"
-          :to="{name: 'shop'}"
+          :to="{name: 'shopList'}"
           class="full-width"
           target="_blank"
           icon="launch"

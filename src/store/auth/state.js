@@ -7,7 +7,9 @@ export default {
     // 是否进行学生认证
     flag: 0,
     // 用户所在的寝楼
-    buildingNum: 0
+    buildingNum: 0,
+    // 是否为小卖部的店主(判断buildNumber是否为null)
+    bossNumber: null,
   },
   // 图书电子辅导其他的页面信息，用于从详情页到编辑页面
   pageMsg: '',

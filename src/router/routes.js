@@ -115,13 +115,31 @@ const routes = [
   },
   {
     path: '/shop',
-    component: () => import('layouts/marketLayout'),
+    component: () => import('layouts/shopLayout'),
     meta: { keepAlive: false },
     children: [
       {
-        path: 'books/books',
+        path: 'shop/build',
+        name: 'buildingSelect',
+        component: () => import('pages/shop/buildingSelect'),
+        meta: { keepAlive: true }
+      },
+      {
+        path: 'shop/list',
         name: 'shopList',
-        component: () => import('pages/ebook/books/books'),
+        component: () => import('pages/shop/shopList'),
+        meta: { keepAlive: true }
+      },
+      {
+        path: 'shop/list',
+        name: 'orderList',
+        component: () => import('pages/shop/shopList'),
+        meta: { keepAlive: true }
+      },
+      {
+        path: 'shop/list',
+        name: 'shopPerson',
+        component: () => import('pages/shop/shopList'),
         meta: { keepAlive: true }
       }
     ]

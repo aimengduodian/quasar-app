@@ -1,7 +1,7 @@
 import config from 'src/common/config'
 
 export const powerFlag = state => {
-  return !(parseInt(state.user.flag) === 0)
+  return !(parseInt(state.flag) === 0)
 }
 
 export const power = state => {
@@ -10,6 +10,10 @@ export const power = state => {
 
 export const getFlag = state => {
   return state.flag
+}
+
+export const getUserMsg = state => {
+  return state.user
 }
 
 // 获取页面header和footer的布局信息

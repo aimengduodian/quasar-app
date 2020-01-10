@@ -5,9 +5,9 @@ export default {
   user: {
     id: '123',
     // 是否进行学生认证
-    flag: 0,
+    flag: 1,
     // 用户所在的寝楼
-    buildingNum: 0,
+    buildingNum: null,
     // 是否为小卖部的店主(判断buildNumber是否为null)
     bossNumber: null,
   },

@@ -29,6 +29,12 @@ const routes = [
     meta: { keepAlive: false }
   },
   {
+    path: '/buildingSelect',
+    name: 'buildingSelect',
+    component: () => import('components/buildingSelect'),
+    meta: { keepAlive: false }
+  },
+  {
     path: '/market',
     component: () => import('layouts/marketLayout'),
     meta: { keepAlive: false },
@@ -119,28 +125,28 @@ const routes = [
     meta: { keepAlive: false },
     children: [
       {
-        path: 'shop/build',
-        name: 'buildingSelect',
-        component: () => import('pages/shop/buildingSelect'),
-        meta: { keepAlive: true }
-      },
-      {
         path: 'shop/list',
         name: 'shopList',
         component: () => import('pages/shop/shopList'),
         meta: { keepAlive: true }
       },
       {
-        path: 'shop/list',
-        name: 'orderList',
-        component: () => import('pages/shop/shopList'),
-        meta: { keepAlive: true }
+        path: 'shop/view',
+        name: 'shop_view',
+        component: () => import('pages/shop/shopGoodsList'),
+        meta: { keepAlive: false }
       },
       {
-        path: 'shop/list',
+        path: 'shop/orderList',
+        name: 'orderList',
+        component: () => import('pages/shop/shopList'),
+        meta: { keepAlive: false }
+      },
+      {
+        path: 'shop/shopPerson',
         name: 'shopPerson',
         component: () => import('pages/shop/shopList'),
-        meta: { keepAlive: true }
+        meta: { keepAlive: false }
       }
     ]
   },

@@ -4,9 +4,7 @@
       <div class="bg-primary q-pa-md row justify-around head-div">
         <div class="col-3" style="margin-left: 20px">
           <img style="border-radius: 50%; width: 80%"
-               src="statics/boy-avatar.png"
-               alt=""
-          >
+               src="statics/boy-avatar.png" alt="" >
         </div>
         <div class="col-6">
           <div class="q-title">

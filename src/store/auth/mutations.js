@@ -1,4 +1,3 @@
-
 // 设置进入系统模式 0.我要购买 1.我要发布
 export const setFlag = (state, val) => {
   state.flag = val
@@ -24,6 +23,14 @@ export const userDetailCacheSet = (state, rPayload) => {
 
   // change
   state.userDetail = userDetail
+  try {
+    state.user.id = userDetail.id
+    state.user.buildingNum = userDetail.buildingNum
+    state.user.bossNumber = userDetail.buildingNumber
+  } catch (e) {
+    console.log(e)
+  }
+
 }
 
 // 设置页眉页脚是否显示

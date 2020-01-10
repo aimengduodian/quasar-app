@@ -2,7 +2,14 @@
   <q-layout view="lHh lpr lFf">
     <!--header-->
     <q-header v-model="getLayout.header" >
-      <header-model />
+      <q-toolbar class="text-white">
+        <q-btn round dense flat icon="menu" class="q-mr-xs" />
+        <q-input rounded borderless class="full-width q-ml-md" placeholder="点击搜索">
+          <template v-slot:append>
+            <q-icon @click="" name="search" />
+          </template>
+        </q-input>
+      </q-toolbar>
     </q-header>
     <!--footer-->
     <q-footer bordered v-model="getLayout.footer"
@@ -20,12 +27,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import HeaderModel from 'components/search-modal'
 import FooterTabs from 'components/shop-tabs'
 
 export default {
   components: {
-    HeaderModel,
     FooterTabs
   },
   data () {
@@ -39,16 +44,15 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['updateUserCache', 'updateLayoutMsg']),
-    show () {
-      this.layoutModal = true
-    },
-    selected (item) {
-      this.$q.notify(`Selected suggestion "${item.label}"`)
-    }
   },
   watch: {
     '$route.name'(val) {
-      console.log(val)
+      if(val === 'shopList') {
+        this.updateLayoutMsg({header: true, footer: true})
+      }
+      if(val === 'shop_view') {
+        this.updateLayoutMsg({header: false, footer: false})
+      }
     }
   }
 }

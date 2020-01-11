@@ -9,7 +9,7 @@
     </div>
 
     <div class="q-pa-md">
-      <div style="height: 150px"></div>
+      <div style="height: 150px"/>
       <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
         <div v-for="(item, index) in items" :key="index">
           <q-item>
@@ -25,8 +25,8 @@
               </q-item-label>
             </q-item-section>
 
-            <q-item-section side top>
-              <q-item-label caption>meta</q-item-label>
+            <q-item-section side center>
+              <cart-control @add="" :food="{count: 0}"/>
             </q-item-section>
           </q-item>
           <q-separator spaced/>
@@ -52,13 +52,15 @@
   import NeedVerify from 'components/needVerify'
   import shopHeaders from './components/shopHeaders'
   import shopCart from './components/shopCart'
+  import CartControl from './components/cart-control'
   import config from 'src/common/config'
 
   export default {
     components: {
       NeedVerify,
       shopHeaders,
-      shopCart
+      shopCart,
+      CartControl
     },
     data () {
       return {
@@ -141,7 +143,7 @@
   .head-list
     width 100%
     position fixed
-    z-index 50
+    z-index 1
 
   .shop-cart-wrapper
     position: fixed

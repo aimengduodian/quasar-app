@@ -5,15 +5,16 @@
         <div class="content-left">
           <div class="logo-wrapper">
             <div class="logo" :class="{'highlight':totalCount>0}">
-              <i class="icon-shopping_cart ion-ios-cart" :class="{'highlight':totalCount>0}" />
+              <q-btn round glossy icon="local_grocery_store"
+                     :class="{'highlight':totalCount>0}"/>
             </div>
             <div class="num" v-show="totalCount>0">
-              <bubble :num="totalCount" />
+
             </div>
           </div>
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
         </div>
-        <div class="content-right" @click="pay">
+        <div class="content-right" @click="">
           <div class="pay" :class="payClass">
             {{payDesc}}
           </div>
@@ -36,8 +37,6 @@
 </template>
 
 <script>
-  import Bubble from './bubble'
-
   const BALL_LEN = 10
   const innerClsHook = 'inner-hook'
 
@@ -133,104 +132,6 @@
           this._hideShopCartList()
         }
       },
-      commitPayMsg () {
-        let count = 0
-        let cost = 0
-        const goodsList = []
-        this.selectFoods.forEach(item => {
-          count += item.count
-          cost += item.goodPrice
-          const goods = {}
-          goods.id = item.id
-          goods.buyNumber = item.count
-          goodsList.push(goods)
-        })
-        const fd = {
-          'phone': this.phone,
-          'address': this.building,
-          'totalNum': count,
-          'totalCost': cost,
-          'goods': goodsList
-        }
-        PostGoodsTest(JSON.stringify(fd))
-      },
-      pay (e) {
-        if (this.totalPrice < this.minPrice) {
-          return
-        }
-        const that = this
-        this.dialog = this.$createDialog({
-          type: 'confirm',
-          confirmBtn: {
-            text: '确定',
-            active: true
-          }, cancelBtn: {
-            text: '取消',
-            active: false,
-            disabled: false,
-            href: 'javascript:;'
-          }, onConfirm: () => {
-            this.commitPayMsg()
-          }, onCancel: () => {
-          }
-        }, (createElement) => {
-          return [
-            createElement('div', {
-              'class': {
-                'my-title': true
-              },
-              slot: 'title'
-            }, [
-              createElement('div', {
-                'class': {
-                  'my-title-img': true
-                }
-              }),
-              createElement('input', {
-                style: {
-                  'border': '1px solid lightgrey',
-                  'border-radius': '3px',
-                  'margin': '6px 0'
-                },
-                domProps: {
-                  placeholder: '请输入手机号',
-                  value: null
-                },
-                on: {
-                  input: function (event) {
-                    that.phone = event.target.value
-                  }
-                }
-              }),
-              createElement('input', {
-                style: {
-                  'border': '1px solid lightgrey',
-                  'border-radius': '3px',
-                  'margin': '6px 0'
-                },
-                domProps: {
-                  placeholder: '请输入寝室号',
-                  value: null
-                },
-                on: {
-                  input: function (event) {
-                    that.building = event.target.value
-                  }
-                }
-              })
-            ]),
-            createElement('p', {
-              'class': {
-                'my-content': true
-              },
-              slot: 'content'
-            }, that.selectFoods)
-          ]
-        })
-        this.dialog.show()
-        console.log(this.selectFoods)
-        e.stopPropagation()
-      },
       drop (el) {
         for (let i = 0; i < this.balls.length; i++) {
           const ball = this.balls[i]
@@ -314,9 +215,6 @@
           this._hideShopCartList()
         }
       }
-    },
-    components: {
-      Bubble
     }
   }
 </script>

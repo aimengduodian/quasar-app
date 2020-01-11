@@ -5,7 +5,8 @@
            @click="switch_go(item.id)">
         <q-item>
           <q-item-section top thumbnail class="q-ml-none">
-            <img style="object-fit: cover; border-radius: 10px" :src="item.bookPic" alt="">
+            <img style="object-fit: cover; border-radius: 10px"
+                 :src="item.bookPic" alt="">
           </q-item-section>
 
           <q-item-section>

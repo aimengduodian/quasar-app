@@ -10,10 +10,17 @@
         <q-icon name="account_circle"/>
       </template>
     </q-input>
+    <br>
+    <div class="row">
+      <div class="col">
+        <q-btn color="grey" class="full-width" label="取消" @click="submitCancel"/>
+      </div>
+      <div class="col">
+        <q-btn color="primary" class="full-width" label="提交" @click="submitHandler"/>
+      </div>
+    </div>
 
-    <br>
-    <q-btn color="primary" class="full-width" label="提交" @click="submitHandler"/>
-    <br>
+
   </div>
 </template>
 
@@ -35,7 +42,7 @@
           if (Number(res.data.code) === 100) {
             this.$q.notify('设置成功')
             // 跳转回原页面
-            this.$router.go(-1)
+            this.$router.go(-2)
           } else {
             this.$q.notify('设置失败')
           }

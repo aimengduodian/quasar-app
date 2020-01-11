@@ -53,6 +53,9 @@ export default {
       if(val === 'shop_view') {
         this.updateLayoutMsg({header: false, footer: false})
       }
+      if (val === 'shopPerson') {
+        this.updateLayoutMsg({header: false, footer: true})
+      }
     }
   }
 }

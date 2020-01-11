@@ -139,13 +139,13 @@ const routes = [
       {
         path: 'shop/orderList',
         name: 'orderList',
-        component: () => import('pages/shop/shopList'),
+        component: () => import('pages/shop/orderList'),
         meta: { keepAlive: false }
       },
       {
         path: 'shop/shopPerson',
         name: 'shopPerson',
-        component: () => import('pages/shop/shopList'),
+        component: () => import('pages/ebook/person/person'),
         meta: { keepAlive: false }
       }
     ]

@@ -1,45 +1,54 @@
 <template>
   <div>
     <shop-headers/>
-    <q-tabs
-      v-model="tab"
-      dense
-      class="bg-grey text-white"
-      indicator-color="grey"
-      align="justify"
-      style="opacity:0.6"
-    >
-      <q-tab name="mails" label="商品列表"/>
-    </q-tabs>
-    <q-separator/>
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="mails">
-        <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
-          <div v-for="(item, index) in items" :key="index">
-            <q-item>
-              <q-item-section top thumbnail class="q-ml-none">
-                <img :src="item.pic">
-              </q-item-section>
+    <div>
+      <q-tabs
+        dense
+        class="bg-grey text-white"
+        indicator-color="grey"
+        align="justify"
+        style="opacity:0.6"
+      >
+        <q-tab name="mails" label="商品列表"/>
+      </q-tabs>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="mails">
+          <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
+            <div v-for="(item, index) in items" :key="index">
+              <q-item>
+                <q-item-section top thumbnail class="q-ml-none">
+                  <img :src="item.pic" alt="">
+                </q-item-section>
 
-              <q-item-section>
-                <q-item-label>{{item.goodName}}</q-item-label>
-                <q-item-label caption>{{item.des}}</q-item-label>
-                <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
-                  <span class="cursor-pointer">￥{{item.goodPrice}}</span>
-                </q-item-label>
-              </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{item.goodName}}</q-item-label>
+                  <q-item-label caption>{{item.des}}</q-item-label>
+                  <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
+                    <span class="cursor-pointer">￥{{item.goodPrice}}</span>
+                  </q-item-label>
+                </q-item-section>
 
-              <q-item-section side top>
-                <q-item-label caption>meta</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-separator spaced/>
-          </div>
-        </q-infinite-scroll>
-      </q-tab-panel>
-    </q-tab-panels>
-    <shop-cart />
+                <q-item-section side top>
+                  <q-item-label caption>meta</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator spaced/>
+            </div>
+          </q-infinite-scroll>
+        </q-tab-panel>
+      </q-tab-panels>
+    </div>
+    <!--购物车-->
+    <div class="shop-cart-wrapper">
+      <shop-cart
+        ref="shopCart"
+        :select-foods="selectedFood"
+        :delivery-price=12
+        :min-price=10
+      />
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -82,7 +91,8 @@
           id: null,
           pageSize: config.pageSize,
           pageNumber: 1
-        }
+        },
+        selectedFood: []
       }
     },
     created () {
@@ -131,3 +141,12 @@
   }
 </script>
 
+<style lang="stylus">
+  .shop-cart-wrapper
+    position: absolute
+    left: 0
+    bottom: 0
+    z-index: 50
+    width: 100%
+    height: 48px
+</style>

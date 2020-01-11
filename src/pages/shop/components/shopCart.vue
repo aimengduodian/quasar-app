@@ -5,14 +5,13 @@
         <div class="content-left">
           <div class="logo-wrapper">
             <div class="logo" :class="{'highlight':totalCount>0}">
-              <i class="icon-shopping_cart ion-ios-cart" :class="{'highlight':totalCount>0}"></i>
+              <i class="icon-shopping_cart ion-ios-cart" :class="{'highlight':totalCount>0}" />
             </div>
             <div class="num" v-show="totalCount>0">
-              <bubble :num="totalCount"></bubble>
+              <bubble :num="totalCount" />
             </div>
           </div>
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
         <div class="content-right" @click="pay">
           <div class="pay" :class="payClass">
@@ -59,11 +58,6 @@
         default () {
           return []
         }
-      },
-      // 配送费用
-      deliveryPrice: {
-        type: Number,
-        default: 0
       },
       // 最小起送费用
       minPrice: {
@@ -328,6 +322,8 @@
 </script>
 
 <style lang="stylus">
+  @import "../../../css/variable"
+
   .shopcart
     height: 100%
 

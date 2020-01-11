@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 120px">
+  <div style="height: 130px">
     <div class="row justify-around text-grey-3">
       <div class="col-3">
         <br>
@@ -24,7 +24,7 @@
       </div>
       <div class="col-2"></div>
     </div>
-    <img src="~assets/donuts.png" class="background"/>
+    <img src="~assets/donuts.png" class="background" alt=""/>
   </div>
 </template>
 
@@ -45,6 +45,7 @@
 </script>
 
 <style lang="stylus">
+
   .background
     position absolute
     top 0
@@ -52,5 +53,5 @@
     width 100%
     height 150px
     z-index -1
-    filter blur(10px)
+    filter blur(2px)
 </style>

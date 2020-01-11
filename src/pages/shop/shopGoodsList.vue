@@ -1,42 +1,38 @@
 <template>
   <div>
-    <shop-headers/>
-    <div>
-      <q-tabs
-        dense
-        class="bg-grey text-white"
-        indicator-color="grey"
-        align="justify"
-        style="opacity:0.6"
-      >
-        <q-tab name="mails" label="商品列表"/>
-      </q-tabs>
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="mails">
-          <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
-            <div v-for="(item, index) in items" :key="index">
-              <q-item>
-                <q-item-section top thumbnail class="q-ml-none">
-                  <img :src="item.pic" alt="">
-                </q-item-section>
+    <div class="head-list">
+      <shop-headers/>
+      <div class="bg-grey text-white"
+           style="opacity:0.6; text-align: center">
+        商品列表
+      </div>
+    </div>
 
-                <q-item-section>
-                  <q-item-label>{{item.goodName}}</q-item-label>
-                  <q-item-label caption>{{item.des}}</q-item-label>
-                  <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
-                    <span class="cursor-pointer">￥{{item.goodPrice}}</span>
-                  </q-item-label>
-                </q-item-section>
+    <div class="q-pa-md">
+      <div style="height: 150px"></div>
+      <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
+        <div v-for="(item, index) in items" :key="index">
+          <q-item>
+            <q-item-section top thumbnail class="q-ml-none">
+              <img :src="item.pic" alt="">
+            </q-item-section>
 
-                <q-item-section side top>
-                  <q-item-label caption>meta</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-separator spaced/>
-            </div>
-          </q-infinite-scroll>
-        </q-tab-panel>
-      </q-tab-panels>
+            <q-item-section>
+              <q-item-label>{{item.goodName}}</q-item-label>
+              <q-item-label caption>{{item.des}}</q-item-label>
+              <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
+                <span class="cursor-pointer">￥{{item.goodPrice}}</span>
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side top>
+              <q-item-label caption>meta</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-separator spaced/>
+        </div>
+        <div style="height: 50px"></div>
+      </q-infinite-scroll>
     </div>
     <!--购物车-->
     <div class="shop-cart-wrapper">
@@ -68,7 +64,6 @@
       return {
         showReport: false,
         reportMsg: null,
-        tab: 'mails',
         slide: 0,
         scrollOffset: 250,
         items: [],
@@ -142,11 +137,18 @@
 </script>
 
 <style lang="stylus">
+
+  .head-list
+    width 100%
+    position fixed
+    z-index 50
+
   .shop-cart-wrapper
-    position: absolute
+    position: fixed
     left: 0
     bottom: 0
     z-index: 50
     width: 100%
     height: 48px
+
 </style>

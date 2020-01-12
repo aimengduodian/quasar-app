@@ -35,7 +35,41 @@
       </q-infinite-scroll>
     </div>
 
-    <!--dialog-->
+    <!--提交-->
+    <q-dialog v-model="submitDialog">
+      <q-card style="width: 70vw">
+        <q-card-actions>
+          <q-icon name="close" flat @click.stop="submitDialog = false" />
+        </q-card-actions>
+        <q-separator />
+        <q-card-section>
+          <q-btn
+            fab
+            color="primary"
+            icon="place"
+            class="absolute"
+            style="top: 0; right: 12px; transform: translateY(-50%);"
+          />
+
+          <div class="row no-wrap items-center">
+            <div class="col text-h6 ellipsis"></div>
+            <div class="col-auto text-grey q-pt-md">
+              <q-icon name="place"/>
+              {{user.buildingNum}}
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div class="text-subtitle1"> 学号: 888888888</div>
+          <div class="text-subtitle2 text-grey"> 邮箱: </div>
+          <div class="text-subtitle2 text-grey"> 微信: </div>
+        </q-card-section>
+
+      </q-card>
+    </q-dialog>
+
+    <!--添加到购物车中的物品-->
     <q-dialog v-model="dialog" position="bottom">
       <q-card style="width: 100%">
         <div>
@@ -127,7 +161,8 @@
           id: null,
           pageSize: config.pageSize,
           pageNumber: 1
-        }
+        },
+        submitDialog: false
       }
     },
     created () {
@@ -176,7 +211,7 @@
         this.$refs.shopCart.drop(target)
       },
       onSubmitShopCart () {
-
+        this.submitDialog = !this.submitDialog
         console.log(this.selectedFood)
       },
       empty () {

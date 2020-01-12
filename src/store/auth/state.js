@@ -1,15 +1,19 @@
 export default {
   // 权限控制 0.我要购买 1.我要发布
   flag: 0,
-  // 用户信息
+  // 个人用户信息
   user: {
     id: '123',
     // 是否进行学生认证
     flag: 1,
-    // 用户所在的寝楼
-    buildingNum: null,
     // 是否为小卖部的店主(判断buildNumber是否为null)
     bossNumber: null,
+    // 用户所在的寝楼
+    buildingNum: null,
+    // 用户所在的寝室
+    buildingRoomNum: null,
+    // 用户手机号
+    userPhone: null
   },
   // 图书电子辅导其他的页面信息，用于从详情页到编辑页面
   pageMsg: '',

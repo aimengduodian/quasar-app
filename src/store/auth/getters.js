@@ -31,7 +31,7 @@ export const getUserDetailMsg = (state) => {
   return sessionStorage.getItem('userDetail')
 }
 
-// 获取用户详细信息
+// 获取搜索参数配置信息
 export const getSearchParamsMsg = (state) => {
   const searchParams = JSON.parse(JSON.stringify(state.searchParams))
   searchParams.pageNumber = 1

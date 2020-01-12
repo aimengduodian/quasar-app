@@ -66,11 +66,7 @@
         this.$router.push({ name: 'others_add' })
       },
       switch_go (id) {
-        let itemId = 0
-        if (!this.powerFlag) {
-          itemId = id
-        }
-        this.$router.push({ name: 'others_view', query: { id: itemId } })
+        this.$router.push({ name: 'others_view', query: { id: id } })
       },
       splitMth (str) {
         const strs = str.split(',')

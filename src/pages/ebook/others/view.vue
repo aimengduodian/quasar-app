@@ -147,7 +147,7 @@ export default {
     moreMsgShow () {
       const report = [
         {
-          show: !this.flag,
+          show: !this.getFlag,
           label: '举报',
           icon: 'report',
           id: 'report'
@@ -155,14 +155,14 @@ export default {
       ]
       const seller = [
         {
-          show: this.flag,
+          show: this.getFlag,
           label: '编辑',
           icon: 'edit',
           color: 'primary',
           id: 'edit'
         },
         {
-          show: this.flag,
+          show: this.getFlag,
           label: '下架',
           icon: 'delete',
           color: 'primary',
@@ -177,7 +177,7 @@ export default {
           id: 'share'
         }
       ]
-      if (this.flag) {
+      if (this.getFlag) {
         seller.forEach(item => {
           action.unshift(item)
         })

@@ -17,7 +17,7 @@
       food: {
         type: Object,
         default: function () {
-          return { count: 0 }
+          return {}
         }
       }
     },
@@ -28,13 +28,14 @@
         } else {
           this.food.count++
         }
+        this.$emit('change', this.food)
         this.$forceUpdate()
-        this.$emit('add', this.food)
       },
       decrease () {
         if (this.food.count) {
           this.food.count--
         }
+        this.$emit('change', this.food)
         this.$forceUpdate()
       }
     }
@@ -60,8 +61,8 @@
         opacity: 0
         transform: translate3d(24px, 0, 0)
 
-
     .cart-count
+      margin-right: 6px
       width: 12px
       line-height: 24px
       text-align: center

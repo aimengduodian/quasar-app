@@ -26,7 +26,7 @@
             </q-item-section>
 
             <q-item-section side center>
-              <cart-control @add="" :food="{count: 0}"/>
+              <cart-control @change="shopCardChange" :food="item"/>
             </q-item-section>
           </q-item>
           <q-separator spaced/>
@@ -69,16 +69,15 @@
         slide: 0,
         scrollOffset: 250,
         items: [],
-        // 获取详细信息
-        goods: {
+        itemMsg: {
           buyNumber: null,
-          createTime: 1561902960000,
-          dataStatus: 1,
-          des: '去微软推哦的法国红酒看来',
-          goodName: 'huaduo',
-          goodPic: '/good/d3930a5a24c340eeb7ed889eb134a3b9.jpg',
-          goodPrice: 0,
-          id: '',
+          createTime: null,
+          dataStatus: null,
+          des: null,
+          goodName: null,
+          goodPic: null,
+          goodPrice: null,
+          id: null,
           orderId: null,
           updateTime: null,
           updateUser: null,
@@ -133,6 +132,9 @@
           }
           done()
         }, 10000)
+      },
+      shopCardChange(food) {
+        console.log(food)
       }
     }
   }

@@ -11,10 +11,10 @@
     <div class="q-pa-md">
       <div style="height: 150px"/>
       <q-infinite-scroll @load="onLoad" :offset="scrollOffset">
-        <div v-for="(item, index) in items" :key="index">
+        <div v-for="(item, index) in selectedFood" :key="index">
           <q-item>
             <q-item-section top thumbnail class="q-ml-none">
-              <img :src="item.pic" alt="">
+              <img style="border-radius: 5px" :src="item.pic" alt="">
             </q-item-section>
 
             <q-item-section>
@@ -34,10 +34,52 @@
         <div style="height: 50px"></div>
       </q-infinite-scroll>
     </div>
+
+    <!--dialog-->
+    <q-dialog v-model="dialog" position="bottom">
+      <q-card style="width: 100%">
+        <div>
+          <q-btn flat>购物车</q-btn>
+          <q-btn flat style="float: right" @click="empty">清空</q-btn>
+        </div>
+        <q-separator/>
+        <div style="max-height: 50vh; overflow: scroll">
+          <q-card-section class="items-center no-wrap">
+            <div v-for="(item, index) in selectedFood"
+                 v-if="item.count" :key="index">
+              <q-item>
+                <q-item-section top thumbnail class="q-ml-none">
+                  <img style="border-radius: 5px" :src="item.pic" alt="">
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label>{{item.goodName}}</q-item-label>
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
+                    <span class="cursor-pointer">￥{{item.goodPrice * item.count}}</span>
+                  </q-item-label>
+                </q-item-section>
+
+                <q-item-section side center>
+                  <cart-control @change="shopCardChange" :food="item"/>
+                </q-item-section>
+              </q-item>
+              <q-separator spaced/>
+            </div>
+          </q-card-section>
+        </div>
+
+        <br>
+      </q-card>
+    </q-dialog>
     <!--购物车-->
     <div class="shop-cart-wrapper">
       <shop-cart
         ref="shopCart"
+        @open="dialog = !dialog"
+        @submit="onSubmitShopCart"
         :select-foods="selectedFood"
         :delivery-price=12
         :min-price=10
@@ -64,11 +106,9 @@
     },
     data () {
       return {
-        showReport: false,
-        reportMsg: null,
-        slide: 0,
+        dialog: false,
         scrollOffset: 250,
-        items: [],
+        selectedFood: [],
         itemMsg: {
           buyNumber: null,
           createTime: null,
@@ -87,8 +127,7 @@
           id: null,
           pageSize: config.pageSize,
           pageNumber: 1
-        },
-        selectedFood: []
+        }
       }
     },
     created () {
@@ -110,7 +149,7 @@
         this.$axios.post('/good/goods', this.params).then(res => {
           res.data.page.pageInfo.list.forEach(item => {
             item.pic = config.picUrl + this.splitMth(item.goodPic)
-            this.items.push(item)
+            this.selectedFood.push(item)
           })
           if (!res.data.page.pageInfo.isLastPage) {
             this.params.pageNumber++
@@ -133,8 +172,28 @@
           done()
         }, 10000)
       },
-      shopCardChange(food) {
-        console.log(food)
+      shopCardChange (target) {
+        this.$refs.shopCart.drop(target)
+      },
+      onSubmitShopCart () {
+
+        console.log(this.selectedFood)
+      },
+      empty () {
+        this.$q.dialog({
+          title: '确认？',
+          message: '确认清空购物车!',
+          cancel: true,
+          persistent: true
+        }).onOk(data => {
+            this.selectedFood.forEach(item => {
+              if (item.count) {
+                item.count = 0
+              }
+            })
+            this.dialog = false
+          }
+        )
       }
     }
   }
@@ -151,8 +210,9 @@
     position: fixed
     left: 0
     bottom: 0
-    z-index: 50
+    z-index: 6001
     width: 100%
     height: 48px
+
 
 </style>

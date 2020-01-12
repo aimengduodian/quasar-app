@@ -22,20 +22,19 @@
       }
     },
     methods: {
-      add () {
+      add (event) {
         if (!this.food.count) {
           this.$set(this.food, 'count', 1)
         } else {
           this.food.count++
         }
-        this.$emit('change', this.food)
+        this.$emit('change', event.target)
         this.$forceUpdate()
       },
       decrease () {
         if (this.food.count) {
           this.food.count--
         }
-        this.$emit('change', this.food)
         this.$forceUpdate()
       }
     }

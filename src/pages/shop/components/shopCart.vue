@@ -1,20 +1,17 @@
 <template>
   <div>
     <div class="shopcart">
-      <div class="content" @click="toggleList">
+      <div class="content">
         <div class="content-left">
           <div class="logo-wrapper">
             <div class="logo" :class="{'highlight':totalCount>0}">
-              <q-btn round glossy icon="local_grocery_store"
-                     :class="{'highlight':totalCount>0}"/>
-            </div>
-            <div class="num" v-show="totalCount>0">
-
+              <q-btn round glossy icon="local_grocery_store" :class="{'highlight':totalCount>0}"
+                     @click.stop="toggleList" />
             </div>
           </div>
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
         </div>
-        <div class="content-right" @click="">
+        <div class="content-right" @click.stop="toggleSubmit">
           <div class="pay" :class="payClass">
             {{payDesc}}
           </div>
@@ -66,18 +63,13 @@
       sticky: {
         type: Boolean,
         default: false
-      },
-      fold: {
-        type: Boolean,
-        default: true
       }
     },
     data () {
       return {
         phone: null,
         building: null,
-        balls: createBalls(),
-        listFold: this.fold
+        balls: createBalls()
       }
     },
     created () {
@@ -88,7 +80,9 @@
       totalPrice () {
         let total = 0
         this.selectFoods.forEach((food) => {
-          total += food.goodPrice * food.count
+          if (food.count) {
+            total += food.goodPrice * food.count
+          }
         })
         return total
       },
@@ -96,7 +90,9 @@
       totalCount () {
         let count = 0
         this.selectFoods.forEach((food) => {
-          count += food.count
+          if (food.count) {
+            count += food.count
+          }
         })
         return count
       },
@@ -120,16 +116,14 @@
     },
     methods: {
       toggleList () {
-        if (this.listFold) {
-          if (!this.totalCount) {
-            return
-          }
-          this.listFold = false
-          this._showShopCartList()
-          this._showShopCartSticky()
-        } else {
-          this.listFold = true
-          this._hideShopCartList()
+        if (!this.totalCount) {
+          return
+        }
+        this.$emit('open')
+      },
+      toggleSubmit () {
+        if (this.totalPrice >= this.minPrice) {
+          this.$emit('submit')
         }
       },
       drop (el) {
@@ -166,53 +160,12 @@
           ball.show = false
           el.style.display = 'none'
         }
-      },
-      _showShopCartList () {
-        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
-          $props: {
-            selectFoods: 'selectFoods'
-          },
-          $events: {
-            leave: () => {
-              this._hideShopCartSticky()
-            },
-            hide: () => {
-              this.listFold = true
-            },
-            add: (el) => {
-              this.shopCartStickyComp.drop(el)
-            }
-          }
-        })
-        this.shopCartListComp.show()
-      },
-      _showShopCartSticky () {
-        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
-          $props: {
-            selectFoods: 'selectFoods',
-            deliveryPrice: 'deliveryPrice',
-            minPrice: 'minPrice',
-            fold: 'listFold',
-            list: this.shopCartListComp
-          }
-        })
-        this.shopCartStickyComp.show()
-      },
-      _hideShopCartList () {
-        const list = this.sticky ? this.$parent.list : this.shopCartListComp
-        list.hide && list.hide()
-      },
-      _hideShopCartSticky () {
-        this.shopCartStickyComp.hide()
       }
     },
     watch: {
-      fold (newVal) {
-        this.listFold = newVal
-      },
       totalCount (count) {
-        if (!this.fold && count === 0) {
-          this._hideShopCartList()
+        if (count === 0) {
+          this.toggleList()
         }
       }
     }
@@ -255,7 +208,7 @@
             background: $color-dark-grey
 
             &.highlight
-              background: $color-blue
+              background: $color-green
 
             .icon-shopping_cart
               line-height: 44px
@@ -321,7 +274,7 @@
           width: 16px
           height: 16px
           border-radius: 50%
-          background: $color-blue
+          background: $color-green
           transition: all 0.4s linear
 
   .my-title-img

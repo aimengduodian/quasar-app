@@ -39,9 +39,9 @@
     <q-dialog v-model="submitDialog">
       <q-card style="width: 70vw">
         <q-card-actions>
-          <q-icon name="close" flat @click.stop="submitDialog = false" />
+          <q-icon name="close" flat @click.stop="submitDialog = false"/>
         </q-card-actions>
-        <q-separator />
+        <q-separator/>
         <q-card-section>
           <q-btn
             fab
@@ -53,18 +53,32 @@
 
           <div class="row no-wrap items-center">
             <div class="col text-h6 ellipsis"></div>
-            <div class="col-auto text-grey q-pt-md">
-              <q-icon name="place"/>
-              {{user.buildingNum}}
-            </div>
           </div>
         </q-card-section>
 
         <q-card-section>
-          <div class="text-subtitle1"> 学号: 888888888</div>
-          <div class="text-subtitle2 text-grey"> 邮箱: </div>
-          <div class="text-subtitle2 text-grey"> 微信: </div>
+          <div class="text-subtitle1">
+            <div>
+              寝楼: <span class="text-subtitle2 text-grey">{{getUserMsg.buildingNum}}</span>
+            </div>
+            <div>
+              寝室: <span class="text-subtitle2 text-grey">{{getUserMsg.buildingRoomNum}}</span>
+            </div>
+            <div>
+              手机: <span class="text-subtitle2 text-grey">{{getUserMsg.phone}}</span>
+            </div>
+            <div>
+              邮箱: <span class="text-subtitle2 text-grey">{{getUserMsg.email}}</span>
+            </div>
+          </div>
         </q-card-section>
+
+        <q-separator/>
+
+        <q-card-actions>
+          <q-btn label="取消" @click.stop="submitDialog = false"/>
+          <q-btn color="primary" label="确认" @click.stop="onSubmitShopCart"/>
+        </q-card-actions>
 
       </q-card>
     </q-dialog>
@@ -113,7 +127,7 @@
       <shop-cart
         ref="shopCart"
         @open="dialog = !dialog"
-        @submit="onSubmitShopCart"
+        @submit="submitDialog = !submitDialog"
         :select-foods="selectedFood"
         :delivery-price=12
         :min-price=10
@@ -175,7 +189,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
+      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag', 'getUserMsg']),
       ...mapGetters('staticData', ['getBookTypeNameByNumber'])
     },
     methods: {
@@ -210,9 +224,56 @@
       shopCardChange (target) {
         this.$refs.shopCart.drop(target)
       },
-      onSubmitShopCart () {
-        this.submitDialog = !this.submitDialog
-        console.log(this.selectedFood)
+      async onSubmitShopCart () {
+        this.dialog = false
+        this.submitDialog = false
+
+        const goods = [] //购物车中的商品集合
+        let totalNum = 0 //总数量
+        let totalCost = 0 //总价格
+        this.selectedFood.forEach(item => {
+          if (item.count) {
+            goods.push({
+              id: item.id,
+              buyNumber: item.count
+            })
+            totalNum = totalNum + item.count
+            totalCost = totalCost + item.count * item.goodPrice
+          }
+        })
+        const params = {
+          phone: this.getUserMsg.phone,
+          address: this.getUserMsg.buildingRoomNum || '11-2-725',
+          totalNum: totalNum,
+          totalCost: totalCost,
+          goods: JSON.stringify(goods)
+        }
+        try {
+          this.$q.loading.show({
+            message: '正在提交数据...'
+          })
+          await this.$axios.post('/order/save', params).then((res) => {
+            if (res.data.code === 100) {
+              this.$q.notify(res.data.msgs.msg)
+            }
+            else {
+              this.$q.notify('Fail')
+            }
+            // 跳转回原页面
+            this.$router.go(-1)
+          })
+        }
+        catch (e) {
+          console.log(e)
+        }
+        finally {
+          this.$q.loading.hide()
+          this.selectedFood.forEach(item => {
+            if (item.count) {
+              item.count = 0
+            }
+          })
+        }
       },
       empty () {
         this.$q.dialog({

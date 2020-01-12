@@ -3,7 +3,7 @@ export default {
   flag: 0,
   // 个人用户信息
   user: {
-    id: '123',
+    id: null,
     // 是否进行学生认证
     flag: 1,
     // 是否为小卖部的店主(判断buildNumber是否为null)
@@ -13,7 +13,9 @@ export default {
     // 用户所在的寝室
     buildingRoomNum: null,
     // 用户手机号
-    userPhone: null
+    userPhone: null,
+    // 用户email
+    email: null
   },
   // 图书电子辅导其他的页面信息，用于从详情页到编辑页面
   pageMsg: '',

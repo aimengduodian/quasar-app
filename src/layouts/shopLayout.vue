@@ -47,7 +47,7 @@ export default {
   },
   watch: {
     '$route.name'(val) {
-      if(val === 'shopList') {
+      if(val === 'shopList' || val === 'orderList' ) {
         this.updateLayoutMsg({header: true, footer: true})
       }
       if(val === 'shop_view') {

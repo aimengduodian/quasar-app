@@ -91,7 +91,7 @@
           <q-btn flat style="float: right" @click="empty">清空</q-btn>
         </div>
         <q-separator/>
-        <div style="max-height: 50vh; overflow: scroll">
+        <div style="max-height: 50vh" class="scroll">
           <q-card-section class="items-center no-wrap">
             <div v-for="(item, index) in selectedFood"
                  v-if="item.count" :key="index">
@@ -246,7 +246,7 @@
           address: this.getUserMsg.buildingRoomNum || '11-2-725',
           totalNum: totalNum,
           totalCost: totalCost,
-          goods: JSON.stringify(goods)
+          goodsStr: JSON.stringify(goods)
         }
         try {
           this.$q.loading.show({
@@ -255,6 +255,11 @@
           await this.$axios.post('/order/save', params).then((res) => {
             if (res.data.code === 100) {
               this.$q.notify(res.data.msgs.msg)
+              this.selectedFood.forEach(item => {
+                if (item.count) {
+                  item.count = 0
+                }
+              })
             }
             else {
               this.$q.notify('Fail')
@@ -268,11 +273,6 @@
         }
         finally {
           this.$q.loading.hide()
-          this.selectedFood.forEach(item => {
-            if (item.count) {
-              item.count = 0
-            }
-          })
         }
       },
       empty () {

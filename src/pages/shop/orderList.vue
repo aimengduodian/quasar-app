@@ -91,17 +91,22 @@
         this.subAdvice()
       },
       async switch_go (id) {
-        this.persistent = true
         // 查看订单详情
         const aParams = JSON.parse(JSON.stringify(this.params))
         aParams.id = id
-        await this.$axios.post('/order/getDetailed', aParams).then((res) => {
-          const goods = res.data.page.listinfo[0].goods
-          goods.forEach(item => {
-            item.displayPic = config.picUrl + item.goodPic
+        try{
+          this.orderFood = []
+          await this.$axios.post('/order/getDetailed', aParams).then((res) => {
+            const goods = res.data.page.listinfo[0].goods
+            goods.forEach(item => {
+              item.displayPic = config.picUrl + item.goodPic
+            })
+            this.orderFood = goods
+            this.persistent = true
           })
-          this.orderFood = goods
-        })
+        } catch (e) {
+          console.log(e)
+        }
         // this.$router.push({ name: 'shop_view', query: { id: id } })
       },
       async subAdvice () {

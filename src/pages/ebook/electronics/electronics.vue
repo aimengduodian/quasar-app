@@ -98,7 +98,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag', 'getSearchParamsMsg'])
+      ...mapGetters('auth', [ 'getFlag', 'needVerify', 'getSearchParamsMsg'])
     },
     watch: {
       getSearchParamsMsg (val) {

@@ -4,8 +4,8 @@ export default {
   // 个人用户信息
   user: {
     id: null,
-    // 是否进行学生认证
-    flag: 1,
+    // 服务器用户的权限状态，0我要购买 1我要发布
+    flag: null,
     // 是否为小卖部的店主(判断buildNumber是否为null)
     bossNumber: null,
     // 用户所在的寝楼

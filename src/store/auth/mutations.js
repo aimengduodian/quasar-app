@@ -25,7 +25,7 @@ export const userDetailCacheSet = (state, rPayload) => {
   state.userDetail = userDetail
   try {
     state.user.id = userDetail.id
-    // state.user.flag = userDetail.flag
+    state.user.flag = userDetail.flag
     state.user.buildingNum = userDetail.buildingNum
     state.user.bossNumber = userDetail.buildingNumber
     state.user.buildingRoomNum = userDetail.buildingRoomNum

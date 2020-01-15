@@ -101,7 +101,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'powerFlag', 'getUserMsg'])
+      ...mapGetters('auth', [ 'needVerify', 'getUserMsg'])
     }
   }
 </script>

@@ -1,11 +1,21 @@
 import config from 'src/common/config'
 
-export const powerFlag = state => {
-  return !(parseInt(state.flag) === 0)
-}
+export const needVerify = state => {
+  let needVerify = true
+  if (Number(state.flag) === 1) {
+    //  我要发布
+    if (state.user.id && Number(state.user.flag) === 1) {
+      needVerify = false
+    }
+  } else if (Number(state.flag) === 0) {
+    //  我要购买
+    if (state.user.id && Number(state.user.flag) === 0) {
+      needVerify = false
+    }
+  } else {
 
-export const power = state => {
-  return state.user.id.length > 1
+  }
+  return needVerify
 }
 
 export const getFlag = state => {

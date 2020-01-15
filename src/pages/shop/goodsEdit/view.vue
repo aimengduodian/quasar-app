@@ -74,7 +74,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
+      ...mapGetters('auth', [ 'getFlag', 'needVerify']),
       ...mapGetters('staticData', ['getBookTypeNameByNumber'])
     },
     methods: {

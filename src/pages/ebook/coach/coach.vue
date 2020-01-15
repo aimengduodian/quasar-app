@@ -93,7 +93,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag', 'getSearchParamsMsg']),
+      ...mapGetters('auth', [ 'getFlag', 'getSearchParamsMsg']),
       picShow: function () {
         return function (item) {
           const nowDate = Date.now()

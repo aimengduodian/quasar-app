@@ -35,7 +35,7 @@
     >
       <q-tab name="mails" label="简要信息"/>
       <q-tab name="alarms" label="商品描述"/>
-      <q-tab name="movies" v-if="!getFlag" label="卖家信息"/>
+      <q-tab name="movies" label="卖家信息"/>
     </q-tabs>
     <q-separator/>
     <q-tab-panels v-model="tab" animated>
@@ -48,9 +48,9 @@
       <q-tab-panel name="alarms">
         <p class="caption q-body-2" v-html='coach.des'/>
       </q-tab-panel>
-      <q-tab-panel v-if="!powerFlag" name="movies">
-        <need-verify/>
-        <div v-if="false">
+      <q-tab-panel name="movies">
+        <need-verify  v-if="needVerify" />
+        <div v-else>
           <div>电话: {{ coach.phone }}</div>
           <div>微信: {{ coach.weiXin }}</div>
         </div>
@@ -203,7 +203,7 @@
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
+      ...mapGetters('auth', [ 'getFlag', 'needVerify']),
       orderCodeShow: function () {
         const nowDate = Date.now()
         return this.getFlag === 1 && this.coach.orderUser === null && nowDate < this.coach.startTime

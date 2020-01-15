@@ -51,7 +51,7 @@
       >
         <q-tab name="mails" label="简要信息" />
         <q-tab name="alarms" label="商品描述" />
-        <q-tab name="movies" v-if="!getFlag" label="卖家信息" />
+        <q-tab name="movies" label="卖家信息" />
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tab" animated>
@@ -63,11 +63,11 @@
         <q-tab-panel name="alarms">
           <p class="caption q-body-2" v-html="electronics.des" />
         </q-tab-panel>
-        <q-tab-panel v-if="!powerFlag" name="movies">
-          <need-verify />
-          <div v-if="false">
-            <div>phone: {{ electronics.phone }}</div>
-            <div>weixin: {{ electronics.weiXin }}</div>
+        <q-tab-panel name="movies">
+          <need-verify v-if="needVerify" />
+          <div v-else>
+            <div>电话: {{ electronics.phone }}</div>
+            <div>微信: {{ electronics.weiXin }}</div>
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['power', 'getFlag', 'powerFlag']),
+    ...mapGetters('auth', [ 'getFlag', 'needVerify']),
     ...mapGetters('staticData', ['getElectronicsTypeNameByNumber'])
   },
   methods: {

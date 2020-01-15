@@ -248,7 +248,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['power', 'powerFlag', 'getUserDetailMsg'])
+    ...mapGetters('auth', [ 'needVerify', 'getUserDetailMsg'])
   }
 }
 </script>

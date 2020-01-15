@@ -7,7 +7,7 @@
           <q-item-section>
             <q-item-label>哆啦小店 ￥{{ item.totalCost }}</q-item-label>
             <q-item-label caption>下单地址: {{ item.address }}</q-item-label>
-            <q-item-label caption>下单时间:{{ item.createTime }}</q-item-label>
+            <q-item-label caption>下单时间:{{ formatOrderDate(item.createTime) }}</q-item-label>
             <q-item-label caption>订单号：{{ item.id }}</q-item-label>
           </q-item-section>
         </q-item>
@@ -67,6 +67,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import config from 'src/common/config'
+  import common from '../../common/common'
 
   export default {
     data () {
@@ -107,7 +108,6 @@
         } catch (e) {
           console.log(e)
         }
-        // this.$router.push({ name: 'shop_view', query: { id: id } })
       },
       async subAdvice () {
         await this.$axios.post('/order/orders', this.params).then((res) => {
@@ -130,6 +130,9 @@
           }
           done()
         }, 2500)
+      },
+      formatOrderDate (val) {
+        return common.toDate(val, 'yyyy-MM-dd HH:mm:ss')
       }
     },
     computed: {

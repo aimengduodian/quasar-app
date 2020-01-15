@@ -29,12 +29,6 @@ const routes = [
     meta: { keepAlive: false }
   },
   {
-    path: '/buildingSelect',
-    name: 'buildingSelect',
-    component: () => import('components/buildingSelect'),
-    meta: { keepAlive: false }
-  },
-  {
     path: '/market',
     component: () => import('layouts/marketLayout'),
     meta: { keepAlive: false },
@@ -147,8 +141,32 @@ const routes = [
         name: 'shopPerson',
         component: () => import('pages/ebook/person/person'),
         meta: { keepAlive: false }
+      },
+      {
+        path: 'shop/edit',
+        name: 'goods_edit',
+        component: () => import('pages/shop/goodsEdit/index'),
+        meta: { keepAlive: false }
+      },
+      {
+        path: 'shop/item_view',
+        name: 'goods_view',
+        component: () => import('pages/shop/goodsEdit/view'),
+        meta: { keepAlive: false }
+      },
+      {
+        path: 'shop/add',
+        name: 'goods_add',
+        component: () => import('pages/shop/goodsEdit/add'),
+        meta: { keepAlive: false }
       }
     ]
+  },
+  {
+    path: '/buildingSelect',
+    name: 'buildingSelect',
+    component: () => import('pages/shop/components/buildingSelect'),
+    meta: { keepAlive: false }
   },
   {
     // 没有找到路由返回404

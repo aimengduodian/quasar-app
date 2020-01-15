@@ -5,14 +5,14 @@
            @click="switch_go(item.id)">
         <q-item>
           <q-item-section top thumbnail class="q-ml-none">
-            <img style="object-fit: cover; border-radius: 10px" :src="item.elecPic" alt="">
+            <img style="object-fit: cover; border-radius: 10px" :src="item.goodsPic" alt="">
           </q-item-section>
 
           <q-item-section>
             <q-item-label>{{ item.electronicsName }}</q-item-label>
-            <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>购买时间:{{ formatElectronicsDate(item.buyDate) }}
+            <q-item-label mask="YYYY-MM-DD HH:mm:ss" caption>商品名称:{{ item.goodName }}
             </q-item-label>
-            <q-item-label caption>价格：￥{{ item.presentPrice }}</q-item-label>
+            <q-item-label caption>价格：￥{{ item.goodPrice }}</q-item-label>
           </q-item-section>
         </q-item>
         <hr>
@@ -25,19 +25,15 @@
       </template>
       <span v-if="loadAllData" class="row justify-center q-my-md"> 已经没有更多数据 </span>
     </q-infinite-scroll>
-    <!--回到顶部-->
-    <q-page-scroller v-if="!getFlag" position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
-      <q-btn fab icon="keyboard_arrow_up" color="primary"/>
-    </q-page-scroller>
-    <q-page-scroller v-else position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
-      <q-btn fab icon="add" color="primary" @click="addElectronics"/>
+
+    <q-page-scroller position="bottom-right" :scroll-offset="-150" :offset="[18, 18]">
+      <q-btn fab icon="add" color="primary" @click="addGoods"/>
     </q-page-scroller>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
-  import { date } from 'quasar'
   import config from 'src/common/config'
 
   export default {
@@ -59,21 +55,21 @@
       this.subAdvice()
     },
     methods: {
-      addElectronics () {
+      addGoods () {
         // goto 发布界面
-        this.$router.push({ name: 'electronics_add' })
+        this.$router.push({ name: 'goods_add' })
       },
       switch_go (id) {
-        this.$router.push({ name: 'electronics_view', query: { id: id } })
+        this.$router.push({ name: 'goods_view', query: { id: id } })
       },
       splitMth (str) {
         const strs = str.split(',')
         return strs[0]
       },
       async subAdvice () {
-        await this.$axios.post('/electronics/electronics', this.params).then((res) => {
+        await this.$axios.post('/good/goods', this.params).then((res) => {
           res.data.page.pageInfo.list.forEach(item => {
-            item.elecPic = config.picUrl + this.splitMth(item.electronicsPic)
+            item.goodsPic = config.picUrl + this.splitMth(item.goodPic)
             this.items.push(item)
           })
           if (!res.data.page.pageInfo.isLastPage) {
@@ -92,13 +88,10 @@
           }
           done()
         }, 2500)
-      },
-      formatElectronicsDate (val) {
-        return date.formatDate(val, 'YYYY-MM-DD')
       }
     },
     computed: {
-      ...mapGetters('auth', ['power', 'getFlag', 'powerFlag', 'getSearchParamsMsg'])
+      ...mapGetters('auth', ['power', 'powerFlag', 'getSearchParamsMsg'])
     },
     watch: {
       getSearchParamsMsg (val) {

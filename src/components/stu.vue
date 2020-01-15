@@ -4,13 +4,13 @@
       <span class="text-h5">学生身份认证</span>
     </div>
     <br>
-    <q-input value="" v-model="stuId" type="number" prefix="学号:">
+    <q-input value="" v-model="query.studNo" type="number" prefix="学号:">
       <template v-slot:prepend>
         <q-icon name="account_circle" />
       </template>
     </q-input>
 
-    <q-input value="" v-model="password" :type="isPwd ? 'password' : 'text'" prefix="密码:"
+    <q-input value="" v-model="query.password" :type="isPwd ? 'password' : 'text'" prefix="密码:"
     >
       <template v-slot:prepend>
         <q-icon name="add" />
@@ -24,13 +24,25 @@
       </template>
     </q-input>
 
-    <q-input value="" v-model="email" type="email" mask="email" prefix="邮箱:">
+    <q-input value="" v-model="query.email" type="email" mask="email" prefix="邮箱:">
       <template v-slot:prepend>
         <q-icon name="email" />
       </template>
     </q-input>
 
-    <q-input value="" v-model="checkCode" type="text" prefix="验证码:">
+    <q-input value="" v-model="query.weiXin" type="email" prefix="微信:">
+      <template v-slot:prepend>
+        <q-icon name="email" />
+      </template>
+    </q-input>
+
+    <q-input value="" v-model="query.phone" type="number" mask="###########" prefix="手机:">
+      <template v-slot:prepend>
+        <q-icon name="phone" />
+      </template>
+    </q-input>
+
+    <q-input value="" v-model="query.validCode" type="text" prefix="验证码:">
       <template v-slot:prepend>
         <q-icon name="delete" />
       </template>
@@ -50,13 +62,17 @@ export default {
     return {
       schoolUrl: 'http://202.203.132.204:8019/',
       isPwd: true,
-      stuId: '',
-      checkCode: '',
+      query: {
+        studNo: '',
+        password: '',
+        validCode: '',
+        email: '',
+        weiXin: '',
+        url: '',
+        phone: ''
+      },
       checkCodeUrl: '',
-      password: '',
       sessionString: '',
-      email: '',
-      url: '',
       error: false,
       warning: false,
       loading: true
@@ -71,7 +87,7 @@ export default {
           this.$q.notify('获取session失败')
         }
         else {
-          this.url = this.schoolUrl + this.sessionString + '/default2.aspx'
+          this.query.url = this.schoolUrl + this.sessionString + '/default2.aspx'
           this.checkCodeUrl = this.schoolUrl + this.sessionString + '/CheckCode.aspx'
         }
       })
@@ -82,16 +98,7 @@ export default {
     },
     // 提交数据
     submitHandler () {
-      const query = {
-        schoolNo: this.stuId,
-        studNo: this.stuId,
-        password: this.password,
-        validCode: this.checkCode,
-        email: this.email,
-        url: this.url
-      }
-
-      this.$axios.post('user/authentication', query).then(res => {
+      this.$axios.post('user/authentication', this.query).then(res => {
         if (Number(res.data.code) === 200) {
           this.$q.notify(res.data.page.errors)
           this.freshCode()

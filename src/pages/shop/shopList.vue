@@ -70,7 +70,12 @@
         }
       },
       switch_go (id) {
-        this.$router.push({ name: 'shop_view', query: { id: id } })
+        if (this.getUserMsg.id === id) {
+          // 自己的商铺
+          this.$router.push({ name: 'goods_edit', query: { id: id } })
+        } else {
+          this.$router.push({ name: 'shop_view', query: { id: id } })
+        }
       },
       async subAdvice () {
         await this.$axios.post('/user/getsuperMarkets', this.params).then((res) => {

@@ -89,11 +89,12 @@
             this.scrollOffset = Math.abs(this.scrollOffset)
           }
         }).catch(err => {
-          this.reRequestTime = this.reRequestTime + this.reRequestInterval
-          this.$q.notify('网络开小差了' + this.reRequestTime / 1000 + '秒后重新请求数据')
-          setTimeout(() => {
-            this.subAdvice()
-          }, this.reRequestTime)
+          if (err === undefined) {
+            this.reRequestTime = this.reRequestTime + this.reRequestInterval
+            setTimeout(() => {
+              this.subAdvice()
+            }, this.reRequestTime)
+          }
         })
       },
       onLoad (index, done) {

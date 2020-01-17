@@ -34,7 +34,7 @@
         </q-card-section>
 
         <q-card-section>
-          <div style="max-height: 50vh" class="scroll" >
+          <div style="max-height: 50vh" class="scroll">
             <q-item v-for="(item, index) in orderFood" :key="index">
               <q-item-section top thumbnail class="q-ml-none">
                 <img style="border-radius: 5px" :src="item.displayPic" alt="">
@@ -72,6 +72,8 @@
   export default {
     data () {
       return {
+        reRequestTime: config.reRequestBaseInterval,
+        reRequestInterval: config.reRequestAddInterval,
         persistent: false,
         orderFood: [],
         loadAllData: false,
@@ -95,7 +97,7 @@
         // 查看订单详情
         const aParams = JSON.parse(JSON.stringify(this.params))
         aParams.id = id
-        try{
+        try {
           this.orderFood = []
           await this.$axios.post('/order/getDetailed', aParams).then((res) => {
             const goods = res.data.page.listinfo[0].goods
@@ -110,6 +112,7 @@
         }
       },
       async subAdvice () {
+        this.scrollOffset = -Math.abs(this.scrollOffset)
         await this.$axios.post('/order/orders', this.params).then((res) => {
           res.data.page.pageInfo.list.forEach(item => {
             this.items.push(item)
@@ -118,25 +121,28 @@
             this.params.pageNumber++
           } else {
             this.loadAllData = true
-            if (this.scrollOffset > 0)
-              this.scrollOffset = -this.scrollOffset
+            this.scrollOffset = Math.abs(this.scrollOffset)
           }
+        }).catch(err => {
+          this.reRequestTime = this.reRequestTime + this.reRequestInterval
+          this.$q.notify('网络开小差了' + this.reRequestTime / 1000 + '秒后重新请求数据')
+          setTimeout(() => {
+            this.subAdvice()
+          }, this.reRequestTime)
         })
       },
       async onLoad (index, done) {
-        setTimeout(() => {
-          if (!this.loadAllData) {
-            this.subAdvice()
-          }
-          done()
-        }, 2500)
+        if (!this.loadAllData) {
+          this.subAdvice()
+        }
+        done()
       },
       formatOrderDate (val) {
         return common.toDate(val, 'yyyy-MM-dd HH:mm:ss')
       }
     },
     computed: {
-      ...mapGetters('auth', [ 'needVerify', 'getUserMsg'])
+      ...mapGetters('auth', ['needVerify', 'getUserMsg'])
     }
   }
 </script>

@@ -38,6 +38,8 @@
   export default {
     data () {
       return {
+        reRequestTime: config.reRequestBaseInterval,
+        reRequestInterval: config.reRequestAddInterval,
         loadAllData: false,
         scrollOffset: 250,
         items: [],
@@ -78,6 +80,7 @@
         }
       },
       async subAdvice () {
+        this.scrollOffset = -Math.abs(this.scrollOffset)
         await this.$axios.post('/user/getsuperMarkets', this.params).then((res) => {
           res.data.page.pageInfo.list.forEach(item => {
             this.items.push(item)
@@ -86,22 +89,25 @@
             this.params.pageNumber++
           } else {
             this.loadAllData = true
-            if (this.scrollOffset > 0)
-              this.scrollOffset = -this.scrollOffset
+            this.scrollOffset = Math.abs(this.scrollOffset)
           }
+        }).catch(err => {
+          this.reRequestTime = this.reRequestTime + this.reRequestInterval
+          this.$q.notify('网络开小差了' + this.reRequestTime / 1000 + '秒后重新请求数据')
+          setTimeout(() => {
+            this.subAdvice()
+          }, this.reRequestTime)
         })
       },
       async onLoad (index, done) {
-        setTimeout(() => {
-          if (!this.loadAllData) {
-            this.subAdvice()
-          }
-          done()
-        }, 2500)
+        if (!this.loadAllData) {
+          this.subAdvice()
+        }
+        done()
       }
     },
     computed: {
-      ...mapGetters('auth', [ 'needVerify', 'getUserMsg'])
+      ...mapGetters('auth', ['needVerify', 'getUserMsg'])
     }
   }
 </script>

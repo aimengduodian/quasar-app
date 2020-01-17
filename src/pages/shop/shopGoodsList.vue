@@ -154,6 +154,8 @@
     },
     data () {
       return {
+        reRequestTime: config.reRequestBaseInterval,
+        reRequestInterval: config.reRequestAddInterval,
         dialog: false,
         scrollOffset: 250,
         selectedFood: [],
@@ -189,12 +191,13 @@
       }
     },
     computed: {
-      ...mapGetters('auth', [ 'getFlag', 'needVerify', 'getUserMsg']),
+      ...mapGetters('auth', ['getFlag', 'needVerify', 'getUserMsg']),
       ...mapGetters('staticData', ['getBookTypeNameByNumber'])
     },
     methods: {
       ...mapActions('auth', ['updatePageMsg']),
       subAdvice () {
+        this.scrollOffset = -Math.abs(this.scrollOffset)
         this.$axios.post('/good/goods', this.params).then(res => {
           res.data.page.pageInfo.list.forEach(item => {
             item.pic = config.picUrl + this.splitMth(item.goodPic)
@@ -204,9 +207,14 @@
             this.params.pageNumber++
           } else {
             this.loadAllData = true
-            if (this.scrollOffset > 0)
-              this.scrollOffset = -this.scrollOffset
+            this.scrollOffset = Math.abs(this.scrollOffset)
           }
+        }).catch(err => {
+          this.reRequestTime = this.reRequestTime + this.reRequestInterval
+          this.$q.notify('网络开小差了' + this.reRequestTime / 1000 + '秒后重新请求数据')
+          setTimeout(() => {
+            this.subAdvice()
+          }, this.reRequestTime)
         })
       },
       splitMth (str) {
@@ -214,12 +222,10 @@
         return strs[0]
       },
       onLoad (index, done) {
-        setTimeout(() => {
-          if (!this.loadAllData) {
-            this.subAdvice()
-          }
-          done()
-        }, 10000)
+        if (!this.loadAllData) {
+          this.subAdvice()
+        }
+        done()
       },
       shopCardChange (target) {
         this.$refs.shopCart.drop(target)
@@ -260,18 +266,15 @@
                   item.count = 0
                 }
               })
-            }
-            else {
+            } else {
               this.$q.notify('Fail')
             }
             // 跳转回原页面
             this.$router.go(-1)
           })
-        }
-        catch (e) {
+        } catch (e) {
           console.log(e)
-        }
-        finally {
+        } finally {
           this.$q.loading.hide()
         }
       },

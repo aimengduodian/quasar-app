@@ -147,7 +147,7 @@ export default {
         this.updatePageMsg(pageMsg)
       })
     },
-    moreMsgShow () {
+    moreMsgShow (grid) {
       const report = [
         {
           show: !this.getFlag,
@@ -193,7 +193,7 @@ export default {
 
       this.$q.bottomSheet({
         message: '更多',
-        grid: false,
+        grid,
         actions: action
       }).onOk(action => {
         switch (action.id) {

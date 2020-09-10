@@ -74,7 +74,6 @@ module.exports = configure(function (/* ctx */) {
     },
 
     framework: {
-      all: true,
       lang: 'zh-hans',
       // iconSet: ctx.theme ? 'material-icons' : 'ionicons-v4'
       config: {},
@@ -92,7 +91,12 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-       plugins: []
+       plugins: [
+         'Notify',
+         'BottomSheet',
+         'Dialog',
+         'Loading'
+       ]
     },
 
     // animations: 'all', // --- includes all animations

@@ -14,20 +14,20 @@
     "@vue/composition-api": "^0.6.4",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
-    "quasar": "^1.13.2",
-    "js-md5": "^0.7.3"
+    "js-md5": "^0.7.3",
+    "quasar": "^1.13.2"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.9",
     "babel-plugin-transform-imports": "^2.0.0",
     "devtron": "1.4.0",
-    "lrz": "^4.9.40",
-    "qs": "^6.9.4",
-    "node-sass": "^4.14.1",
     "img-vuer": "^0.19.2",
+    "lrz": "^4.9.40",
+    "node-sass": "^4.14.1",
+    "qs": "^6.9.4",
+    "strip-ansi": "=6.0.0",
     "vue-cookie": "^1.1.4",
-    "vuelidate": "^0.7.5",
-    "strip-ansi": "=6.0.0"
+    "vuelidate": "^0.7.5"
   },
   "engines": {
     "node": ">= 10.18.1",

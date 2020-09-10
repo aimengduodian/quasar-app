@@ -17,10 +17,11 @@
       <footer-tabs/>
     </q-footer>
     <q-page-container>
-      <keep-alive>
+<!--      <keep-alive>
         <router-view v-if="$route.meta.keepAlive" />
       </keep-alive>
-      <router-view v-if="!$route.meta.keepAlive" />
+      <router-view v-if="!$route.meta.keepAlive" />-->
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>

@@ -80,7 +80,7 @@
       async subAdvice (isFirstRequest = false) {
         let url = '/book/books'
         if (isFirstRequest) {
-          url = '/book/books?flag=' + this.$route.query.flag
+          url = '/book/books?flag=' + this.getFlag
         }
         this.scrollOffset = -Math.abs(this.scrollOffset)
         await this.$axios.post(url, this.params).then((res) => {

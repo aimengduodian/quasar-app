@@ -59,8 +59,6 @@
       this.params.pageNumber = 1
       if (this.$route.query.flag !== undefined) {
         this.updateFlag(this.$route.query.flag)
-      } else {
-        this.updateFlag(0)
       }
       this.subAdvice(true)
     },
